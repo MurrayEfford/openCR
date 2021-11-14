@@ -1,4 +1,4 @@
-version 2.2.2 (2021-11-10)
+version 2.2.2 (2021-11-14)
 
 New features and changed behaviour
     o none
@@ -7,7 +7,7 @@ Bugs fixed
     o expected.d() failed with user-defined movement model
 
 Other
-    o 
+    o Git repository
 
 version 2.2.1 (2021-11-09)
 
