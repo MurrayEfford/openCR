@@ -20,11 +20,11 @@ for now must be called with the prefix `openCR:::'.
 
 \method{modelAverage}{openCR}(object, ..., realnames = NULL, betanames = NULL, 
     newdata = NULL, alpha = 0.05, dmax = 10, covar = FALSE, average = c("link", 
-    "real"), criterion = c("AICc","AIC"), CImethod = c("Wald", "MATA"))
+    "real"), criterion = c("AIC","AICc"), CImethod = c("Wald", "MATA"))
     
 \method{modelAverage}{openCRlist}(object, ..., realnames = NULL, betanames = NULL, 
     newdata = NULL, alpha = 0.05, dmax = 10, covar = FALSE, average = c("link", 
-    "real"), criterion = c("AICc","AIC"), CImethod = c("Wald", "MATA"))
+    "real"), criterion = c("AIC","AICc"), CImethod = c("Wald", "MATA"))
 
 }
 

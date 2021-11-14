@@ -55,7 +55,7 @@ modelAverage.openCRlist <- function (
     dmax = 10, 
     covar = FALSE, 
     average = c('link', 'real'), 
-    criterion = c('AICc','AIC'), 
+    criterion = c('AIC','AICc'), 
     CImethod = c('Wald', 'MATA')) 
 {
     
