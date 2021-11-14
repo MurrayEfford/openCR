@@ -1,0 +1,394 @@
+version 2.2.2 (2021-11-10)
+
+New features and changed behaviour
+    o none
+
+Bugs fixed
+    o expected.d() failed with user-defined movement model
+
+Other
+    o 
+
+version 2.2.1 (2021-11-09)
+
+New features and changed behaviour
+    o none
+
+Bugs fixed
+    o openCR.fit() did not correctly fit non-spatial learned response (b) models 
+      such as model = p~b, type = 'JSSAfCL' (bug undetected for some years).
+
+Other
+    o tidied C++ code, edited vignette
+
+version 2.2.0 (2021-11-03)
+
+New features and changed behaviour
+    o openCR.fit() new defaults: kernelradius = 30, sparsekernel = TRUE
+    o plot.kernel() accepts meshcol argument
+    o make.kernel() acquires argument 'session' for model input
+    o expected.d() expected movement from movement parameters, fitted model etc.
+    o summary.kernel() expected distances use expected.d() and may differ
+    o matchscale() acquires argument 'expected' to match expected distance
+    o 'BVN2' movement model (equal mixture two BVN)
+    o bivariate Cauchy movement model 'BVC' (BVT with fixed move.b = 0.5)
+    o log-sech movement model 'RDLS' (partial implementation)
+    o extensions to plot.kernel
+
+Bugs fixed
+    o openCR.fit() failed with non-binary detector usage
+    o domain errors in inputs to Boost statistical distributions could crash R
+    o make.table() could fail with models fitted before 2.1.0
+
+Other
+    o new aliases for movementmodel 'RDE', RDG','RDL','RDEzi','IND','INDzi'
+    o RDL movementmodel no longer blocked (Boost call bypassed if scale infinite)
+    o openCR.fit() more robust to extreme parameter values (spatial models)
+    o more documentation of movement models
+    o improved weighting of sparse kernels; details argument 'r0' for 
+      effective radius of zero cell
+
+version 2.1.0 (2021-08-14)
+
+New features and changed behaviour
+    o new movement kernels based on polar distance 
+    o zero-inflated option for some movement kernels and 'uncorrelated' movement
+    o cumMove() compounds movement kernel and applies edge effect
+    o proportionInPolygon() sums probability within arbitrary polygon(s)
+    o optional link 'log1' defined as log(x-1) (constrains x>1)
+    o plot.kernel() uses par()$cex.main for title font
+    o openCR.fit() optional dummy variable coding of factor predictors
+    
+Bugs fixed
+    o openCR.esa() failed and hence derived() failed for spatial models 
+    o openCR.make.newdata() failed if model from version <2.0.0 (details$minimumage not specified)
+    o m.array() mis-tabulated counts when none caught on some occasions (no flow-on)
+    o openCR.fit() version 2.0 halved variance for types 'Pradel' and 'Pradelg' 
+    
+Other
+    o 'BVN','BVE','BVT' aliases for movementmodels 'normal','exponential','t2D'
+    o openCR.fit() default move.b for BVT changed to 1.5 (from 0.6)
+    o openCR.fit() details argument 'control' passes arguments to nlm()
+    o openCR.fit() default iterlim for nlm() raised to 300 
+    o makeNewData() S3 method replaces openCR.make.newdata()
+    o C++ code uses Boost library for statistical distributions, avoiding R API
+    o kernel code simplified (one C++ routine) and tested
+    o long operations more responsive to interruption
+    o plot.openCR() definition of 'turnover parameters' for intermediate.x
+      extended to include move.a and move.b
+    o number of threads explicit in calls to RcppParallel parallelFor
+    o minor changes to make.kernel() and summary.kernel()
+    o c and '[' methods for openCRlist class; separate documentation of openCRlist()
+    o "anchored" movement (experimental)
+
+version 2.0.2 (2021-05-14)
+
+New features and changed behaviour
+    o make.table() acquires argument 'collapse' for stratified models
+
+Bugs fixed
+    o C++ sqrt() ambiguity on r-patched-solaris-x86 (use std::sqrt())
+    o clang-UBSAN overflow error in tests (read beyond array in C++ getmoveargs)
+    o erroneous likelihood when dimensions differed among strata
+    o openCR.make.newdata() omitted session covariates of stratified model
+    o sumsims() failed with 'non-numeric argument to binary operator'
+
+Other
+    o multithreaded Examples now in dontrun{} to avoid problematic TBB library
+    
+version 2.0.1 (2021-05-09)
+
+New features and changed behaviour
+    o none
+
+Other
+    o run tests with Sys.setenv(RCPP_PARALLEL_BACKEND = "tinythread") 
+      to avoid CRAN errors
+    o added URL to DESCRIPTION
+    o onLoad() allows for possibility of single CPU (previous minimum 2)
+
+version 2.0.0 (2021-05-04)
+
+New features and changed behaviour
+    o stratified models
+    o generic method strata() for retrieving and assigning stratum names
+    o stratify() function to arrange data for stratified model
+    o openCR.fit() sparse movement kernels (new argument 'sparsekernel')
+    o openCR.fit() kernelradius elevated to full argument from 'details'
+    o make.kernel() saves empirical cumulative distribution function as attribute
+    o make.kernel() accepts fitted model as input
+    o pkernel() computes cumulative probability distribution of distance
+    o qkernel() computes quantiles of distance distribution
+    o dkernel() computes probability density of distance distribution
+    o matchscale() kernel scale parameter giving required quantile of distance
+    o plot.kernel() acquires argument 'title'
+    o new movementmodel "annular" in openCR.fit(), make.kernel() etc.
+    o HPX new detection function for binary detection
+    
+Bugs fixed
+    o age miscoded in openCR.make.newdata(), hence bad prediction for age models
+    o summary.kernel() proportion truncated misreported for exponential movement
+    o LLsurface.openCR() failed
+
+Other
+    o vignette drops call for multiple cores
+    o Age2 included in openCR.make.newdata()
+    o plotKernel() removed (superceded by plot method for kernel objects)
+    o 'openCR' object returned by openCR.fit includes kernel coordinates
+    o optional logmultinomial term precalculated and not affected by covariates
+    o fixed doi format in a citation
+    o avoid ':::' (use local versions of unexported 'secr' functions)
+    o Imports RcppParallel version >= 5.1.1 to dodge problems in earlier releases
+
+version 1.5.0 (2020-12-13)
+
+New features and changed behaviour
+    o number of threads managed via RCPP_PARALLEL_NUM_THREADS as in secr
+    o PLB... aliases for JSSA...CL type names
+    o openCR.fit() new argument 'edgemethod' ("truncate", "wrap", "none")
+    o par.openCR.fit() modified to allow each fit to multithread
+    o openCR.fit() and openCR.design() new argument 'agecov' for grouping ages
+    o openCR.fit() and openCR.design() new argument 'minimumage'
+    o openCR.esa() now returns a list when bysession = TRUE
+    o openCR.esa() unsqueezes result (allows for histories with freq>1)
+
+Bugs fixed
+    o movementmodel "user" failed (typo in openCR.fit line 80)
+    o secr LL component 3 miscalculated when some capthist repeated (biased D-hat)
+    o movement models bias in D-hat due to edge effect
+    o movement models failed when R = TRUE (dim(PIA) error)
+    o derived.openCR() mistakenly report kappa for spatial models
+    o some factor covariates mishandled by openCR.make.newdata() and hence by 
+      predict, derived
+
+Other
+    o more robust user-defined kernel 
+    o calcpdotbd details argument of openCR.fit defunct
+    o correct description of runsim.spatial() intervals argument
+    o par.openCR.fit() ncores>1 is deprecated (slower than ncores=1!)
+    o par.openCR.fit() logfile defaults to automatically generated tempfile
+    o Suggests testthat, adds some unit tests
+
+version 1.4.4 (2020-09-01)
+
+New features and changed behaviour
+    o none
+
+Other
+    o suggests rmarkdown
+    o tweak url in vignette
+
+version 1.4.2 (2020-09-01)
+
+New features and changed behaviour
+    o reported rank takes account of possible negative eigenvalues (eigH)
+
+Other
+    o some data.frame() calls specify stringsAsFactors = TRUE for backwards 
+      compatibility in R >= 4.0
+    o corrected return without ()
+    o terminal '/' on URLs in documentation as required
+    o updated references
+
+version 1.4.1 (2019-06-29)
+
+New features and changed behaviour
+    o sumsims() dropifnoSE condition now also rejects zero SE
+    o print.summary.openCR() drops attributes eigH and fit
+
+Bugs fixed
+    o multiple problems in naive CJSsecr model (CJSp1 FALSE, the default)
+    o summary.openCR table of counts, format error with non-spatial model
+
+Other
+    o details switch 'calcpdotbd' defaults to FALSE unless required for movement model; 
+      may affect estimates with JSSAsecr models
+    o minor improvements to robustness when details$R = TRUE etc.
+
+version 1.4.0 (2019-06-15)
+
+New features and changed behaviour
+    o new 2-parameter movement kernel t2D for 2-D t-distribution 
+    o new movement kernel uniform (no parameters, depends kernelradius)
+    o new function make.kernel() and kernel methods plot and summary
+    o plotKernel() deprecated
+    o runsims.spatial() more robust with non-standard extractfn
+    o see also 1.3.6
+
+Bugs fixed
+    o biased estimates from movement models
+
+Other
+    o removed redundant C++ code for single-threaded execution
+    o default details$autoini changed to NULL, meaning 'use all'
+    o classMembership should now work with movement models
+
+version 1.3.6 (2019-04-13; not published)
+
+New features and changed behaviour
+    o plot.openCR() invisibly returns the x coordinates of plotted points; dots argument 
+      also controls axes, line width and colour of CI
+    o new plot method for output from derived.openCR
+    o openCR.fit checks whether autoini required (incomplete or no start provided)
+    o runsim.nonspatial() and runsim.spatial() return NULL for failed replicates rather than crashing
+
+Bugs fixed
+    o derived method for openCR SECR models wrongly adjusted per capita recruitment 
+      when intervals varied, with consequences for derived D-hat
+    o JSSAsecrXXX models gave erroneous estimates, particularly of lambda0 and sigma, 
+      for count data with binomN = 0 (Poisson counts) 
+    o predict.openCR failed when one parameter estimated (others fixed)
+
+version 1.3.5 (2019-03-10)
+
+New features and changed behaviour
+    o none
+
+Bugs fixed
+    o vignette rebuild failed on r-devel-linux-x86_64-debian-gcc (double \vec)
+
+version 1.3.4 (2019-02-05)
+
+Bugs fixed
+    o bad keyword in classMembership.Rd
+
+Other
+    o removed unnecessary pdf from inst/doc
+    
+version 1.3.3 (2019-02-04)
+
+New features and changed behaviour
+    o enabled detector-level covariates
+    o summary method compatible with secr 3.2.0 (moves)
+    
+Bugs fixed
+    o openCR.make.newdata() and dependent methods (print, predict, summary etc.) 
+      failed with learned responses (~b etc.) 
+
+version 1.3.2 (2018-12-09)
+
+New features and changed behaviour
+    o none
+    
+Other
+    o conditional use of R2ucare in Examples, vignette
+
+version 1.3.1 (2018-12-08)
+
+New features and changed behaviour
+    o sumsims accepts simulated fits with method = "none"
+
+Other
+    o R2ucare now in Suggests not Imports, with tweak to ucare.cjs() 
+
+version 1.3.0 (2018-11-26)
+
+New features and changed behaviour
+    o canned predictors for learned responses (b, bk etc.) redefined and extended
+    o AIC method acquires argument n to override the default effective sample size
+    o openCR.fit() no longer computes 'posterior' component for mixture models
+    o classMembership method for finite mixture models ('posterior' component removed)
+    o specifying native R routines for the likelihood forces ncores = 1
+    o print and AIC methods for summary.openCR
+    o openCR.fit() acquires argument dframe0 for pesky custom models with learned response
+    o par.openCR.fit() default trace = FALSE 
+    o rev method for reversing primary sessions of capthist objects
+
+Bugs fixed
+    o varying usage unreliable with 'multi' detector type in some circumstances
+    o summary method for openCR objects: erroneous counts in capthist component (ignored freq)
+    o finite mixture model posterior class membership crashed openCR.fit() for spatial models
+    o finite mixture models failed for 'multi' detector type
+
+Other
+    o help page for openCR.design corrected
+
+version 1.2.1 (2018-10-31)
+
+New features and changed behaviour
+    o runsim.spatial() acquires intervals argument
+    o summary method for openCR objects 
+    o sumsims() accepts output from summary.openCR
+    o sumsims() acquires argument 'true' and adds summaries of bias, coverage etc.
+    o CJSp1 = TRUE details argument respected by openCR.design etc.
+
+Bugs fixed
+    o sumsims() failed with parameters superN and superD
+    o derived method for openCR objects: erroneous f and lambda for some models when
+      intervals not 1.0
+    o print.derivedopenCR did not apply Dscale to session-specific D
+
+Other
+    o changed default starting value for superD
+    o tweaks to print method for derivedopenCR class
+    o not published on CRAN
+
+version 1.2.0 (2018-05-25)
+
+New features and changed behaviour
+    o  multithreaded execution of some functions (up to 4x speed gain)
+    o  openCR.fit() types 'secrCL' and 'secrD' emulate closed-population analyses of 'secr'
+    o  openCR.fit() trace may be a positive integer (frequency of reporting)
+    o  ucare.cjs() wrapper for R2ucare test functions
+    o  moving.fit() and extractFocal() functions for moving window of sessions
+    o  m.array() reports releases on final session (last.session = TRUE)
+    o  openCR.fit() details ignoreusage option
+    o  runsim.spatial() and runsim.nonspatial() ncores argument defaults to NULL for multithreading
+    o  cyclic.fit() exposed as internal function but not exported
+    o  derived() method for openCR objects acquires arguments newdata and all.levels
+
+Bugs fixed
+    o usage of count detectors not properly accounted for (noted by Richard Glennie)
+    o fixedbeta clashed with start argument (some options)
+    o session covariates not matched correctly with robust design sessions
+    o LLonly reported x -1
+    o details$hessian = FALSE failed
+
+Other
+    o Links to RcppParallel
+    o Additional check for nonidentifiable parameters in print.openCR() 
+
+version 1.1.2 (2018-04-16)
+
+New features and changed behaviour
+    o  none
+    
+Other
+    o  tweaks to C++ code for CRAN (fabs -> abs)
+    o  check for availability of RMark
+    o  better failure criterion in bd.array()
+    o  http changed to https where possible
+
+version 1.1.1 (2018-04-11)
+
+New features and changed behaviour
+    o  movement kernel exposed
+    o  bd.array() probability of (b,d)
+    o  improved simulation functions
+    o  start may be named numeric vector
+    
+Other
+    o  first CRAN submission
+    o  consolidates CJS and JSSA C code (e.g. prwisecrcpp)
+    o  timevaryingcov<- disabled until next release secr
+
+version 1.0.2 (2018-03-26)
+
+New features and changed behaviour
+    o  movement kernel unsuppressed
+
+version 1.0.1 (2018-03-25)
+
+New features and changed behaviour
+    o  movement kernel [temporarily suppressed]
+    o  plotKernel()
+    o  movementmodel argument replaces staticHR
+    o  experimental timevarying individual covariates
+
+version 1.0.0 (2018-03-11)
+
+Known bugs
+    o  CI of predicted b[1]
+
+Other
+    o  renumbered 1.0.0 (previously unreleased 2.2.3)

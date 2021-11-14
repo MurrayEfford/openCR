@@ -1,0 +1,103 @@
+import (secr)
+import (parallel)
+
+importFrom (graphics, "abline", "axis", "box", "contour", "plot", "points", "segments", 
+    "mtext", "lines", "par", "rug", "symbols")
+importFrom (utils, "packageDescription", "packageVersion", "flush.console", "combn", "head", "tail")
+importFrom (MASS, "ginv", "eqscplot")
+importFrom (nlme, "fdHess")
+importFrom (stringr, "str_trim", "str_split", "str_c", "str_pad")
+importFrom (plyr, "count", "rbind.fill")
+importFrom (abind, "abind")
+importFrom (stats, "AIC", "as.formula", "coef", "contrasts", "dist", "integrate", 
+    "logLik", "model.matrix", "nlm", "optim", "vcov",
+    "predict", "qnorm", "dpois", "dbinom", "dnbinom", "dgamma", "dlnorm", 
+    "pgamma", "pnorm", "qexp", "qgamma", "qlnorm", "runif", "sd", "median", 
+    "uniroot", "update")
+importFrom (methods, "formalArgs")
+importFrom (Rcpp, "evalCpp")
+importFrom (RcppParallel, "RcppParallelLibs", "setThreadOptions", "defaultNumThreads")
+
+export (openCR.fit)
+export (par.openCR.fit)
+export (openCRlist)
+export (cloned.fit)
+export (make.table)
+export (JS.counts)
+export (JS.direct)
+export (m.array)
+export (bd.array)
+export (age.matrix)
+export (read.inp)
+export (squeeze)
+export (unsqueeze)
+export (primarysessions)
+export (secondarysessions)
+export (sim.nonspatial)
+export (runsim.nonspatial)
+export (runsim.RMark)
+export (runsim.spatial)
+export (sumsims)
+export (classMembership)
+
+export (openCR.design)
+export (openCR.esa)
+export (openCR.pdot)
+
+export (make.kernel)
+export (gkernel)
+export (dkernel)
+export (pkernel)
+export (qkernel)
+export (matchscale)
+export (cumMove)
+export (expected.d)
+export (proportionInPolygon)
+export (ucare.cjs)
+export (moving.fit)
+export (extractFocal)
+export (stratify)
+# export (modelAverage) 
+
+export (strata)
+S3method(strata, default)
+export ('strata<-')
+
+S3method (plot, openCR)
+S3method (derived, openCR)
+S3method (derived, openCRlist)
+S3method (LLsurface, openCR)
+S3method (plot, kernel)
+S3method (summary, kernel)
+S3method (print, summary.kernel)
+
+S3method(modelAverage, openCR)
+S3method(modelAverage, openCRlist)
+
+S3method (print, openCR)
+S3method (summary, openCR)
+S3method (print, summary.openCR)
+S3method (AIC, summary.openCR)
+S3method (print, derivedopenCR)
+S3method (plot, derivedopenCR)
+S3method (predict, openCR)
+S3method (vcov, openCR)
+S3method (AIC, openCR)
+S3method (logLik, openCR)
+S3method (coef, openCR)
+S3method (classMembership, openCR)
+S3method (makeNewData, openCR)
+
+S3method (rev, capthist)
+
+S3method (AIC, openCRlist)
+S3method (predict, openCRlist)
+S3method('[', openCRlist)
+S3method(c, openCRlist)
+
+useDynLib (openCR, .registration = TRUE)
+
+## DEBUGGING ONLY (cpp functions not documented)
+## exportPattern("*cpp")
+
+
