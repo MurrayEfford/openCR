@@ -16,4 +16,4 @@ LazyData: yes
 LazyDataCompression: xz
 SystemRequirements: GNU make
 URL: https://www.otago.ac.nz/density/
-BugReports: https://github.com/MurrayEfford/openCR/
+BugReports: https://github.com/MurrayEfford/openCR/issues/
