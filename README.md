@@ -1,6 +1,17 @@
 # openCR
 Open Population Capture-Recapture
 
+Functions for non-spatial open population analysis by Cormack-Jolly-Seber (CJS) and Jolly-Seber-
+Schwarz-Arnason (JSSA) methods, and by spatially explicit extensions of these methods. The
+methods build on Schwarz and Arnason (1996), Borchers and Efford (2008) and Pledger et al.
+(2010) (see vignette for more comprehensive references and likelihood). The parameterisation of
+JSSA recruitment is flexible (options include population growth rate λ, per capita recruitment f
+and seniority γ). Spatially explicit analyses may assume home-range centres are fixed or allow
+dispersal between primary sessions according to various probability kernels, including bivariate
+normal (BVN) and bivariate t (BVT).
+
+
+
 **openCR** 2.2.1 is available on [CRAN](https://CRAN.R-project.org/package=openCR).
 
 See also --
