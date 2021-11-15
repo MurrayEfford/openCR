@@ -10,8 +10,6 @@ and seniority γ). Spatially explicit analyses may assume home-range centres are
 dispersal between primary sessions according to various probability kernels, including bivariate
 normal (BVN) and bivariate t (BVT).
 
-
-
 **openCR** 2.2.1 is available on [CRAN](https://CRAN.R-project.org/package=openCR).
 
 See also --
@@ -30,3 +28,21 @@ devtools::install_github("MurrayEfford/openCR")
 ```
 
 (Installation is rather slow, and produces voluminous messages because of the compilation of C++ code).
+
+
+## References
+
+  Borchers, D. L. and Efford, M. G. (2008) Spatially explicit maximum
+  likelihood methods for capture--recapture studies. *Biometrics*
+  **64**, 377--385.
+
+  Efford, M. G. and Schofield, M. R. (2020) A spatial open-population capture--recapture model.
+  *Biometrics* **76**, 392--402.
+
+  Pledger, S., Pollock, K. H. and Norris, J. L. (2010) Open
+  capture--recapture models with heterogeneity: II. Jolly-Seber
+  model. *Biometrics* **66**, 883--890.
+
+  Schwarz, C. J. and Arnason, A. N. (1996) A general methodology for the
+  analysis of capture-recapture experiments in open
+  populations. *Biometrics* **52**, 860--873.
