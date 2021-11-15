@@ -20,9 +20,7 @@ www.otago.ac.nz/density/openCR.html
 
 [openCR-manual.pdf](https://www.otago.ac.nz/density/pdfs/openCR-manual.pdf)
 
-The code here is under development.
-
-It may be installed using
+The code here is under development. It may be installed using
 ```
 devtools::install_github("MurrayEfford/openCR")
 ```
