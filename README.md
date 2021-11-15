@@ -1,9 +1,11 @@
 # openCR
 Open Population Capture-Recapture
 
-**openCR** 2.2.1 is available on CRAN (https://CRAN.R-project.org/package=openCR).
+**openCR** 2.2.1 is available on [CRAN](https://CRAN.R-project.org/package=openCR).
 
-See also www.otago.ac.nz/density/openCR.html
+See also --
+
+www.otago.ac.nz/density/openCR.html
 
 [openCR-vignette.pdf](https://www.otago.ac.nz/density/pdfs/openCR-vignette.pdf)
 
