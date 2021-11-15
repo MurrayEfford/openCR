@@ -6,7 +6,7 @@ Schwarz-Arnason (JSSA) methods, and by spatially explicit extensions of these me
 methods build on Schwarz and Arnason (1996), Borchers and Efford (2008) and Pledger et al.
 (2010) (see vignette for more comprehensive references and likelihood). The parameterisation of
 JSSA recruitment is flexible (options include population growth rate λ, per capita recruitment f
-and seniority γ). Spatially explicit analyses may assume home-range centres are fixed or allow
+and seniority γ). Spatially explicit analyses may assume home-range centres are static or allow
 dispersal between primary sessions according to various probability kernels, including bivariate
 normal (BVN) and bivariate t (BVT).
 
@@ -27,7 +27,7 @@ It may be installed using
 devtools::install_github("MurrayEfford/openCR")
 ```
 
-(Installation is rather slow, and produces voluminous messages because of the compilation of C++ code).
+Installation is rather slow, and produces voluminous messages because of the compilation of C++ code.
 
 
 ## References
