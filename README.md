@@ -12,4 +12,4 @@ It may be installed using
 devtools::install_github("MurrayEfford/openCR")
 ```
 
-(Installation is rather slow because of the compilation of C++ code, and produces voluminous messages).
+(Installation is rather slow, and produces voluminous messages because of the compilation of C++ code).
