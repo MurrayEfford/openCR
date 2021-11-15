@@ -5,6 +5,9 @@ Open Population Capture-Recapture
 
 See also www.otago.ac.nz/density/openCR.html
 
+[openCR-vignette.pdf](https://www.otago.ac.nz/density/pdfs/openCR-vignette.pdf)
+[openCR-manual.pdf](https://www.otago.ac.nz/density/pdfs/openCR-manual.pdf)
+
 The code here is under development.
 
 It may be installed using
