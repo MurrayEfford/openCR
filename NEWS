@@ -9,7 +9,7 @@ Bugs fixed
 Other
     o Git repository synched with GitHub
     o exampledata folder under inst with some previously fitted models 
-      (used in Examples e.g. ?kernel)
+      (used in Examples e.g. ?make.kernel)
 
 version 2.2.1 (2021-11-09)
 
