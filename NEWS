@@ -1,4 +1,4 @@
-version 2.2.2 (2021-11-14)
+version 2.2.2 (2021-11-17)
 
 New features and changed behaviour
     o none
@@ -8,6 +8,8 @@ Bugs fixed
 
 Other
     o Git repository synched with GitHub
+    o exampledata folder under inst with some previously fitted models 
+      (used in Examples e.g. ?kernel)
 
 version 2.2.1 (2021-11-09)
 

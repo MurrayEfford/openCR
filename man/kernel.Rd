@@ -154,6 +154,13 @@ Nathan, R., Klein, E., Robledo-Arnuncio, J. J. and Revilla, E. (2012) Dispersal 
 k <- make.kernel(movementmodel = 'BVT', spacing = 10, move.a = 20, move.b = 1)
 summary(k)
 
+# read a previously fitted movement model packaged with 'openCR'
+fit <- readRDS(system.file("exampledata", "spmOV.RDS", package = "openCR"))
+k <- make.kernel(fit)
+plot(k)
+if (interactive()) {
+   spotHeight(k, dec = 3)  # click on points; Esc to exit
+}
 }
 
 \keyword{ hplot }
