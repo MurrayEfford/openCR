@@ -63,7 +63,7 @@ Model weights are calculated as \deqn{w_i = \frac{\exp(-\Delta_i / 2)}{
 Models for which dAIC > \code{dmax} are given a weight of zero and are
 excluded from the summation. Model weights may be used to form
 model-averaged estimates of real or beta parameters with
-\code{\link{model.average}} (see also Buckland et al. 1997, Burnham and
+\code{\link{modelAverage}} (see also Buckland et al. 1997, Burnham and
 Anderson 2002).
 
 The argument \code{k} is included for consistency with the generic
