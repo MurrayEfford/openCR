@@ -18,8 +18,8 @@ make.kernel(movementmodel = c("BVN", "BVE", "BVC", "BVT","RDE", "RDG", "RDL", "U
     sparsekernel = FALSE, clip = FALSE, normalize = TRUE,     
     stat = c('estimate','lcl', 'ucl'), session = 1, r0 = 1/sqrt(pi), ...)
 
-\method{plot}{kernel}(x, type = "kernel", contour = FALSE, levels = NULL, text = FALSE, 
-title = NULL, add = FALSE, xscale = 1, ...)
+\method{plot}{kernel}(x, type = "kernel", contour = FALSE, levels = NULL, text = FALSE,
+    title = NULL, add = FALSE, xscale = 1, ...)
 
 \method{summary}{kernel}(object, ...)
 
