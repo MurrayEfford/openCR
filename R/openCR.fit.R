@@ -473,6 +473,19 @@ openCR.fit <- function (
     design
   }
   
+  ##############################
+  # mask-level parameters
+  ##############################
+  
+  if (secr) {
+    maskdesign <- mask.designdata(mask, maskmodel = model, stratumlevels, sessionlevels, 
+      stratumcov, sessioncov) 
+    # here assume for now that settle is only mask parm
+    # and mask.designdata returns only one matrix.
+    # Including maskdesign in 'design' streamlines
+    design$designMatrices$settle <- maskdesign
+  }
+  
   ############################
   # Parameter mapping (general)
   #############################
@@ -487,6 +500,7 @@ openCR.fit <- function (
   
   mqarray <- 0
   if (secr && !(movementmodel %in% c('static','uncorrelated','uncorrelatedzi'))) {
+    
     ## 2021-02-19 add annular option
     ## movement kernel
     k2 <- kernelradius

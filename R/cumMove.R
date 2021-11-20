@@ -6,6 +6,7 @@ cumMove <- function (X, mask, kernel, edgemethod = c('truncate', 'wrap', 'none')
     if (ms(mask)) {
         stop ("requires single mask")
     }
+    settlement <- matrix(1)   # dummy for now 2021-11-21
     # cell probabilities
     kernelp <- matrix(covariates(kernel)$kernelp, nrow = nrow(kernel), 
         ncol = max(1,nstep))
@@ -16,7 +17,7 @@ cumMove <- function (X, mask, kernel, edgemethod = c('truncate', 'wrap', 'none')
     
     # edge method will usually be 'truncate and normalise'
     edgemethod <- match.arg(edgemethod)
-    edgecode <- edgemethodcode(edgemethod)  # 0 none, 1 wrap, 2 truncate
+    edgecode <- edgemethodcode(edgemethod)  # 0 none, 1 wrap, 2 truncate, 3 weighted
     if (attr(mask, 'type') != 'traprect' && edgemethod == 'wrap') {
         stop("edgemethod = 'wrap' requires mask of type 'traprect'")        
     }
@@ -60,6 +61,7 @@ cumMove <- function (X, mask, kernel, edgemethod = c('truncate', 'wrap', 'none')
                 as.integer(j), 
                 as.integer(edgecode),
                 as.matrix(mqarray), 
+                as.matrix(settlement),
                 as.double(kernelp), 
                 as.double(pm))
         }

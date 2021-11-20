@@ -41,13 +41,10 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
 {
     
     onestratumll <- function(stratum) {
-        freq <- covariates(stratum$capthist)$freq
-        if (is.null(freq)) freq <- rep(1, stratum$nc)
-        if (length(freq) == 1) freq <- rep(freq, stratum$nc)
         
-        ####################################################################
+        ########################################################################
         # functions for one history at a time are used mostly for debugging
-        ####################################################################
+        ########################################################################
         
         onehistory <- function (n) {
             sump <- 0
@@ -131,17 +128,19 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
                     as.matrix (data$kernel),
                     as.matrix (stratum$mqarray),
                     as.double (stratum$cellsize),
-                    as.double (data$details$r0))
+                    as.double (data$details$r0),
+                    as.matrix (settlement))
                 sump <- sump + pmix[x,] * temp
             }
             if (any(is.na(sump)) || any(sump<=0)) NA else freq * log(sump)
         }
+        ########################################################################
         
         freq <- covariates(stratum$capthist)$freq
         if (is.null(freq)) freq <- rep(1, stratum$nc)
         if (length(freq) == 1) freq <- rep(freq, stratum$nc)
         ncf <- sum(freq)
-        
+
         trps <- traps(stratum$capthist)
         if (!is.null(stratum$mask)) area <- attr(stratum$mask,'area')
         else area <- 0
@@ -164,6 +163,22 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
         PIA  <- data$design$PIA [stratum$i, 1:nc1, 1:S, 1:stratum$k, , drop = FALSE]
         PIAJ <- data$design$PIAJ[stratum$i, 1:nc1, 1:stratum$J, , drop = FALSE]
         
+        #-----------------------------------------
+        
+        # optionally model settlement as function of mask covariates (and others)
+        if (!is.null(settlematrix)) {
+            settlement <- getmaskparm (
+                settlematrix, 
+                beta, 
+                stratum, 
+                data$parindx, 
+                data$link, 
+                data$fixed, 
+                parameter = 'settle')
+        }
+        else {
+            settlement <- 1
+        }
         #-----------------------------------------
         
         ## number of threads was set in openCR.fit
@@ -341,16 +356,16 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
         comp
     }   # end of onestratumll
     
-    #####################################################################
+    ############################################################################
     # main line
-    #--------------------------------------------------------------------
+    #------------------------------------------------------------
     # Fixed beta
     fb <- data$details$fixedbeta
     if (!is.null(fb)) {
         fb[is.na(fb)] <- beta
         beta <- fb    ## complete
     }
-    #--------------------------------------------------------------------
+    #------------------------------------------------------------
     # Real parameters
     realparval  <- makerealparameters (data$design, beta, data$parindx, data$link, data$fixed)
     if (data$learnedresponse)
@@ -358,41 +373,47 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
     else realparval0 <- realparval
     if (data$details$debug>0) print(realparval)    
     
-    #-----------------------------------------
+    #------------------------------------------------------------
+    # Design data for settlement model - usually NULL
+    settlematrix <- data$design$designMatrices$settle
+    
+    #------------------------------------------------------------
     # check valid parameter values
     if (!all(is.finite(realparval))) {
         return (1e10)
     }
     
-    #-----------------------------------------
+    #------------------------------------------------------------
     type <- typecode(data$type)
     if (type < 0) stop ("Invalid likelihood type")
     
     if (data$details$debug>2) browser()
     
-    #####################################################################
+    #------------------------------------------------------------
     ## call onestratumll
     compbystratum <- lapply(data$stratumdata, onestratumll)
     compbystratum <- matrix(unlist(compbystratum), ncol = 4, byrow = TRUE)
-    #####################################################################
+    #------------------------------------------------------------
     ## optional multinomial term (not if CJS)
     if (data$details$multinom & !(type %in% c(6))) {
         compbystratum[,4] <- data$logmult   ## precalculated 2021-03-30
     }
-    #####################################################################
+    #------------------------------------------------------------
     ## log-likelihood as sum of components
     loglik <- sum(compbystratum)
-    #####################################################################
+    #------------------------------------------------------------
     compbystratum <- cbind(compbystratum, apply(compbystratum,1,sum))
-    colnames(compbystratum) <- c('Comp1', 'Comp2', 'Comp3', 'logmultinom', 'Total')
+    colnames(compbystratum) <- c('Comp1', 'Comp2', 'Comp3', 
+        'logmultinom', 'Total')
     if (nrow(compbystratum)>1) {
         compbystratum <- rbind(compbystratum, apply(compbystratum,2,sum))
-        rownames(compbystratum) <- c(paste0('Stratum', 1:(nrow(compbystratum)-1)), 'Total')
+        rownames(compbystratum) <- c(paste0('Stratum', 
+            1:(nrow(compbystratum)-1)), 'Total')
     }
     else {
         rownames(compbystratum) <- ''
     }
-    #####################################################################
+    #------------------------------------------------------------
     
     ## debug
     if (data$details$debug>=1) {

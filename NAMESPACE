@@ -98,6 +98,6 @@ S3method(c, openCRlist)
 useDynLib (openCR, .registration = TRUE)
 
 ## DEBUGGING ONLY (cpp functions not documented)
-## exportPattern("*cpp")
+exportPattern("*cpp")
 
 

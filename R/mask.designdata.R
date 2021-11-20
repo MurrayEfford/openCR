@@ -13,7 +13,7 @@ mask.designdata <- function (mask, maskmodel, stratumlevels, sessionlevels,
     stratumcov = NULL, sessioncov = NULL, meanSD = NULL) 
 {
 
-    ## mask -- mask object or list of masks of the same length as sessionlevels
+    ## mask -- mask object or list of masks of the same length as stratumlevels
     ## maskmodel -- formula that may be constant ~1 or include
     ## any of the 'automatic' terms c('stratum','x','y','x2','y2','xy',
     ##     'session', 't', 'Session') or user-supplied mask-level covariates
@@ -226,6 +226,6 @@ mask.designdata <- function (mask, maskmodel, stratumlevels, sessionlevels,
 
 ## test
 
-msk <- make.mask(make.grid(), nx=4)
-mask.designdata(msk, ~session, 1, 1:2)
+# msk <- make.mask(make.grid(), nx=4)
+# mask.designdata(msk, ~session, 1, 1:2)
 

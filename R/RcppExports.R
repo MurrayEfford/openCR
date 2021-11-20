@@ -17,8 +17,8 @@ gethcpp <- function(nc1, cc, nmix, nk, ss, mm, PIA, Tsk, hk) {
     .Call(`_openCR_gethcpp`, nc1, cc, nmix, nk, ss, mm, PIA, Tsk, hk)
 }
 
-convolvemqcpp <- function(j, edgecode, mqarray, kernelp, pjm) {
-    .Call(`_openCR_convolvemqcpp`, j, edgecode, mqarray, kernelp, pjm)
+convolvemqcpp <- function(j, edgecode, mqarray, settlement, kernelp, pjm) {
+    .Call(`_openCR_convolvemqcpp`, j, edgecode, mqarray, settlement, kernelp, pjm)
 }
 
 fillkernelcpp <- function(kernel, kerneltype, sparsekernel, cellsize, r0, jj, fnname, moveargsi, moveargs, normalize) {
@@ -49,7 +49,7 @@ allhistparallelcpp <- function(x, type, nc, CJSp1, grain, ncores, intervals, cum
     .Call(`_openCR_allhistparallelcpp`, x, type, nc, CJSp1, grain, ncores, intervals, cumss, w, fi, li, openval, PIA, PIAJ)
 }
 
-allhistsecrparallelcpp <- function(x, type, mm, nc, binomN, CJSp1, grain, ncores, intervals, cumss, w, fi, li, gk, openval, PIA, PIAJ, Tsk, h, hindex, movementcode, sparsekernel, anchored, edgecode, usermodel, moveargsi, kernel, mqarray, cellsize, r0) {
-    .Call(`_openCR_allhistsecrparallelcpp`, x, type, mm, nc, binomN, CJSp1, grain, ncores, intervals, cumss, w, fi, li, gk, openval, PIA, PIAJ, Tsk, h, hindex, movementcode, sparsekernel, anchored, edgecode, usermodel, moveargsi, kernel, mqarray, cellsize, r0)
+allhistsecrparallelcpp <- function(x, type, mm, nc, binomN, CJSp1, grain, ncores, intervals, cumss, w, fi, li, gk, openval, PIA, PIAJ, Tsk, h, hindex, movementcode, sparsekernel, anchored, edgecode, usermodel, moveargsi, kernel, mqarray, cellsize, r0, settlement) {
+    .Call(`_openCR_allhistsecrparallelcpp`, x, type, mm, nc, binomN, CJSp1, grain, ncores, intervals, cumss, w, fi, li, gk, openval, PIA, PIAJ, Tsk, h, hindex, movementcode, sparsekernel, anchored, edgecode, usermodel, moveargsi, kernel, mqarray, cellsize, r0, settlement)
 }
 
