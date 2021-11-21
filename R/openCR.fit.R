@@ -335,13 +335,11 @@ openCR.fit <- function (
   
   moveargsi <- c(-2,-2)
   if (secr) {
-    if (movementmodel %in% c('RDE', 'BVN', 'BVE', 'BVC', 'INDzi', 'UNIzi', 'uniformzi',
-      'normal', 'exponential','frE','uncorrelatedzi')) {
+    if (movementmodel %in% c('RDE', 'BVN', 'BVE', 'BVC', 'INDzi', 'UNIzi')) {
       pnames <- c(pnames, 'move.a')
       moveargsi[1] <- .openCRstuff$sigmai[typecode(type)] + 1 + (detectfn %in% c(15,17,18,19))
     }
-    else if (movementmodel %in% c('RDG','RDL','BVT','BVNzi','BVEzi','RDEzi','BVN2', 'RDLS',
-      'frL', 'frG', 'frEzi', 't2D')) {
+    else if (movementmodel %in% c('RDG','RDL','BVT','BVNzi','BVEzi','RDEzi','BVN2', 'RDLS')) {
       pnames <- c(pnames, 'move.a', 'move.b')
       moveargsi[1] <- .openCRstuff$sigmai[typecode(type)] + 1 + (detectfn %in% c(15,17,18,19))
       moveargsi[2] <- moveargsi[1]+1
@@ -406,8 +404,8 @@ openCR.fit <- function (
     gamma = 'logit', kappa = 'log', g = 'logit',
     lambda = 'log', BN = 'log', BD = 'log', D = 'log', N = 'log',
     superN = 'log', superD = 'log', sigma = 'log', z = 'log', pmix='mlogit',
-    move.a =  if (movementmodel %in% c('INDzi', 'UNIzi', 'uncorrelatedzi','uniformzi')) 'logit' else 'log', 
-    move.b = if (movementmodel %in% c('BVNzi','BVEzi', 'RDEzi', 'frEzi')) 'logit' else 'log',
+    move.a =  if (movementmodel %in% c('INDzi', 'UNIzi')) 'logit' else 'log', 
+    move.b = if (movementmodel %in% c('BVNzi','BVEzi', 'RDEzi')) 'logit' else 'log',
     tau = 'mlogit')
   link <- replace (defaultlink, names(link), link)
   link[!(names(link) %in% pnames)] <- NULL
@@ -486,7 +484,7 @@ openCR.fit <- function (
   ##########################
   
   mqarray <- 0
-  if (secr && !(movementmodel %in% c('static','uncorrelated','uncorrelatedzi'))) {
+  if (secr && !(movementmodel %in% c('static','IND','INDzi'))) {
     ## 2021-02-19 add annular option
     ## movement kernel
     k2 <- kernelradius
@@ -601,8 +599,8 @@ openCR.fit <- function (
       superD = (ncf + 20) / marea,
       sigma =  rpsv,
       z = 2,
-      move.a = if (secr) (if (movementmodel %in% c('annular', 'uniformzi','uncorrelatedzi','INDzi', 'UNIzi')) 0.4 else rpsv) else 0.6,    # increased rpsv/2 to rpsv 2021-04-11
-      move.b = if (secr) (if (movementmodel %in% c('annular2','annularR','BVNzi','BVEzi','RDEzi','frEzi')) 0.4 else 
+      move.a = if (secr) (if (movementmodel %in% c('annular', 'UNIzi','INDzi', 'UNIzi')) 0.4 else rpsv) else 0.6,    # increased rpsv/2 to rpsv 2021-04-11
+      move.b = if (secr) (if (movementmodel %in% c('annular2','annularR','BVNzi','BVEzi','RDEzi')) 0.4 else 
         if (movementmodel %in% c('BVN2')) rpsv*2 else 1.5) else 0.2,
       pmix = 0.25
     )
@@ -750,7 +748,7 @@ openCR.fit <- function (
       }
       distmat <- getdistmat (traps(CH), mask, detectfn == 20)
       cellsize <- attr(mask,'area')^0.5 * 100   ## metres, equal mask cellsize
-      if (!(movementmodel %in% c('static','uncorrelated','uncorrelatedzi'))) {
+      if (!(movementmodel %in% c('static','IND','INDzi'))) {
         mqarray <- mqsetup (mask, kernel, cellsize, edgecode)  
       }
     }
@@ -935,7 +933,7 @@ openCR.fit <- function (
   }
   
   desc <- packageDescription("openCR")  ## for version number
-  if (secr && !(movementmodel %in% c('static','uncorrelated','uncorrelatedzi'))) 
+  if (secr && !(movementmodel %in% c('static','IND','INDzi'))) 
     kernel <- kernel * spacing(mask)
   else
     kernel <- NULL

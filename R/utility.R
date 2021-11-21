@@ -80,9 +80,7 @@
   'BVCzi'
   )                           
 
-.openCRstuff$movementmodels <- c(.openCRstuff$kernelmodels,
-  'uncorrelated', 'IND',    
-  'uncorrelatedzi','INDzi')
+.openCRstuff$movementmodels <- c(.openCRstuff$kernelmodels, 'IND', 'INDzi')
 
 stdmovement <- function (movementmodel) {
   ## transition to standardized codes
@@ -143,33 +141,22 @@ detectionfunctionnumber <- function (detname) {
 movecode <- function (movementmodel) {
   switch (movementmodel, 
     static         = 0, 
-    uncorrelated   = 1, 
     IND            = 1, 
-    normal         = 2, 
     BVN            = 2, 
-    exponential    = 3, 
     BVE            = 3, 
     user           = 4, 
-    t2D            = 5, 
     BVT            = 5,
-    uniform        = 6, 
     UNI            = 6, 
     annular        = 7, 
     annular2       = 8, 
     annularR       = 9, 
-    frE            = 10, 
     RDE            = 10, 
-    frG            = 11, 
     RDG            = 11, 
-    frL            = 12, 
     RDL            = 12, 
     BVNzi          = 13,
     BVEzi          = 14,
-    uniformzi      = 15,
     UNIzi          = 15,
-    frEzi          = 16,
     RDEzi          = 16,
-    uncorrelatedzi = 17,
     INDzi          = 17,
     BVN2           = 18,
     RDLS           = 19,
