@@ -276,7 +276,7 @@ openCR.fit <- function (
   model <- stdform (model)  ## named, no LHS; see utility.R
   defaultmodel <- list(p = ~1, lambda0 = ~1, phi = ~1, b = ~1, f = ~1, lambda = ~1, g = ~1,
     gamma = ~1, kappa = ~1, BN = ~1, BD = ~1, N=~1, D = ~1, superN = ~1,
-    superD = ~1, sigma = ~1, z = ~1, move.a = ~1, move.b = ~1, tau = ~1)
+    superD = ~1, sigma = ~1, z = ~1, move.a = ~1, move.b = ~1, tau = ~1, settle = ~1)
   model <- replace (defaultmodel, names(model), model)
   
   pnames <- switch (type,
@@ -333,13 +333,11 @@ openCR.fit <- function (
   
   moveargsi <- c(-2,-2)
   if (secr) {
-    if (movementmodel %in% c('RDE', 'BVN', 'BVE', 'BVC', 'INDzi', 'UNIzi', 'uniformzi',
-      'normal', 'exponential','frE','uncorrelatedzi')) {
+    if (movementmodel %in% c('RDE', 'BVN', 'BVE', 'BVC', 'INDzi', 'UNIzi', 'uniformzi')) {
       pnames <- c(pnames, 'move.a')
       moveargsi[1] <- .openCRstuff$sigmai[typecode(type)] + 1 + (detectfn %in% c(15,17,18,19))
     }
-    else if (movementmodel %in% c('RDG','RDL','BVT','BVNzi','BVEzi','RDEzi','BVN2', 'RDLS',
-      'frL', 'frG', 'frEzi', 't2D')) {
+    else if (movementmodel %in% c('RDG','RDL','BVT','BVNzi','BVEzi','RDEzi','BVN2', 'RDLS')) {
       pnames <- c(pnames, 'move.a', 'move.b')
       moveargsi[1] <- .openCRstuff$sigmai[typecode(type)] + 1 + (detectfn %in% c(15,17,18,19))
       moveargsi[2] <- moveargsi[1]+1
@@ -356,7 +354,7 @@ openCR.fit <- function (
         }
       }
     }
-    else if (movementmodel %in% c('uniform','UNI')) {
+    else if (movementmodel %in% c('UNI')) {
       ## no parameters, no action needed
     }
     else if (movementmodel == 'annular') {
@@ -372,6 +370,10 @@ openCR.fit <- function (
       ## closed population
       ## fix survival and recruitment
       fixed <- replace(list(phi = 1.0, b = 1.0), names(fixed), fixed)
+    }
+    if (edgemethod == 'settlement' && 
+        !(movementmodel %in% c('static','IND','INDzi')) ) {
+      pnames <- c(pnames, 'settle')
     }
   }
   
@@ -403,9 +405,10 @@ openCR.fit <- function (
   defaultlink <- list(p = 'logit', lambda0 = 'log', phi = 'logit', b = 'mlogit', f = 'log',
     gamma = 'logit', kappa = 'log', g = 'logit',
     lambda = 'log', BN = 'log', BD = 'log', D = 'log', N = 'log',
-    superN = 'log', superD = 'log', sigma = 'log', z = 'log', pmix='mlogit',
-    move.a =  if (movementmodel %in% c('INDzi', 'UNIzi', 'uncorrelatedzi','uniformzi')) 'logit' else 'log', 
-    move.b = if (movementmodel %in% c('BVNzi','BVEzi', 'RDEzi', 'frEzi')) 'logit' else 'log',
+    superN = 'log', superD = 'log', sigma = 'log', z = 'log', pmix = 'mlogit',
+    move.a =  if (movementmodel %in% c('INDzi', 'UNIzi')) 'logit' else 'log', 
+    move.b = if (movementmodel %in% c('BVNzi','BVEzi', 'RDEzi')) 'logit' else 'log',
+    settle = 'logit',
     tau = 'mlogit')
   link <- replace (defaultlink, names(link), link)
   link[!(names(link) %in% pnames)] <- NULL
@@ -474,16 +477,16 @@ openCR.fit <- function (
   ##############################
   # mask-level parameters
   ##############################
-  
-  if (secr && edgemethod == 'settlement') {
-    maskdesign <- mask.designdata(mask, maskmodel = model, stratanames, 
-      sessionlevels, stratumcov, sessioncov) 
-    # here assume for now that settle is only mask parm
+  if (secr && edgemethod == 'settlement' &&  
+      !(movementmodel %in% c('static','IND','INDzi')) ) {
+    maskdesign <- mask.designdata(mask, maskmodel = model$settle, stratanames, 
+      1:dim(design$PIAJ)[3], stratumcov, sessioncov) 
+    # here assume for now that settle is the only mask parm
     # and mask.designdata returns only one matrix.
     # Including maskdesign in 'design' streamlines
     design$designMatrices$settle <- maskdesign
   }
-  
+
   ############################
   # Parameter mapping (general)
   #############################
@@ -497,7 +500,7 @@ openCR.fit <- function (
   ##########################
   
   mqarray <- 0
-  if (secr && !(movementmodel %in% c('static','uncorrelated','uncorrelatedzi'))) {
+  if (secr && !(movementmodel %in% c('static','IND','INDzi'))) {
     
     ## 2021-02-19 add annular option
     ## movement kernel
@@ -613,8 +616,8 @@ openCR.fit <- function (
       superD = (ncf + 20) / marea,
       sigma =  rpsv,
       z = 2,
-      move.a = if (secr) (if (movementmodel %in% c('annular', 'uniformzi','uncorrelatedzi','INDzi', 'UNIzi')) 0.4 else rpsv) else 0.6,    # increased rpsv/2 to rpsv 2021-04-11
-      move.b = if (secr) (if (movementmodel %in% c('annular2','annularR','BVNzi','BVEzi','RDEzi','frEzi')) 0.4 else 
+      move.a = if (secr) (if (movementmodel %in% c('annular', 'UNIzi','INDzi', 'UNIzi')) 0.4 else rpsv) else 0.6,    # increased rpsv/2 to rpsv 2021-04-11
+      move.b = if (secr) (if (movementmodel %in% c('annular2','annularR','BVNzi','BVEzi','RDEzi')) 0.4 else 
         if (movementmodel %in% c('BVN2')) rpsv*2 else 1.5) else 0.2,
       pmix = 0.25
     )
@@ -762,7 +765,7 @@ openCR.fit <- function (
       }
       distmat <- getdistmat (traps(CH), mask, detectfn == 20)
       cellsize <- attr(mask,'area')^0.5 * 100   ## metres, equal mask cellsize
-      if (!(movementmodel %in% c('static','uncorrelated','uncorrelatedzi'))) {
+      if (!(movementmodel %in% c('static','IND','INDzi'))) {
         mqarray <- mqsetup (mask, kernel, cellsize, edgecode)  
       }
     }
@@ -947,7 +950,7 @@ openCR.fit <- function (
   }
   
   desc <- packageDescription("openCR")  ## for version number
-  if (secr && !(movementmodel %in% c('static','uncorrelated','uncorrelatedzi'))) 
+  if (secr && !(movementmodel %in% c('static','IND','INDzi'))) 
     kernel <- kernel * spacing(mask)
   else
     kernel <- NULL
