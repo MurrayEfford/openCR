@@ -17,6 +17,8 @@
 ## 2021-09-21 tidy .openCRstuff$movementmodels, add .openCRstuff$kernelmodels
 ## 2021-10-12 stdmovement
 ## 2021-11-03 openCR 2.2.0 
+## 2021-11-20 getmaskparm function used for mask-level parameters
+
 ###############################################################################
 
 .openCRstuff <- new.env()
@@ -219,13 +221,14 @@ nparmove <- function (movementmodel) {
 
 edgemethodcode <- function (edgemethod) {
   if (is.null(edgemethod)) edgemethod <- 'none' 
-  if (!edgemethod %in% c('none','wrap','truncate')) {
-    stop ("unrecognised edge method - should be 'none','wrap' or 'truncate'")
+  if (!edgemethod %in% c('none','wrap','truncate', 'settlement')) {
+    stop ("unrecognised edge method - should be 'none','wrap', 'truncate' or 'settlement'")
   }
   switch (edgemethod, 
-    none     = 0, 
-    wrap     = 1,
-    truncate = 2, 
+    none       = 0, 
+    wrap       = 1,
+    truncate   = 2, 
+    settlement = 3,
     0)
 }
 ################################################################################
@@ -1333,3 +1336,29 @@ get.nmix <- function (model) {
 }
 ###############################################################################
 
+## build array of 'real' values for a mask-level parameter
+## based on secr:::getD
+getmaskparm <- function (designdata, beta, stratum, parindx, link, fixed,
+  parameter = 'settle') {
+  if ((is.null(designdata) || nrow(designdata)==0) && (is.null(fixed[[parameter]]))) return(NULL)
+  # restrict to data for current stratum
+  designdata <- designdata[designdata$stratum == stratum$stratumi,]
+  nmask <- nrow(stratum$mask)
+  nsession <- stratum$J
+  ## using 'D' for continuity with secr; openCR does not model D
+  D <- matrix(nrow = nmask, ncol = nsession)
+  if (!is.null(fixed[[parameter]])) {
+    D[,] <- fixed[[parameter]]
+  }
+  else {
+    D[,] <- designdata %*% beta[parindx[[parameter]]]   # linear predictor
+    D[,] <- untransform (D, link[[parameter]])
+  }
+  # silently constrain 'settle' to 0-1
+  if (parameter %in% 'settle') {
+    D[D<0] <- 0
+    D[D>1] <- 1
+  }
+  D
+}
+###############################################################################

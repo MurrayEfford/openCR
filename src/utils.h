@@ -22,21 +22,27 @@ double pski ( int binomN, int count, double Tski, double g);
 //--------------------------------------------------------------------------
 
 void convolvemq (
-        const int    mm,                            // number of points on mask 
-        const int    kn,                            // number of points on kernel 
-        const int    j,                             // session number 1..jj 
-        const int    edgecode,                      // adjust for incomplete kernel
-        const  RcppParallel::RMatrix<int> &mqarray, // input [& 2020-10-31]
-        std::vector<double> &kernelp,               // p(move|dx,dy) for points in kernel 
-        std::vector<double> &pjm                    // return value 
+                const int    mm,        // number of points on mask 
+                const int    kn,        // number of points on kernel
+                const int    j,         // session number 1..jj 
+                const int    edgecode,  // 0 none, no action
+                                        // 1 wrapped, no action
+                                        // 2 normalize truncated kernel
+                                        // 3 normalize, weighted by settlement
+                const RcppParallel::RMatrix<int> &mqarray, 
+                const RcppParallel::RMatrix<double> &settlement, 
+                std::vector<double> &kernelp, // p(move|dx,dy) for points in kernel 
+                std::vector<double> &pjm      // return value
 );
+
 //--------------------------------------------------------------------------
 
 void convolvemq1 (
         const int    m,                     // initial location on mask
         const int    j,                     // session number 1..jj 
         const int    edgecode,              // 0 none, no action; 1 wrapped, no action; 2 normalize truncated kernel
-        const  RcppParallel::RMatrix<int> &mqarray, // input [& 2020-10-31]
+        const RcppParallel::RMatrix<int> &mqarray, // input [& 2020-10-31]
+        const RcppParallel::RMatrix<double> &settlement, 
         const  std::vector<double> &kernelp, // p(move|dx,dy) for points in kernel 
         std::vector<int>    &mj,
         std::vector<double> &pj      // return value

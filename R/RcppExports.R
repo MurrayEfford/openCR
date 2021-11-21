@@ -9,8 +9,8 @@ PCH0secrjcpp <- function(type, x, nc, jj, cumss, kk, mm, cc0, PIA0, gk0, binomN,
     .Call(`_openCR_PCH0secrjcpp`, type, x, nc, jj, cumss, kk, mm, cc0, PIA0, gk0, binomN, Tsk)
 }
 
-PCH1secrparallelcpp <- function(x, type, grain, ncores, individual, jj, mm, nc, cumss, openval0, PIA0, PIAJ, gk0, binomN, Tsk, intervals, moveargsi, movementcode, sparsekernel, anchored, edgecode, usermodel, kernel, mqarray, cellsize, r0) {
-    .Call(`_openCR_PCH1secrparallelcpp`, x, type, grain, ncores, individual, jj, mm, nc, cumss, openval0, PIA0, PIAJ, gk0, binomN, Tsk, intervals, moveargsi, movementcode, sparsekernel, anchored, edgecode, usermodel, kernel, mqarray, cellsize, r0)
+PCH1secrparallelcpp <- function(x, type, grain, ncores, individual, jj, mm, nc, cumss, openval0, PIA0, PIAJ, gk0, binomN, Tsk, intervals, moveargsi, movementcode, sparsekernel, anchored, edgecode, usermodel, kernel, mqarray, cellsize, r0, settlement) {
+    .Call(`_openCR_PCH1secrparallelcpp`, x, type, grain, ncores, individual, jj, mm, nc, cumss, openval0, PIA0, PIAJ, gk0, binomN, Tsk, intervals, moveargsi, movementcode, sparsekernel, anchored, edgecode, usermodel, kernel, mqarray, cellsize, r0, settlement)
 }
 
 gethcpp <- function(nc1, cc, nmix, nk, ss, mm, PIA, Tsk, hk) {

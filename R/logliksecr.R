@@ -319,7 +319,8 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
                         as.matrix(data$kernel),
                         as.matrix(stratum$mqarray),
                         as.double (stratum$cellsize),
-                        as.double (data$details$r0)
+                        as.double (data$details$r0),
+                        as.matrix (settlement)
                     )
                 }
                 pdot <- pdot + pmix[x] * pch1

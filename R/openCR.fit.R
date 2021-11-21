@@ -43,11 +43,9 @@ openCR.fit <- function (
   binomN = 0, 
   movementmodel = c('static', 'BVN', 'BVE', 'BVT', 'RDE', 'RDG','RDL','IND', 'UNI',
       'BVNzi', 'BVEzi', 'RDEzi', 'INDzi', 'UNIzi'),
-  edgemethod = c('truncate', 'wrap', 'none'), 
-  # kernelradius = 10,
-  # sparsekernel = FALSE, 
-  kernelradius = 30,
-  sparsekernel = TRUE, 
+  edgemethod = c('truncate', 'settlement', 'wrap', 'none'), 
+  kernelradius = 30,          # 10 until 2.2.0
+  sparsekernel = TRUE,        # FALSE until 2.2.0
   start = NULL, 
   link = list(), 
   fixed = list(), 
@@ -477,9 +475,9 @@ openCR.fit <- function (
   # mask-level parameters
   ##############################
   
-  if (secr) {
-    maskdesign <- mask.designdata(mask, maskmodel = model, stratumlevels, sessionlevels, 
-      stratumcov, sessioncov) 
+  if (secr && edgemethod == 'settlement') {
+    maskdesign <- mask.designdata(mask, maskmodel = model, stratanames, 
+      sessionlevels, stratumcov, sessioncov) 
     # here assume for now that settle is only mask parm
     # and mask.designdata returns only one matrix.
     # Including maskdesign in 'design' streamlines
