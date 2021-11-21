@@ -3,7 +3,10 @@
 ## mask.designdata.R
 ## Prepare design matrix for mask-level models (cf D.designdata.R in secr)
 ##
-## 2021-11-20
+## 2021-11-22
+
+## mask.designdata()
+## getmaskparm()
 
 ###############################################################################
 ## NOTE does not standardize stratumcov, maskcov
@@ -15,7 +18,7 @@ mask.designdata <- function (mask, maskmodel, stratumlevels, sessionlevels,
 
     ## mask -- mask object or list of masks of the same length as stratumlevels
     ## maskmodel -- formula that may be constant ~1 or include
-    ## any of the 'automatic' terms c('stratum','x','y','x2','y2','xy',
+    ##     any of the 'automatic' terms c('stratum','x','y','x2','y2','xy',
     ##     'session', 't', 'Session') or user-supplied mask-level covariates
     ## stratumlevels -- character vector of stratum names
     ## sessionlevels -- character vector of session names
@@ -220,6 +223,31 @@ mask.designdata <- function (mask, maskmodel, stratumlevels, sessionlevels,
     attr(dframe, 'dimmaskdesign') <- c(nmaskrow, nstrata, R)
     attr(dframe, 'validMaskRows') <- maskrows
     dframe
+}
+###############################################################################
+
+## build array of 'real' values for mask-level parameter 'settle'
+## based on secr:::getD
+getmaskparm <- function (designdata, beta, stratum, parindx, link, fixed,
+    parameter = 'settle') {
+    browser()
+    if ((is.null(designdata) || nrow(designdata)==0) && (is.null(fixed[[parameter]]))) return(NULL)
+    # restrict to data for current stratum
+    designdata <- designdata[designdata$stratum == stratum$i,]
+    nmask <- nrow(stratum$mask)
+    settle <- matrix(nrow = nmask, ncol = stratum$J)
+    if (!is.null(fixed[[parameter]])) {
+        settle[,] <- fixed[[parameter]]
+    }
+    else {
+        settle[,] <- designdata %*% beta[parindx[[parameter]]]   # linear predictor
+        settle[,] <- untransform (settle, link[[parameter]])
+    }
+    # silently constrain 'settle' to be positive
+    if (parameter %in% 'settle') {
+        settle[settle<0] <- 0
+    }
+    settle
 }
 ###############################################################################
 

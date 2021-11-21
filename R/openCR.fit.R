@@ -35,31 +35,32 @@
 
 openCR.fit <- function (
   capthist, 
-  type = "CJS", 
-  model = list(p~1, phi~1, sigma~1),
-  distribution = c("poisson", "binomial"), 
-  mask = NULL, 
-  detectfn = c('HHN','HHR','HEX','HAN','HCG','HVP', 'HPX'), 
-  binomN = 0, 
-  movementmodel = c('static', 'BVN', 'BVE', 'BVT', 'RDE', 'RDG','RDL','IND', 'UNI',
-      'BVNzi', 'BVEzi', 'RDEzi', 'INDzi', 'UNIzi'),
-  edgemethod = c('truncate', 'settlement', 'wrap', 'none'), 
-  kernelradius = 30,          # 10 until 2.2.0
-  sparsekernel = TRUE,        # FALSE until 2.2.0
-  start = NULL, 
-  link = list(), 
-  fixed = list(), 
-  stratumcov = NULL, 
-  sessioncov = NULL, 
-  timecov = NULL, 
-  agecov = NULL, 
-  dframe = NULL, 
-  dframe0 = NULL, 
-  details = list(), 
-  method = 'Newton-Raphson', 
-  trace = NULL, 
-  ncores = NULL, 
-  stratified = FALSE, ...)
+  type          = "CJS", 
+  model         = list(p~1, phi~1, sigma~1),
+  distribution  = c("poisson", "binomial"), 
+  mask          = NULL, 
+  detectfn      = c('HHN','HHR','HEX','HAN','HCG','HVP', 'HPX'), 
+  binomN        = 0, 
+  movementmodel = c('static', 'BVN', 'BVE', 'BVT', 'RDE', 'RDG','RDL','IND', 
+                    'UNI', 'BVNzi', 'BVEzi', 'RDEzi', 'INDzi', 'UNIzi'),
+  edgemethod    = c('truncate', 'settlement', 'wrap', 'none'), 
+  kernelradius  = 30,          # 10 until 2.2.0
+  sparsekernel  = TRUE,        # FALSE until 2.2.0
+  start         = NULL, 
+  link          = list(), 
+  fixed         = list(), 
+  stratumcov    = NULL, 
+  sessioncov    = NULL, 
+  timecov       = NULL, 
+  agecov        = NULL, 
+  dframe        = NULL, 
+  dframe0       = NULL, 
+  details       = list(), 
+  method        = 'Newton-Raphson', 
+  trace         = NULL, 
+  ncores        = NULL, 
+  stratified    = FALSE, 
+  ...)
   
 {
   # Fit open population capture recapture model
@@ -408,7 +409,7 @@ openCR.fit <- function (
     superN = 'log', superD = 'log', sigma = 'log', z = 'log', pmix = 'mlogit',
     move.a =  if (movementmodel %in% c('INDzi', 'UNIzi')) 'logit' else 'log', 
     move.b = if (movementmodel %in% c('BVNzi','BVEzi', 'RDEzi')) 'logit' else 'log',
-    settle = 'logit',
+    settle = 'log',
     tau = 'mlogit')
   link <- replace (defaultlink, names(link), link)
   link[!(names(link) %in% pnames)] <- NULL
@@ -479,8 +480,14 @@ openCR.fit <- function (
   ##############################
   if (secr && edgemethod == 'settlement' &&  
       !(movementmodel %in% c('static','IND','INDzi')) ) {
-    maskdesign <- mask.designdata(mask, maskmodel = model$settle, stratanames, 
-      1:dim(design$PIAJ)[3], stratumcov, sessioncov) 
+    nsession <- dim(design$PIAJ)[3]
+    maskdesign <- mask.designdata(
+      mask          = mask, 
+      maskmodel     = model$settle, 
+      stratumlevels = session(capthist), 
+      sessionlevels = 1:nsession, 
+      stratumcov, 
+      sessioncov) 
     # here assume for now that settle is the only mask parm
     # and mask.designdata returns only one matrix.
     # Including maskdesign in 'design' streamlines
@@ -619,7 +626,8 @@ openCR.fit <- function (
       move.a = if (secr) (if (movementmodel %in% c('annular', 'UNIzi','INDzi', 'UNIzi')) 0.4 else rpsv) else 0.6,    # increased rpsv/2 to rpsv 2021-04-11
       move.b = if (secr) (if (movementmodel %in% c('annular2','annularR','BVNzi','BVEzi','RDEzi')) 0.4 else 
         if (movementmodel %in% c('BVN2')) rpsv*2 else 1.5) else 0.2,
-      pmix = 0.25
+      pmix = 0.25,
+      settle = 1      ## relative probability of settlement at mask point
     )
     
     getdefault <- function (par) transform (default[[par]], link[[par]])

@@ -17,6 +17,8 @@
 ## 2021-05-12 test for time-varying trap covariates allows for stratification
 ## 2021-09-27 usage bug fixed (used should have been binary)
 
+## openCR.design()
+
 ################################################################################
 
 openCR.design <- function (capthist, models, type, naive = FALSE, 
@@ -616,7 +618,6 @@ njxlookup <- function (PIA, primarysession) {
     names(df) <- c('pia', 'n','s','k','x')
     df$j <- formatC(primarysession[df$s], width=3, flag="0")
     df$n <- formatC(df$n, width=4, flag="0")
-    # splitter <- apply(df[,c('n','j','x')], 1, paste, collapse='.')
     splitter <- apply(df[,c('x','j','n')], 1, paste, collapse='.')
     splitdf <- split(df[,c('pia','s')], splitter)
     fixpiask <- function (x) {

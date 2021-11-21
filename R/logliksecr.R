@@ -367,17 +367,21 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
         beta <- fb    ## complete
     }
     #------------------------------------------------------------
-    # Real parameters
-    realparval  <- makerealparameters (data$design, beta, data$parindx, data$link, data$fixed)
-    if (data$learnedresponse)
-        realparval0 <- makerealparameters (data$design0, beta, data$parindx, data$link, data$fixed)
-    else realparval0 <- realparval
-    if (data$details$debug>0) print(realparval)    
-    
-    #------------------------------------------------------------
     # Design data for settlement model - usually NULL
     settlematrix <- data$design$designMatrices$settle
+    data$design$designMatrices$settle <- NULL ## not to confuse makerealparameters
     
+    #------------------------------------------------------------
+    # Real parameters
+    tmpparindx <- data$parindx[!(names(data$parindx) %in% c('settle'))]
+    tmplink <- data$link[!(names(data$link) %in% c('settle'))]
+    tmpfixed <- data$fixed[!(names(data$fixed) %in% c('settle'))]
+    realparval  <- makerealparameters (data$design, beta, tmpparindx, tmplink, tmpfixed)
+    if (data$learnedresponse)
+        realparval0 <- makerealparameters (data$design0, beta, tmpparindx, tmplink, tmpfixed)
+    else realparval0 <- realparval
+    if (data$details$debug>0) print(realparval)    
+
     #------------------------------------------------------------
     # check valid parameter values
     if (!all(is.finite(realparval))) {
