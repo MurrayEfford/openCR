@@ -802,6 +802,11 @@ makerealparameters <- function (design, beta, parindx, link, fixed) {
     Yp[design$parameterTable[,i]]   ## replicate as required
   }
   
+  ## turnover and detection parameters only
+  design$designMatrices$settle <- NULL
+  parindx$settle <- NULL 
+  link$settle    <- NULL 
+  
   ## construct matrix of parameter values
   nrealpar  <- length(design$designMatrices)
   pnames <- names(link)  ## should be complete!
@@ -815,6 +820,7 @@ makerealparameters <- function (design, beta, parindx, link, fixed) {
   temp <- sapply (names(parindx), modelfn)
   if (nrow(design$parameterTable)==1) temp <- t(temp)
   nrw <- nrow(temp)
+  
   ## make new matrix and insert columns in right place
   if (is.null(nrw)) stop ("bug in makerealparameters")
   temp2 <- as.data.frame(matrix(nrow = nrw, ncol = length(parindx)))

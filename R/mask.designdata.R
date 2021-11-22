@@ -228,16 +228,15 @@ mask.designdata <- function (mask, maskmodel, stratumlevels, sessionlevels,
 
 ## build array of 'real' values for mask-level parameter 'settle'
 ## based on secr:::getD
-getsettle <- function (designdata, beta, parindx, link, fixed,
-    nmask, nstrata, nsessions, parameter = 'settle') 
+getsettle <- function (designdata, beta, parindx, link, fixed, parameter = 'settle') 
 {
     if ((is.null(designdata) || nrow(designdata)==0) && (is.null(fixed[[parameter]]))) return(NULL)
-    settle <- array(dim = c(nmask, nstrata, nsessions))
+    settle <- array(dim = attr(designdata, 'dimmaskdesign'))
     if (!is.null(fixed[[parameter]])) {
         settle[,,] <- fixed[[parameter]]
     }
     else {
-        settle[,,] <- designdata %*% beta[parindx[[parameter]]]   # linear predictor
+        settle[,,] <- as.matrix(designdata) %*% beta[parindx[[parameter]]]   # linear predictor
         settle[,,] <- untransform (settle, link[[parameter]])
     }
     # silently constrain 'settle' to be positive

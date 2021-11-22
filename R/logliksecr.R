@@ -366,7 +366,7 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
     #------------------------------------------------------------
     
     if (is.null(data$design$designMatrices$settle)) {
-        settle <- 0
+        settle <- NULL
     }
     else {
         settle <- getsettle (
@@ -375,11 +375,7 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
             data$parindx, 
             data$link, 
             data$fixed,
-            nmask = max(sapply(data$stratumdata, '[[', 'm')),
-            nstrata = length(data$stratumdata),
-            nsessions = max(sapply(data$stratumdata, '[[', 'J')),
             parameter = 'settle') 
-        data$design$designMatrices$settle <- NULL ## not to confuse makerealparameters
     }
     
     #------------------------------------------------------------
