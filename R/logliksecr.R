@@ -166,15 +166,12 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
         #-----------------------------------------
         
         # optionally model settlement as function of mask covariates (and others)
-        if (!is.null(settlematrix)) {
-            settlement <- getmaskparm (
-                settlematrix, 
-                beta, 
-                stratum, 
-                data$parindx, 
-                data$link, 
-                data$fixed, 
-                parameter = 'settle')
+        if (!is.null(settle)) {
+            settlement <- getmaskpar (
+                settle, 
+                m = stratum$m,
+                stratumi = stratum$i 
+                )
         }
         else {
             settlement <- 1
@@ -367,18 +364,29 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
         beta <- fb    ## complete
     }
     #------------------------------------------------------------
-    # Design data for settlement model - usually NULL
-    settlematrix <- data$design$designMatrices$settle
-    data$design$designMatrices$settle <- NULL ## not to confuse makerealparameters
+    
+    if (is.null(data$design$designMatrices$settle)) {
+        settle <- 0
+    }
+    else {
+        settle <- getsettle (
+            data$design$designMatrices$settle, 
+            beta, 
+            data$parindx, 
+            data$link, 
+            data$fixed,
+            nmask = max(sapply(data$stratumdata, '[[', 'm')),
+            nstrata = length(data$stratumdata),
+            nsessions = max(sapply(data$stratumdata, '[[', 'J')),
+            parameter = 'settle') 
+        data$design$designMatrices$settle <- NULL ## not to confuse makerealparameters
+    }
     
     #------------------------------------------------------------
     # Real parameters
-    tmpparindx <- data$parindx[!(names(data$parindx) %in% c('settle'))]
-    tmplink <- data$link[!(names(data$link) %in% c('settle'))]
-    tmpfixed <- data$fixed[!(names(data$fixed) %in% c('settle'))]
-    realparval  <- makerealparameters (data$design, beta, tmpparindx, tmplink, tmpfixed)
+    realparval  <- makerealparameters (data$design, beta, data$parindx, data$link, data$fixed)
     if (data$learnedresponse)
-        realparval0 <- makerealparameters (data$design0, beta, tmpparindx, tmplink, tmpfixed)
+        realparval0 <- makerealparameters (data$design0, beta, data$parindx, data$link, data$fixed)
     else realparval0 <- realparval
     if (data$details$debug>0) print(realparval)    
 
