@@ -218,7 +218,6 @@ mask.designdata <- function (mask, maskmodel, stratumlevels, sessionlevels,
         stop (paste(vars,collapse=','), " not found")
     }
     #--------------------------------------------------------------------------
-    
     ## report dimensions as an attribute
     attr(dframe, 'dimmaskdesign') <- c(nmaskrow, nstrata, R)
     attr(dframe, 'validMaskRows') <- maskrows
@@ -231,6 +230,7 @@ mask.designdata <- function (mask, maskmodel, stratumlevels, sessionlevels,
 getsettle <- function (designdata, beta, parindx, link, fixed, parameter = 'settle') 
 {
     if ((is.null(designdata) || nrow(designdata)==0) && (is.null(fixed[[parameter]]))) return(NULL)
+
     settle <- array(dim = attr(designdata, 'dimmaskdesign'))
     if (!is.null(fixed[[parameter]])) {
         settle[,,] <- fixed[[parameter]]

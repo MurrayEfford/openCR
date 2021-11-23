@@ -481,7 +481,7 @@ openCR.fit <- function (
   if (secr && edgemethod == 'settlement' &&  
       !(movementmodel %in% c('static','IND','INDzi')) ) {
     nsession <- dim(design$PIAJ)[3]
-    maskdesign <- mask.designdata(
+    dframe <- mask.designdata(
       mask          = mask, 
       maskmodel     = model$settle, 
       stratumlevels = session(capthist), 
@@ -489,9 +489,14 @@ openCR.fit <- function (
       stratumcov, 
       sessioncov) 
     # here assume for now that settle is the only mask parm
-    # and mask.designdata returns only one matrix.
-    # Including maskdesign in 'design' streamlines
-    design$designMatrices$settle <- maskdesign
+    # and mask.designdata returns only one dataframe.
+    # Including settle design in 'design' streamlines
+    design$designMatrices$settle <- model.matrix(
+      object = model$settle, 
+      data = dframe,
+      contrasts.arg = details$contrasts)
+    attr(design$designMatrices$settle, 'dimmaskdesign') <- attr(dframe, 'dimmaskdesign')
+    
   }
 
   ############################

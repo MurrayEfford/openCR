@@ -130,6 +130,9 @@ openCR.design <- function (capthist, models, type, naive = FALSE,
         }
     }
     #--------------------------------------------------------------------------------
+    
+    models$settle <- NULL                     # handled separately
+    
     npar     <- length(models)                # real parameters
     parnames <- names(models)                 # c('p','phi') for CJS
     vars     <- unique (unlist(sapply (models, all.vars)))
