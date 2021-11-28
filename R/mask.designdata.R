@@ -6,7 +6,7 @@
 ## 2021-11-22
 
 ## mask.designdata()
-## getmaskparm()
+## getmaskpar()
 
 ###############################################################################
 ## NOTE does not standardize stratumcov, maskcov
@@ -246,12 +246,11 @@ getsettle <- function (designdata, beta, parindx, link, fixed, parameter = 'sett
     settle
 }
 
-getmaskpar <- function (settle, m, stratumi) {
-
-    stratumi <- min(dim(settle)[3],stratumi)
-    matrix(settle[1:m,stratumi,], nrow = m)
-    
+getmaskpar <- function (parval, m, stratumi) {
+    stratumi <- min(dim(parval)[3],stratumi)
+    matrix(parval[1:m,stratumi,], nrow = m)
 }
+
 ###############################################################################
 
 

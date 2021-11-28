@@ -168,7 +168,7 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
         # optionally model settlement as function of mask covariates (and others)
         if (!is.null(settle)) {
             settlement <- getmaskpar (
-                settle, 
+                parval = settle, 
                 m = stratum$m,
                 stratumi = stratum$i 
                 )

@@ -128,6 +128,7 @@ Rcpp::NumericVector convolvemqcpp (
     
     int mm = mqarray.nrow();            // number of points on mask
     int kn = mqarray.ncol();            // number of points on kernel
+    bool settlemodel = settlement.nrow() == mm; // true iff settlement model
     
     int m, q, mq;
     double sump;
@@ -136,9 +137,8 @@ Rcpp::NumericVector convolvemqcpp (
     
     // convolve movement kernel and pjm... 
     for (m = 0; m < mm; m++) {
-        if (edgecode == 3) settle = settlement(m,j);  // weight by relative settlement 
-        
-        if (edgecode == 2 || edgecode == 3) {
+        if (settlemodel) settle = settlement(m,j);  // weight by relative settlement 
+        if (edgecode == 2) {
             // 2020-10-29 adjust for edge-truncated kernel cf convolvemqold
             sump = 0;
             for (q=0; q < kn; q++) {           // over movement kernel 
