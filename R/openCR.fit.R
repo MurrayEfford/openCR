@@ -43,7 +43,7 @@ openCR.fit <- function (
   binomN        = 0, 
   movementmodel = c('static', 'BVN', 'BVE', 'BVT', 'RDE', 'RDG','RDL','IND', 
                     'UNI', 'BVNzi', 'BVEzi', 'RDEzi', 'INDzi', 'UNIzi'),
-  edgemethod    = c('truncate', 'settlement', 'wrap', 'none'), 
+  edgemethod    = c('truncate', 'wrap', 'none'), 
   kernelradius  = 30,          # 10 until 2.2.0
   sparsekernel  = TRUE,        # FALSE until 2.2.0
   start         = NULL, 
@@ -105,7 +105,8 @@ openCR.fit <- function (
     log = '',
     dummyvariablecoding = NULL,
     anchored = FALSE,
-    r0 = 1/sqrt(pi)      # effective radius of zero cell in movement kernel
+    r0 = 1/sqrt(pi),      # effective radius of zero cell in movement kernel
+    settlemodel = FALSE
   )
   
   if (is.logical(details$hessian)) {
@@ -372,8 +373,7 @@ openCR.fit <- function (
       ## fix survival and recruitment
       fixed <- replace(list(phi = 1.0, b = 1.0), names(fixed), fixed)
     }
-    if (edgemethod == 'settlement' && 
-        !(movementmodel %in% c('static','IND','INDzi')) ) {
+    if (details$settlemodel && !(movementmodel %in% c('static','IND','INDzi')) ) {
       pnames <- c(pnames, 'settle')
     }
   }
@@ -478,9 +478,11 @@ openCR.fit <- function (
   ##############################
   # mask-level parameters
   ##############################
-  if (secr && edgemethod == 'settlement' &&  
-      !(movementmodel %in% c('static','IND','INDzi')) ) {
+  if (secr && details$settlemodel &&  
+          !(movementmodel %in% c('static','IND','INDzi')) ) {
     nsession <- dim(design$PIAJ)[3]
+    if (link$settle == 'log')
+      model$settle <- update (model$settle, ~.+0)   # drop intercept
     dframe <- mask.designdata(
       mask          = mask, 
       maskmodel     = model$settle, 
@@ -495,6 +497,11 @@ openCR.fit <- function (
       object = model$settle, 
       data = dframe,
       contrasts.arg = details$contrasts)
+    
+    # try to append valid levels (shouldn't this be stratum-dependent?)
+    validlevels <- matrix(TRUE, nrow = 1, ncol = nsession, dimnames=list('settle',NULL))
+    design$validlevels <- rbind(design$validlevels, validlevels)
+    
     attr(design$designMatrices$settle, 'dimmaskdesign') <- attr(dframe, 'dimmaskdesign')
     
   }
@@ -503,6 +510,12 @@ openCR.fit <- function (
   # Parameter mapping (general)
   #############################
   np <- sapply(design$designMatrices, ncol)
+  if (any(np==0)) {  ## 2021-11-30
+    if (!is.na(np['settle']) && np['settle']==0) {
+      message ("use settlemodel = FALSE for uniform settlement")
+    }
+    stop ("model must have at least one beta parameter for each real parameter")
+  }
   NP <- sum(np)
   parindx <- split(1:NP, rep(1:length(np), np))
   names(parindx) <- names(np)

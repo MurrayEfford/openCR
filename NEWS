@@ -1,7 +1,8 @@
-version 2.2.2 (2021-11-17)
+version 2.2.2 (2021-11-30)
 
 New features and changed behaviour
-    o none
+    o openCR() new parameter 'settle' for weighted settlement
+    o cumMove() allows settlement to be weighted by 0-1 mask covariate
 
 Bugs fixed
     o expected.d() failed with user-defined movement model

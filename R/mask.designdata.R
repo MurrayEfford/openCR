@@ -218,6 +218,7 @@ mask.designdata <- function (mask, maskmodel, stratumlevels, sessionlevels,
         stop (paste(vars,collapse=','), " not found")
     }
     #--------------------------------------------------------------------------
+    
     ## report dimensions as an attribute
     attr(dframe, 'dimmaskdesign') <- c(nmaskrow, nstrata, R)
     attr(dframe, 'validMaskRows') <- maskrows

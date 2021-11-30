@@ -220,14 +220,13 @@ nparmove <- function (movementmodel) {
 
 edgemethodcode <- function (edgemethod) {
   if (is.null(edgemethod)) edgemethod <- 'none' 
-  if (!edgemethod %in% c('none','wrap','truncate', 'settlement')) {
-    stop ("unrecognised edge method - should be 'none','wrap', 'truncate' or 'settlement'")
+  if (!edgemethod %in% c('none','wrap','truncate')) {
+    stop ("unrecognised edge method - should be 'none','wrap', or 'truncate'")
   }
   switch (edgemethod, 
     none       = 0, 
     wrap       = 1,
     truncate   = 2, 
-    settlement = 3,
     0)
 }
 ################################################################################

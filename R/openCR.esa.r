@@ -123,7 +123,7 @@ openCR.esa <- function (object, bysession = FALSE, stratum = 1) {
     hk0 <- array(temp[[2]], dim=c(nrow(realparval0), k, m)) # 2020-10-28 as array
 
     settlement <- 1   # dummy value for now
-    if (edgecode == 3) warning ("esa not ready for settlement")
+    if (!is.null(details$settlemodel) && details$settlemodel) warning ("esa not ready for settlement")
     
     ## mixture proportions
     if (details$nmix > 1) {

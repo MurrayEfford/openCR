@@ -98,6 +98,7 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
             for (x in 1:nrow(pmix)) {
                 hx <- if (detectr == "multi") matrix(haztemp$h[x,,], nrow = stratum$m) else -1 ## lookup sum_k (hazard)
                 hi <- if (detectr == "multi") haztemp$hindex else -1                        ## index to hx
+                
                 temp <-  allhistsecrparallelcpp(
                     as.integer(x-1),
                     as.integer(type),
