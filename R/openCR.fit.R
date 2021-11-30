@@ -31,6 +31,7 @@
 ## 2021-08-09 iterlim 300 default for nlm (less frequent code 4)
 ## 2021-10-05 revamp of preferred aliases for movementmodel
 ## 2021-10-06 allow RDL
+## 2021-11-30 completed settlement model
 ################################################################################
 
 openCR.fit <- function (
@@ -106,7 +107,7 @@ openCR.fit <- function (
     dummyvariablecoding = NULL,
     anchored = FALSE,
     r0 = 1/sqrt(pi),      # effective radius of zero cell in movement kernel
-    settlemodel = FALSE
+    settlemodel = FALSE   # TRUE if differential settlement to be modelled
   )
   
   if (is.logical(details$hessian)) {
@@ -478,11 +479,13 @@ openCR.fit <- function (
   ##############################
   # mask-level parameters
   ##############################
-  if (secr && details$settlemodel &&  
-          !(movementmodel %in% c('static','IND','INDzi')) ) {
+  if (secr && 
+      details$settlemodel &&  
+      !(movementmodel %in% c('static','IND','INDzi')) ) {
     nsession <- dim(design$PIAJ)[3]
-    if (link$settle == 'log')
+    if (link$settle == 'log') {
       model$settle <- update (model$settle, ~.+0)   # drop intercept
+    }
     dframe <- mask.designdata(
       mask          = mask, 
       maskmodel     = model$settle, 
