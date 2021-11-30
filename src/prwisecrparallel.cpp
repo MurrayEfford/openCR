@@ -93,10 +93,6 @@ struct Somesecrhistories : public RcppParallel::Worker {
         kn = kernel.nrow();          // number of cells in kernel
         cc = openval.nrow();         // number of parameter combinations
         
-        // fall back to unweighted if data inadequate for settlement model
-        if ((edgecode==3) && (settlement.nrow() != mm))
-            edgecode = 2; 
-        
         pdotbd.resize(jj*jj);
         std::fill(pdotbd.begin(), pdotbd.end(), 1.0);
         
