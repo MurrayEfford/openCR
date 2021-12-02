@@ -482,6 +482,7 @@ openCR.fit <- function (
   if (secr && 
       details$settlemodel &&  
       !(movementmodel %in% c('static','IND','INDzi')) ) {
+    warning ("settlemodel is experimental in openCR 2.2.2")
     nsession <- dim(design$PIAJ)[3]
     if (link$settle == 'log') {
       model$settle <- update (model$settle, ~.+0)   # drop intercept
