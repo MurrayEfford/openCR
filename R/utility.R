@@ -17,6 +17,7 @@
 ## 2021-09-21 tidy .openCRstuff$movementmodels, add .openCRstuff$kernelmodels
 ## 2021-10-12 stdmovement
 ## 2021-11-03 openCR 2.2.0 
+
 ###############################################################################
 
 .openCRstuff <- new.env()
@@ -207,12 +208,12 @@ nparmove <- function (movementmodel) {
 edgemethodcode <- function (edgemethod) {
   if (is.null(edgemethod)) edgemethod <- 'none' 
   if (!edgemethod %in% c('none','wrap','truncate')) {
-    stop ("unrecognised edge method - should be 'none','wrap' or 'truncate'")
+    stop ("unrecognised edge method - should be 'none','wrap', or 'truncate'")
   }
   switch (edgemethod, 
-    none     = 0, 
-    wrap     = 1,
-    truncate = 2, 
+    none       = 0, 
+    wrap       = 1,
+    truncate   = 2, 
     0)
 }
 ################################################################################
@@ -787,6 +788,11 @@ makerealparameters <- function (design, beta, parindx, link, fixed) {
     Yp[design$parameterTable[,i]]   ## replicate as required
   }
   
+  ## turnover and detection parameters only
+  design$designMatrices$settle <- NULL
+  parindx$settle <- NULL 
+  link$settle    <- NULL 
+  
   ## construct matrix of parameter values
   nrealpar  <- length(design$designMatrices)
   pnames <- names(link)  ## should be complete!
@@ -800,6 +806,7 @@ makerealparameters <- function (design, beta, parindx, link, fixed) {
   temp <- sapply (names(parindx), modelfn)
   if (nrow(design$parameterTable)==1) temp <- t(temp)
   nrw <- nrow(temp)
+  
   ## make new matrix and insert columns in right place
   if (is.null(nrw)) stop ("bug in makerealparameters")
   temp2 <- as.data.frame(matrix(nrow = nrw, ncol = length(parindx)))
@@ -1319,4 +1326,3 @@ get.nmix <- function (model) {
   nmix
 }
 ###############################################################################
-

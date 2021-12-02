@@ -1,10 +1,21 @@
 # cumMove.R
 # 2021-06-14,16
+# 2021-11-19 user may provide settlement
 
 cumMove <- function (X, mask, kernel, edgemethod = c('truncate', 'wrap', 'none'), 
-    nstep = 1, mqarray = NULL) {
+    nstep = 1, mqarray = NULL, settlecov = NULL) {
     if (ms(mask)) {
         stop ("requires single mask")
+    }
+    if (is.null(settlecov)) {
+        settlement <- matrix(1)   # dummy for now 2021-11-21
+    }
+    else {
+        if (!(settlecov %in% names(covariates(mask)))) {
+            stop ("settlecov should be the name of a mask covariate")
+        }
+        if (nstep>0)
+        settlement <- matrix(covariates(mask)[,settlecov], nrow=nrow(mask), ncol=nstep)
     }
     # cell probabilities
     kernelp <- matrix(covariates(kernel)$kernelp, nrow = nrow(kernel), 
@@ -20,7 +31,6 @@ cumMove <- function (X, mask, kernel, edgemethod = c('truncate', 'wrap', 'none')
     if (attr(mask, 'type') != 'traprect' && edgemethod == 'wrap') {
         stop("edgemethod = 'wrap' requires mask of type 'traprect'")        
     }
-    
     # generate lookup array
     if (is.null(mqarray)) {
         mqarray <- mqsetup (mask, kernel, cellsize, edgecode)  
@@ -51,7 +61,6 @@ cumMove <- function (X, mask, kernel, edgemethod = c('truncate', 'wrap', 'none')
         pm <- rep(0, nrow(mask))   
         pm[index] <- 1/nrow(X)
     }
-    
     # iterate over steps
     pm0 <- pm
     if (nstep > 0) {
@@ -60,6 +69,7 @@ cumMove <- function (X, mask, kernel, edgemethod = c('truncate', 'wrap', 'none')
                 as.integer(j), 
                 as.integer(edgecode),
                 as.matrix(mqarray), 
+                as.matrix(settlement),
                 as.double(kernelp), 
                 as.double(pm))
         }

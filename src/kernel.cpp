@@ -12,33 +12,45 @@
 // 2021-09-25 BVN2 (16)
 // 2021-10-06 protect Boost call from infinite scale lognormal
 // 2021-10-12 strict new codes RDE, RDG, RDL etc. 
+// 2021-11-29 settlement option
 
 #include "utils.h"
 
 // [[Rcpp::depends(BH)]]
 
 void convolvemq (
-        const int    mm,                    // number of points on mask 
-        const int    kn,                    // number of points on kernel
-        const int    j,                     // session number 1..jj 
-        const int    edgecode,              // 0 none, no action; 1 wrapped, no action; 2 normalize truncated kernel
-        const  RcppParallel::RMatrix<int> &mqarray, // input [& 2020-10-31]
+        const int    mm,        // number of points on mask 
+        const int    kn,        // number of points on kernel
+        const int    j,         // session number 1..jj 
+        const int    edgecode,  // 0 none, no action
+                                // 1 wrapped, no action
+                                // 2 normalize truncated kernel
+                                // 3 normalize, weighted by settlement
+        const RcppParallel::RMatrix<int> &mqarray, 
+        const RcppParallel::RMatrix<double> &settlement, 
         std::vector<double> &kernelp, // p(move|dx,dy) for points in kernel 
         std::vector<double> &pjm      // return value
 )
 {
     int m, q, mq;
     double sump;
+    bool settlemodel = settlement.nrow() == mqarray.nrow(); // true iff settlement model
     std::vector<double> workpjm(mm);
     
     // convolve movement kernel and pjm... 
     for (m = 0; m < mm; m++) {
-        if (edgecode == 2) {
-            // 2020-10-29 adjust for edge-truncated kernel cf convolvemqold
+        if (edgecode >= 2) {
             sump = 0;
             for (q=0; q < kn; q++) {           // over movement kernel 
-                if (mqarray(m,q) >= 0) {       // post-dispersal site is within mask 
-                    sump += kernelp[kn * (j-1) + q];
+                mq = mqarray(m,q);
+                if (mq >= 0) {       // post-dispersal site is within mask 
+                    if (settlemodel) {
+                        // weight by relative settlement 
+                        sump += kernelp[kn * (j-1) + q] * settlement(mq,j-1);  
+                    }
+                    else {
+                        sump += kernelp[kn * (j-1) + q];
+                    }
                 }
             }
         }
@@ -51,8 +63,14 @@ void convolvemq (
                 mq = mqarray(m,q);  
                 // post-dispersal site is within mask 
                 if (mq >= 0) {                 
-                    // probability of this move 
-                    workpjm[mq] += pjm[m] * kernelp[kn * (j-1) + q] / sump;   
+                    if (settlemodel) {
+                        // weight by relative settlement 
+                        workpjm[mq] += pjm[m] * kernelp[kn * (j-1) + q] * settlement(mq,j-1) / sump;   
+                    }
+                    else {
+                        // probability of this move 
+                        workpjm[mq] += pjm[m] * kernelp[kn * (j-1) + q] / sump;   
+                    }
                 }
             }
         }
@@ -63,12 +81,13 @@ void convolvemq (
 }
 //--------------------------------------------------------------------------
 
-// from single point m
+// from single point m (used with 'anchored')
 void convolvemq1 (
         const int    m,                     // initial location on mask
         const int    j,                     // session number 1..jj 
         const int    edgecode,              // 0 none, no action; 1 wrapped, no action; 2 normalize truncated kernel
         const RcppParallel::RMatrix<int> &mqarray, // input [& 2020-10-31]
+        const RcppParallel::RMatrix<double> &settlement, 
         const std::vector<double> &kernelp, // p(move|dx,dy) for points in kernel 
         std::vector<int>    &mj,
         std::vector<double> &pj      // return value
@@ -77,13 +96,16 @@ void convolvemq1 (
     int kn = mqarray.ncol();    // number of points on kernel
     int q;
     double sump;
+    double settle = 1.0;
     
-    if (edgecode == 2) {
+    bool settlemodel = settlement.nrow() == mqarray.nrow(); // true iff settlement model
+    if (edgecode >= 2) {
         // adjust for edge-truncated kernel
         sump = 0;
         for (q=0; q < kn; q++) {           // over movement kernel 
             if (mqarray(m,q) >= 0) {       // post-dispersal site is within mask 
-                sump += kernelp[kn * (j-1) + q];
+                if (settlemodel) settle = settlement(mqarray(m,q),j-1);
+                sump += kernelp[kn * (j-1) + q] * settle;
             }
         }
     }
@@ -97,7 +119,8 @@ void convolvemq1 (
         for (q=0; q < kn; q++) {           
             mj[q] = mqarray(m,q);          // destination; negative if off-mask
             if (mj[q] >= 0) {                 
-                pj[q] = kernelp[kn * (j-1) + q] / sump;   // probability of reaching point mj[q]
+                if (settlemodel) settle = settlement(mqarray(m,q),j-1);
+                pj[q] = kernelp[kn * (j-1) + q] * settle / sump;   // probability of reaching point mj[q]
             }
             else {
                 pj[q] = 0;
@@ -113,24 +136,29 @@ Rcpp::NumericVector convolvemqcpp (
         const int    j,
         const int    edgecode,
         const Rcpp::NumericMatrix mqarray,
+        const Rcpp::NumericMatrix settlement, 
         const Rcpp::NumericVector kernelp,
-        const Rcpp::NumericVector pjm)
-{
+        const Rcpp::NumericVector pjm) {
+    
     int mm = mqarray.nrow();            // number of points on mask
     int kn = mqarray.ncol();            // number of points on kernel
+    bool settlemodel = settlement.nrow() == mm; // true iff settlement model
     
     int m, q, mq;
     double sump;
+    double settle = 1.0;
     std::vector<double> workpjm(mm);
     
     // convolve movement kernel and pjm... 
     for (m = 0; m < mm; m++) {
-        if (edgecode == 2) {
+        if (edgecode >= 2) {
             // 2020-10-29 adjust for edge-truncated kernel cf convolvemqold
             sump = 0;
             for (q=0; q < kn; q++) {           // over movement kernel 
-                if (mqarray(m,q) >= 0) {       // post-dispersal site is within mask 
-                    sump += kernelp[kn * (j-1) + q];
+                mq = mqarray(m,q);  
+                if (mq >= 0) {       // post-dispersal site is within mask 
+                    if (settlemodel) settle = settlement(mq,j-1);
+                    sump += kernelp[kn * (j-1) + q] * settle;
                 }
             }
         }
@@ -144,7 +172,8 @@ Rcpp::NumericVector convolvemqcpp (
                 // post-dispersal site is within mask 
                 if (mq >= 0) {                 
                     // probability of this move 
-                    workpjm[mq] += pjm[m] * kernelp[kn * (j-1) + q] / sump;   
+                    if (settlemodel) settle = settlement(mq,j-1);
+                    workpjm[mq] += pjm[m] * kernelp[kn * (j-1) + q] * settle / sump;   
                 }
             }
         }

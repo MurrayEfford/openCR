@@ -22,7 +22,7 @@ openCR.fit (capthist, type = "CJS", model = list(p~1, phi~1, sigma~1),
     detectfn = c("HHN", "HHR", "HEX", "HAN", "HCG", "HVP", "HPX"), binomN = 0, 
     movementmodel = c('static', 'BVN', 'BVE', 'BVT', 'RDE', 'RDG','RDL','IND', 'UNI',
       'BVNzi', 'BVEzi', 'RDEzi', 'INDzi', 'UNIzi'), edgemethod = 
-    c("truncate","wrap","none"), kernelradius = 30, sparsekernel = TRUE, 
+    c("truncate", "wrap", "none"), kernelradius = 30, sparsekernel = TRUE, 
     start = NULL, link = list(), fixed = list(), stratumcov = NULL, 
     sessioncov = NULL, timecov = NULL, agecov = NULL, dframe = NULL, 
     dframe0 = NULL, details = list(), method = "Newton-Raphson", trace = NULL, 

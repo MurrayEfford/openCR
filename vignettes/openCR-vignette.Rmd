@@ -669,11 +669,42 @@ Use the **secr** function `spotHeight(k)` to display cell values on the plot.
 
 ## Warnings
 
-1. The 'uncorrelated' option is not recommended. It discards information on the continuity of home ranges between primary sessions, and estimates may vary with the (often arbitrary) extent of the habitat mask.
+1. The independent option 'IND' (previously 'uncorrelated') is not recommended. It discards information on the continuity of home ranges between primary sessions, and estimates may vary with the (often arbitrary) extent of the habitat mask.
 
 2. Kernel-based movement models require extreme care. Definitive advice cannot yet be given on the safe use of these models. Long-distance movements will usually be poorly sampled and poorly modelled.
 
 3. User-defined functions cannot be used with multithreaded C++, so they will be slow to fit; always set `ncores = 1`.
+
+# Settlement models
+
+When one of the kernel models is used (`movementmodel` not 'static', 'IND' or 'INDzi') the movement model may be modified by weighting settlement according one or more local (mask) covariates. The weights are given by a new parameter 'settle'. By default the logarithm of 'settle' is a linear combination of mask covariates with no intercept. 'settle' may also vary by 
+
+* stratum
+* primary session
+* canned variables corresponding to coordinates x, y, xy, x2, y2 (see **secr**)
+
+The settlement model is invoked by setting `details = list(settlemodel = TRUE)`.
+
+This example uses a compressed version of the ovenbird mistnetting data:
+```{r settlementexample, eval = TRUE, cache = mycache}
+ovenCHb <- reduce(ovenCHp, by = 'all', outputdetector = 'count')
+msk <- make.mask(traps(ovenCH[[1]]), buffer = 500, spacing = 40, type = 'trapbuffer')
+# uniform settlement
+fit0 <- openCR.fit(ovenCHb, type = 'PLBsecrf', mask = msk, binomN = 1,
+  movementmodel = 'BVN', details = list(settlemodel = FALSE))
+# logarithmic N-S gradient in settlement
+fit1 <- openCR.fit(ovenCHb, type = 'PLBsecrf', mask = msk, binomN = 1,
+  movementmodel = 'BVN', details = list(settlemodel = TRUE), model = settle~y)
+AIC(fit0, fit1)
+coef(fit1)
+```
+
+In this example there is **no** evidence for a N-S gradient in settlement. The intercept is removed automatically when the link function is the default ('log'), as shown in the resulting formula for
+'settle'.
+
+The cumulative effect of differential settlement may be visualised with function `cumMove` by specifying a single mask covariate with values in the range 0 to 1.
+
+NOTE: Settlement models are a novelty in **openCR** 2.2.2 and their value is limited because survival and recruitment are *not* allowed to vary across space. The implementation may change. 
 
 # Derived parameters
 

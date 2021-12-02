@@ -31,37 +31,37 @@
 ## 2021-08-09 iterlim 300 default for nlm (less frequent code 4)
 ## 2021-10-05 revamp of preferred aliases for movementmodel
 ## 2021-10-06 allow RDL
+## 2021-11-30 completed settlement model
 ################################################################################
 
 openCR.fit <- function (
   capthist, 
-  type = "CJS", 
-  model = list(p~1, phi~1, sigma~1),
-  distribution = c("poisson", "binomial"), 
-  mask = NULL, 
-  detectfn = c('HHN','HHR','HEX','HAN','HCG','HVP', 'HPX'), 
-  binomN = 0, 
-  movementmodel = c('static', 'BVN', 'BVE', 'BVT', 'RDE', 'RDG','RDL','IND', 'UNI',
-      'BVNzi', 'BVEzi', 'RDEzi', 'INDzi', 'UNIzi'),
-  edgemethod = c('truncate', 'wrap', 'none'), 
-  # kernelradius = 10,
-  # sparsekernel = FALSE, 
-  kernelradius = 30,
-  sparsekernel = TRUE, 
-  start = NULL, 
-  link = list(), 
-  fixed = list(), 
-  stratumcov = NULL, 
-  sessioncov = NULL, 
-  timecov = NULL, 
-  agecov = NULL, 
-  dframe = NULL, 
-  dframe0 = NULL, 
-  details = list(), 
-  method = 'Newton-Raphson', 
-  trace = NULL, 
-  ncores = NULL, 
-  stratified = FALSE, ...)
+  type          = "CJS", 
+  model         = list(p~1, phi~1, sigma~1),
+  distribution  = c("poisson", "binomial"), 
+  mask          = NULL, 
+  detectfn      = c('HHN','HHR','HEX','HAN','HCG','HVP', 'HPX'), 
+  binomN        = 0, 
+  movementmodel = c('static', 'BVN', 'BVE', 'BVT', 'RDE', 'RDG','RDL','IND', 
+                    'UNI', 'BVNzi', 'BVEzi', 'RDEzi', 'INDzi', 'UNIzi'),
+  edgemethod    = c('truncate', 'wrap', 'none'), 
+  kernelradius  = 30,          # 10 until 2.2.0
+  sparsekernel  = TRUE,        # FALSE until 2.2.0
+  start         = NULL, 
+  link          = list(), 
+  fixed         = list(), 
+  stratumcov    = NULL, 
+  sessioncov    = NULL, 
+  timecov       = NULL, 
+  agecov        = NULL, 
+  dframe        = NULL, 
+  dframe0       = NULL, 
+  details       = list(), 
+  method        = 'Newton-Raphson', 
+  trace         = NULL, 
+  ncores        = NULL, 
+  stratified    = FALSE, 
+  ...)
   
 {
   # Fit open population capture recapture model
@@ -106,7 +106,8 @@ openCR.fit <- function (
     log = '',
     dummyvariablecoding = NULL,
     anchored = FALSE,
-    r0 = 1/sqrt(pi)      # effective radius of zero cell in movement kernel
+    r0 = 1/sqrt(pi),      # effective radius of zero cell in movement kernel
+    settlemodel = FALSE   # TRUE if differential settlement to be modelled
   )
   
   if (is.logical(details$hessian)) {
@@ -278,7 +279,7 @@ openCR.fit <- function (
   model <- stdform (model)  ## named, no LHS; see utility.R
   defaultmodel <- list(p = ~1, lambda0 = ~1, phi = ~1, b = ~1, f = ~1, lambda = ~1, g = ~1,
     gamma = ~1, kappa = ~1, BN = ~1, BD = ~1, N=~1, D = ~1, superN = ~1,
-    superD = ~1, sigma = ~1, z = ~1, move.a = ~1, move.b = ~1, tau = ~1)
+    superD = ~1, sigma = ~1, z = ~1, move.a = ~1, move.b = ~1, tau = ~1, settle = ~1)
   model <- replace (defaultmodel, names(model), model)
   
   pnames <- switch (type,
@@ -356,7 +357,7 @@ openCR.fit <- function (
         }
       }
     }
-    else if (movementmodel %in% c('uniform','UNI')) {
+    else if (movementmodel %in% c('UNI')) {
       ## no parameters, no action needed
     }
     else if (movementmodel == 'annular') {
@@ -372,6 +373,9 @@ openCR.fit <- function (
       ## closed population
       ## fix survival and recruitment
       fixed <- replace(list(phi = 1.0, b = 1.0), names(fixed), fixed)
+    }
+    if (details$settlemodel && !(movementmodel %in% c('static','IND','INDzi')) ) {
+      pnames <- c(pnames, 'settle')
     }
   }
   
@@ -403,6 +407,7 @@ openCR.fit <- function (
   defaultlink <- list(p = 'logit', lambda0 = 'log', phi = 'logit', b = 'mlogit', f = 'log',
     gamma = 'logit', kappa = 'log', g = 'logit',
     lambda = 'log', BN = 'log', BD = 'log', D = 'log', N = 'log',
+    settle = 'log',
     superN = 'log', superD = 'log', sigma = 'log', z = 'log', pmix='mlogit',
     move.a =  if (movementmodel %in% c('INDzi', 'UNIzi')) 'logit' else 'log', 
     move.b = if (movementmodel %in% c('BVNzi','BVEzi', 'RDEzi')) 'logit' else 'log',
@@ -471,10 +476,50 @@ openCR.fit <- function (
     design
   }
   
+  ##############################
+  # mask-level parameters
+  ##############################
+  if (secr && 
+      details$settlemodel &&  
+      !(movementmodel %in% c('static','IND','INDzi')) ) {
+    warning ("settlemodel is experimental in openCR 2.2.2")
+    nsession <- dim(design$PIAJ)[3]
+    if (link$settle == 'log') {
+      model$settle <- update (model$settle, ~.+0)   # drop intercept
+    }
+    dframe <- mask.designdata(
+      mask          = mask, 
+      maskmodel     = model$settle, 
+      stratumlevels = session(capthist), 
+      sessionlevels = 1:nsession, 
+      stratumcov, 
+      sessioncov) 
+    # here assume for now that settle is the only mask parm
+    # and mask.designdata returns only one dataframe.
+    # Including settle design in 'design' streamlines
+    design$designMatrices$settle <- model.matrix(
+      object = model$settle, 
+      data = dframe,
+      contrasts.arg = details$contrasts)
+    
+    # try to append valid levels (shouldn't this be stratum-dependent?)
+    validlevels <- matrix(TRUE, nrow = 1, ncol = nsession, dimnames=list('settle',NULL))
+    design$validlevels <- rbind(design$validlevels, validlevels)
+    
+    attr(design$designMatrices$settle, 'dimmaskdesign') <- attr(dframe, 'dimmaskdesign')
+    
+  }
+
   ############################
   # Parameter mapping (general)
   #############################
   np <- sapply(design$designMatrices, ncol)
+  if (any(np==0)) {  ## 2021-11-30
+    if (!is.na(np['settle']) && np['settle']==0) {
+      message ("use settlemodel = FALSE for uniform settlement")
+    }
+    stop ("model must have at least one beta parameter for each real parameter")
+  }
   NP <- sum(np)
   parindx <- split(1:NP, rep(1:length(np), np))
   names(parindx) <- names(np)
@@ -485,6 +530,10 @@ openCR.fit <- function (
   
   mqarray <- 0
   if (secr && !(movementmodel %in% c('static','IND','INDzi'))) {
+<<<<<<< HEAD
+    
+=======
+>>>>>>> master
     ## 2021-02-19 add annular option
     ## movement kernel
     k2 <- kernelradius
@@ -602,7 +651,8 @@ openCR.fit <- function (
       move.a = if (secr) (if (movementmodel %in% c('annular', 'UNIzi','INDzi', 'UNIzi')) 0.4 else rpsv) else 0.6,    # increased rpsv/2 to rpsv 2021-04-11
       move.b = if (secr) (if (movementmodel %in% c('annular2','annularR','BVNzi','BVEzi','RDEzi')) 0.4 else 
         if (movementmodel %in% c('BVN2')) rpsv*2 else 1.5) else 0.2,
-      pmix = 0.25
+      pmix = 0.25,
+      settle = 1      ## relative probability of settlement at mask point
     )
     
     getdefault <- function (par) transform (default[[par]], link[[par]])

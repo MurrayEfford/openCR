@@ -17,7 +17,7 @@ Compute the compounding effect of a random walk defined by a discrete kernel. Th
 \usage{
 
 cumMove(X, mask, kernel, edgemethod = c("truncate", "wrap", "none"), nstep = 1,
- mqarray = NULL)
+ mqarray = NULL, settlecov = NULL)
 
 proportionInPolygon(mask, poly, cov = "pm")
 
@@ -30,6 +30,7 @@ proportionInPolygon(mask, poly, cov = "pm")
   \item{edgemethod}{character}
   \item{nstep}{non-negative integer}
   \item{mqarray}{integer array of lookup indices}
+  \item{settlecov}{character name of covariate of \code{mask}}
   \item{poly}{a polygon (see Details)}
   \item{cov}{character name of covariate of \code{mask}}
 }
@@ -44,6 +45,8 @@ The input \code{X} may be -
 }
 
 The default edgemethod truncates the kernel at the edge and re-normalizes the cell probabilities so that all destinations lie within the boundary of the mask.
+
+\code{settlecov} may name a covariate of \code{mask} that has settlement weights in range 0--1.
 
 For \code{proportionInPolygon}, the input mask may be the output from \code{cumMove}. The polygon \code{poly} may be specified as for \code{\link{pointsInPolygon}} (e.g., SpatialPolygons object or 2-column matrix of coordinates) or as a list with components x and y. A list of polygon specifications is also accepted.
 

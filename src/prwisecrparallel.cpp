@@ -38,6 +38,7 @@ struct Somesecrhistories : public RcppParallel::Worker {
     
     const double cellsize;   
     const double r0;    
+    const RcppParallel::RMatrix<double> settlement;
     
     int    kk, jj, kn, cc;
     bool   indiv;
@@ -74,6 +75,7 @@ struct Somesecrhistories : public RcppParallel::Worker {
         const Rcpp::IntegerMatrix mqarray,
         double cellsize,
         double r0,
+        const Rcpp::NumericMatrix settlement,
         Rcpp::NumericVector output)    
         : 
             x(x), type(type), mm(mm), nc(nc), binomN(binomN), CJSp1(CJSp1),  
@@ -82,7 +84,8 @@ struct Somesecrhistories : public RcppParallel::Worker {
             openval(openval), PIA(PIA), PIAJ(PIAJ), Tsk(Tsk), h(h), hindex(hindex), 
             movementcode(movementcode), sparsekernel(sparsekernel), anchored(anchored), 
             edgecode(edgecode), usermodel(usermodel), moveargsi(moveargsi), kernel(kernel), 
-            mqarray(mqarray), cellsize(cellsize), r0(r0), output(output) {
+            mqarray(mqarray), cellsize(cellsize), r0(r0), settlement(settlement), 
+            output(output) {
         
         // now can initialise these derived counts
         kk = Tsk.nrow();             // number of detectors
@@ -218,7 +221,7 @@ struct Somesecrhistories : public RcppParallel::Worker {
     //                             }
     //                         } 
     //                         else {
-    //                             convolvemq(mm, kn, j-1, edgecode, mqarray, kernelp, alpha);     
+    //                             convolvemq(mm, kn, j-1, edgecode, mqarray, settlement, kernelp, alpha);     
     //                         }
     //                         for (m = 0; m < mm; m++) alpha[m] *= pjmat[m * jj + j - 1];
     //                     }
@@ -467,7 +470,7 @@ struct Somesecrhistories : public RcppParallel::Worker {
                         std::fill(alpha.begin(), alpha.end(), 1.0/mm);
                         for (m=0; m<mm; m++) {
                             // for now treat distribution p(x_j|x) as constant over sessions
-                            convolvemq1(m, 1, edgecode, mqarray, kernelp, mj, pj);  
+                            convolvemq1(m, 1, edgecode, mqarray, settlement, kernelp, mj, pj);  
                             for (j = b + cjs; j <= d; j++) {
                                 // relocate at each session
                                 // sum over possibilities for this session
@@ -493,7 +496,7 @@ struct Somesecrhistories : public RcppParallel::Worker {
                                 }
                             } 
                             else {
-                                convolvemq(mm, kn, j-1, edgecode, mqarray, kernelp, alpha);  
+                                convolvemq(mm, kn, j-1, edgecode, mqarray, settlement, kernelp, alpha);  
                             }
                             prw (j, n, alpha);                        
                         }		    
@@ -548,7 +551,9 @@ Rcpp::NumericVector allhistsecrparallelcpp (
         const Rcpp::IntegerMatrix kernel,
         const Rcpp::IntegerMatrix mqarray,
         const double cellsize,
-        const double r0) {
+        const double r0,
+        const Rcpp::NumericMatrix settlement) 
+{
     
     Rcpp::NumericVector output(nc); 
     
@@ -561,7 +566,8 @@ Rcpp::NumericVector allhistsecrparallelcpp (
             movementcode, sparsekernel, anchored, edgecode,
             usermodel,
             moveargsi, kernel, mqarray, 
-            cellsize, r0, output);
+            cellsize, r0, settlement,
+            output);
     
     Rcpp::checkUserInterrupt();
     

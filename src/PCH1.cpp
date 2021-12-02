@@ -181,7 +181,8 @@ struct pch1struct : public RcppParallel::Worker {
     const RcppParallel::RMatrix<int> mqarray;
     const double cellsize;
     const double r0;
-    
+    const RcppParallel::RMatrix<double> settlement;
+
     int   kk;
     int   kn;
     int   cc0;
@@ -217,6 +218,7 @@ struct pch1struct : public RcppParallel::Worker {
         const Rcpp::IntegerMatrix mqarray,
         const double cellsize,        
         const double r0,
+        const Rcpp::NumericMatrix settlement,
         
         Rcpp::NumericVector output)    
         : 
@@ -226,7 +228,8 @@ struct pch1struct : public RcppParallel::Worker {
             moveargsi(moveargsi), movementcode(movementcode), 
             sparsekernel(sparsekernel), anchored(anchored), edgecode(edgecode), 
             usermodel(usermodel), kernel(kernel), mqarray(mqarray), 
-            cellsize(cellsize), r0(r0), output(output) 
+            cellsize(cellsize), r0(r0), settlement(settlement), 
+            output(output) 
     {
         kn = kernel.nrow();
         cc0 = openval0.nrow();
@@ -304,7 +307,7 @@ struct pch1struct : public RcppParallel::Worker {
                 else if (anchored) {
                         std::fill(alpha.begin(), alpha.end(), 1.0/mm);
                         for (m=0; m<mm; m++) {
-                            convolvemq1(m, 1, edgecode, mqarray, kernelp, mj, pj); 
+                            convolvemq1(m, 1, edgecode, mqarray, settlement, kernelp, mj, pj); 
                             for (j = b; j <= d; j++) {
                                 prwm = 0;
                                 for (q=0; q<kn; q++) {
@@ -333,7 +336,7 @@ struct pch1struct : public RcppParallel::Worker {
                             }
                         } 
                         else {
-                            convolvemq(mm, kn, j-1, edgecode, mqarray, kernelp, alpha);
+                            convolvemq(mm, kn, j-1, edgecode, mqarray, settlement, kernelp, alpha);
                         }
                         for (m=0; m<mm; m++) alpha[m] *= pjmat[m*jj + j - 1];
                     }
@@ -381,7 +384,8 @@ Rcpp::NumericVector PCH1secrparallelcpp (
         const Rcpp::IntegerMatrix kernel,
         const Rcpp::IntegerMatrix mqarray,
         const double cellsize,
-        const double r0) {
+        const double r0,
+        const Rcpp::NumericMatrix settlement) {
     
     Rcpp::NumericVector output(nc); 
 
@@ -389,7 +393,7 @@ Rcpp::NumericVector PCH1secrparallelcpp (
     pch1struct pch1 (x, type, grain, jj, mm, nc, 
         cumss, openval0, PIA0, PIAJ, gk0, binomN, Tsk, intervals,
         moveargsi, movementcode, sparsekernel, anchored, edgecode, 
-        usermodel, kernel, mqarray, cellsize, r0, output);
+        usermodel, kernel, mqarray, cellsize, r0, settlement, output);
     
     Rcpp::checkUserInterrupt();
     

@@ -5,7 +5,6 @@
 ## 2021-06-11 fixed bugs mqarray <- 0; makegkParalleld
 ################################################################################
 
-
 # CJSsecr = 6
 # JSSAsecrf = 7
 # JSSAsecrD = 8
@@ -123,6 +122,9 @@ openCR.esa <- function (object, bysession = FALSE, stratum = 1) {
     gk0 <- array(temp[[1]], dim=c(nrow(realparval0), k, m)) # 2020-10-28 as array
     hk0 <- array(temp[[2]], dim=c(nrow(realparval0), k, m)) # 2020-10-28 as array
 
+    settlement <- 1   # dummy value for now
+    if (!is.null(details$settlemodel) && details$settlemodel) warning ("esa not ready for settlement")
+    
     ## mixture proportions
     if (details$nmix > 1) {
         temp <- fillpmix2(nc, details$nmix, PIA0, realparval0)
@@ -184,7 +186,9 @@ openCR.esa <- function (object, bysession = FALSE, stratum = 1) {
                 as.matrix(kernel),
                 as.matrix(mqarray),
                 as.double (cellsize),
-                as.double (r0))
+                as.double (r0),
+                as.matrix (settlement)
+            )
         }
         pmix[x,] * pch1
     }

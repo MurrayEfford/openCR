@@ -12,6 +12,7 @@ predict.openCRlist <- function (object, newdata = NULL, se.fit = TRUE,
   alpha = 0.05, savenew = FALSE, ...) {
   lapply(object, predict, newdata, se.fit, alpha, savenew, ...)
 }
+
 predict.openCR <- function (object, newdata = NULL, se.fit = TRUE, alpha = 0.05,
   savenew = FALSE, ...) {
   if (is.null(object$fit)) {
