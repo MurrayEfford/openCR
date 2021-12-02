@@ -530,10 +530,6 @@ openCR.fit <- function (
   
   mqarray <- 0
   if (secr && !(movementmodel %in% c('static','IND','INDzi'))) {
-<<<<<<< HEAD
-    
-=======
->>>>>>> master
     ## 2021-02-19 add annular option
     ## movement kernel
     k2 <- kernelradius
