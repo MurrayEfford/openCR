@@ -336,7 +336,7 @@ openCR.fit <- function (
   
   moveargsi <- c(-2,-2)
   if (secr) {
-    if (movementmodel %in% c('RDE', 'BVN', 'BVE', 'BVC', 'INDzi', 'UNIzi', 'uniformzi')) {
+    if (movementmodel %in% c('RDE', 'BVN', 'BVE', 'BVC', 'INDzi', 'UNIzi')) {
       pnames <- c(pnames, 'move.a')
       moveargsi[1] <- .openCRstuff$sigmai[typecode(type)] + 1 + (detectfn %in% c(15,17,18,19))
     }
@@ -407,10 +407,10 @@ openCR.fit <- function (
   defaultlink <- list(p = 'logit', lambda0 = 'log', phi = 'logit', b = 'mlogit', f = 'log',
     gamma = 'logit', kappa = 'log', g = 'logit',
     lambda = 'log', BN = 'log', BD = 'log', D = 'log', N = 'log',
-    superN = 'log', superD = 'log', sigma = 'log', z = 'log', pmix = 'mlogit',
+    settle = 'log',
+    superN = 'log', superD = 'log', sigma = 'log', z = 'log', pmix='mlogit',
     move.a =  if (movementmodel %in% c('INDzi', 'UNIzi')) 'logit' else 'log', 
     move.b = if (movementmodel %in% c('BVNzi','BVEzi', 'RDEzi')) 'logit' else 'log',
-    settle = 'log',
     tau = 'mlogit')
   link <- replace (defaultlink, names(link), link)
   link[!(names(link) %in% pnames)] <- NULL
@@ -530,7 +530,10 @@ openCR.fit <- function (
   
   mqarray <- 0
   if (secr && !(movementmodel %in% c('static','IND','INDzi'))) {
+<<<<<<< HEAD
     
+=======
+>>>>>>> master
     ## 2021-02-19 add annular option
     ## movement kernel
     k2 <- kernelradius
