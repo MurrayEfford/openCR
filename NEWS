@@ -1,6 +1,7 @@
-version 2.2.2 (2021-11-30)
+version 2.2.2 (2022-01-17)
 
 New features and changed behaviour
+    o modelAverage() method for openCR models
     o openCR() new parameter 'settle' for weighted settlement
     o cumMove() allows settlement to be weighted by 0-1 mask covariate
 

@@ -3,16 +3,14 @@
 \alias{modelAverage.openCR}
 \alias{modelAverage.openCRlist}
 
-\title{ Averaging of OpenCR Models Using Akaike's Information Criterion}
+\title{Averaging of OpenCR Models Using Akaike's Information Criterion}
 
 \description{
   
 AIC- or AICc-weighted average of estimated `real' or `beta' parameters
 from multiple fitted openCR models. 
 
-For a technical reason that will disappear when the next version of \pkg{secr} is 
-released, these are internal functions are not exported by \pkg{openCR} and 
-for now must be called with the prefix `openCR:::'.
+The modelAverage generic is imported from secr (>= 4.5.0).
 
 }
 
@@ -134,11 +132,12 @@ intervals. \emph{Computational statistics and data analysis} \bold{56},
 
 cjs1 <- openCR.fit(dipperCH, model=p~1)
 cjs2 <- openCR.fit(dipperCH, model=p~session)
-openCR:::modelAverage(cjs1, cjs2)
+AIC(cjs1, cjs2)
+modelAverage(cjs1, cjs2)
 
 ## or
 cjs12 <- openCRlist(cjs1, cjs2)
-openCR:::modelAverage(cjs12)
+modelAverage(cjs12)
 
 }
 

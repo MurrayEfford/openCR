@@ -28,7 +28,7 @@
 Package: \tab openCR\cr
 Type: \tab Package\cr
 Version: \tab 2.2.2\cr
-Date: \tab 2021-11-10\cr
+Date: \tab 2022-01-17\cr
 License: \tab GNU General Public License Version 2 or later\cr
 }
 

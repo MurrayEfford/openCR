@@ -1,6 +1,6 @@
 ############################################################################################
 ## package 'openCR'
-## model.average.R
+## modelAverage.R
 ## 2021-09-30 derived from secr
 ## 2021-10-24
 ############################################################################################
@@ -15,20 +15,6 @@ MATA <- function (wt, est, se, alpha) {
     cbind(lcl, ucl)
 }
 
-modelAverage <- function (object, ...,
-    realnames = NULL,
-    betanames = NULL,
-    newdata = NULL,
-    alpha = 0.05,
-    dmax = 10,
-    covar = FALSE,
-    average = c('link', 'real'),
-    criterion = c('AICc','AIC'),
-    CImethod = c('Wald', 'MATA')) 
-{
-    UseMethod("modelAverage")
-}
-
 modelAverage.openCR <- function (
     object, ..., 
     realnames = NULL, 
@@ -38,7 +24,7 @@ modelAverage.openCR <- function (
     dmax = 10, 
     covar = FALSE, 
     average = c('link', 'real'), 
-    criterion = c('AICc','AIC'), 
+    criterion = c('AIC','AICc'), 
     CImethod = c('Wald', 'MATA')) 
 {
     allargs <- list(...)
