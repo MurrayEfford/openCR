@@ -1,7 +1,7 @@
 Package: openCR
 Type: Package
 Title: Open Population Capture-Recapture
-Version: 2.2.2
+Version: 2.2.3
 Depends: R (>= 3.5.0), secr (>= 4.4.0)
 Imports: utils, MASS, nlme, parallel, stats, Rcpp (>= 0.12.14), stringr, plyr, 
          abind, methods, RcppParallel (>= 5.1.1)
