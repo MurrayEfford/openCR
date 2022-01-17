@@ -685,22 +685,31 @@ When one of the kernel models is used (`movementmodel` not 'static', 'IND' or 'I
 
 The settlement model is invoked by setting `details = list(settlemodel = TRUE)`.
 
-This example uses a compressed version of the ovenbird mistnetting data:
-```{r settlementexample, eval = TRUE, cache = mycache}
+This code compares a model with uniform settlement to one in which settlement varies 
+with the 'y' coordinate of the mask. The data are the ovenbird mistnetting data 
+compressed to a single occasion per year. 
+
+```{r settlementexample, eval = FALSE}
 ovenCHb <- reduce(ovenCHp, by = 'all', outputdetector = 'count')
-msk <- make.mask(traps(ovenCH[[1]]), buffer = 500, spacing = 40, type = 'trapbuffer')
+msk <- make.mask(traps(ovenCHp[[1]]), buffer = 500, spacing = 40, type = 'trapbuffer')
 # uniform settlement
 fit0 <- openCR.fit(ovenCHb, type = 'PLBsecrf', mask = msk, binomN = 1,
   movementmodel = 'BVN', details = list(settlemodel = FALSE))
 # logarithmic N-S gradient in settlement
 fit1 <- openCR.fit(ovenCHb, type = 'PLBsecrf', mask = msk, binomN = 1,
   movementmodel = 'BVN', details = list(settlemodel = TRUE), model = settle~y)
-AIC(fit0, fit1)
-coef(fit1)
+```
+
+```{r loadsettlementresults, echo = FALSE}
+load('settlement.RData')
 ```
 
 In this example there is **no** evidence for a N-S gradient in settlement. The intercept is removed automatically when the link function is the default ('log'), as shown in the resulting formula for
 'settle'.
+```{r settlementexampleresults}
+AIC(fit0, fit1)[,-6]
+coef(fit1)
+```
 
 The cumulative effect of differential settlement may be visualised with function `cumMove` by specifying a single mask covariate with values in the range 0 to 1.
 
