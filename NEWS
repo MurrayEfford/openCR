@@ -1,7 +1,11 @@
-version 2.2.3 (2022-01-17)
+version 2.2.3 (2022-01-19)
 
 New features and changed behaviour
     o none
+
+Other
+    o fix accidental inclusion of GitHub README
+    o depends secr 4.5.0
 
 version 2.2.2 (2022-01-17)
 
