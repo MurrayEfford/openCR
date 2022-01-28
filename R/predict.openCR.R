@@ -6,6 +6,7 @@
 ## 2019-04-13 failed with single parameter when others fixed
 ## 2021-04-21 stratified
 ## 2021-07-30 makeNewData() renamed from openCR.make.newdata
+## 2022-01-28 nsess bug fixed invm() (distinguish nsess, maxnsess)
 ###############################################################################
 
 predict.openCRlist <- function (object, newdata = NULL, se.fit = TRUE,
@@ -134,13 +135,15 @@ predict.openCR <- function (object, newdata = NULL, se.fit = TRUE, alpha = 0.05,
         predict[[i]]$SE.estimate <- rep(NA,length(selpred))
         ## doubtful
         ## warning("doubtful confidence limits for 'b' or 'tau' model in predict() - to be tested")
-        
         templist <- split(lpred-z*selpred, newdata1$stratum)
-        tmp <- mapply(invm, templist, 1:length(templist), SIMPLIFY=FALSE)
-        predict[[i]]$lcl <- as.numeric(unlist(tmp))
+        tmp1 <- mapply(invm, templist, 1:length(templist), SIMPLIFY=FALSE)
+        tmp1 <- as.numeric(unlist(tmp1))
         templist <- split(lpred+z*selpred, newdata1$stratum)
-        tmp <- mapply(invm, templist, 1:length(templist), SIMPLIFY=FALSE)
-        predict[[i]]$ucl <- as.numeric(unlist(tmp))
+        tmp2 <- mapply(invm, templist, 1:length(templist), SIMPLIFY=FALSE)
+        tmp2 <- as.numeric(unlist(tmp2))
+        ## 2022-01-28
+        predict[[i]]$lcl <- pmin(tmp1,tmp2)
+        predict[[i]]$ucl <- pmax(tmp1,tmp2)
       }
       else {
         se <- realSE[i,]
@@ -179,8 +182,8 @@ predict.openCR <- function (object, newdata = NULL, se.fit = TRUE, alpha = 0.05,
     # sessionlabels is always stored by openCR.fit as a list
     sessnames <- lapply(object$sessionlabels, unlist)
     if (!is.null(sessnames) && !is.null(predict[[i]]$session) ) {
-      nsess <- max(sapply(sessnames, length))
-      sessnames <- lapply(sessnames, function(x) c(x, rep('', nsess-length(x))))
+      maxnsess <- max(sapply(sessnames, length))
+      sessnames <- lapply(sessnames, function(x) c(x, rep('', maxnsess-length(x))))
       namematrix <- matrix(unlist(sessnames), nrow = nstrata, byrow = TRUE)
       rn <- namematrix[cbind(as.numeric(predict[[i]]$stratum),
         as.numeric(predict[[i]]$session))]
