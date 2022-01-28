@@ -14,13 +14,7 @@ derived.openCRlist <- function (object, newdata = NULL, all.levels = FALSE,
 
 derived.openCR <- function (object, newdata = NULL, all.levels = FALSE,
     Dscale = 1, HTbysession = FALSE, ...) {
-    allvars <- unlist(sapply(object$model, all.vars))
-    if ('h2' %in% allvars | 'h3' %in% allvars)
-        warning ("derived.openCR does not handle finite mixtures")
-    if (is.null(newdata)) {
-        # newdata <- openCR.make.newdata(object, all.levels = all.levels)
-        newdata <- makeNewData(object, all.levels = all.levels)
-    }
+
     onestratum <- function (newdata, stratumi) {
         nnew <- nrow(newdata)
         J <- length(primaryintervals(object)[[stratumi]]) + 1   ## number of primary sessions
@@ -32,12 +26,14 @@ derived.openCR <- function (object, newdata = NULL, all.levels = FALSE,
         if (nnew > J) {
             ngrp <- nnew %/% J
             newdata <- split(newdata, rep(1:ngrp, each = J))
-            out <- vector('list', ngrp)
-            for (n in 1:ngrp) {
-                out[[n]] <- derived(object, newdata[[n]],
-                    Dscale = Dscale, HTbysession = HTbysession,
-                    ...)
-            }
+            # out <- vector('list', ngrp)
+            # for (n in 1:ngrp) {
+            #     out[[n]] <- derived(object, newdata[[n]],
+            #         Dscale = Dscale, HTbysession = HTbysession,
+            #         ...)
+            # }
+            
+            out <- mapply(onestratum, newdata, stratumi = stratumi, SIMPLIFY = FALSE)
             class (out) <- c("derivedopenCR","list")
         }
         else {
@@ -66,7 +62,7 @@ derived.openCR <- function (object, newdata = NULL, all.levels = FALSE,
                 if (!is.null(fxd[[par]]))
                     rep(fxd[[par]], j)
                 else {
-                    predict(object, newdata)[[par]][1:J,'estimate']
+                    pred[[par]][1:J,'estimate']
                 }
             }
             getfbeta <- function (beta, phij) {
@@ -96,6 +92,8 @@ derived.openCR <- function (object, newdata = NULL, all.levels = FALSE,
             stdrate <- function (x) c(x[-J]^(1/primaryintervals), NA)
             # note b, B always on per interval basis - no scaling
             
+            ## 2022-01-28 call predict just once for all getreal()
+            pred <- predict(object, newdata)
             phi <- getreal('phi')
             phij <- persession(phi)
             
@@ -195,7 +193,7 @@ derived.openCR <- function (object, newdata = NULL, all.levels = FALSE,
             
             df <- data.frame(newdata, JS.counts(capthist),
                 time = cumsum(c(0,primaryintervals)))
-            parnames <- names(predict(object))
+            parnames <- names(pred)
             for (i in parnames) {
                 df[,i] <- getreal(i)
             }
@@ -246,7 +244,8 @@ derived.openCR <- function (object, newdata = NULL, all.levels = FALSE,
                     else if (type %in% "JSSAB" )
                         superN <- sum(BN)
                     else {
-                        p <- openCR.pdot(object, bysession = FALSE)
+                        ## 2022-01-28 included stratum argument
+                        p <- openCR.pdot(object, bysession = FALSE, stratum = stratumi)
                         superN <- sum(1 / rep(p, covariates(capthist)$freq))
                     }
                     # assume no mixture for now but see Pledger et al 2010 p885
@@ -308,6 +307,14 @@ derived.openCR <- function (object, newdata = NULL, all.levels = FALSE,
             class (out) <- c("derivedopenCR","list")
         }
         out
+    }
+    
+    ## mainline
+    allvars <- unlist(sapply(object$model, all.vars))
+    if ('h2' %in% allvars | 'h3' %in% allvars)
+        warning ("derived.openCR does not handle finite mixtures")
+    if (is.null(newdata)) {
+        newdata <- makeNewData(object, all.levels = all.levels)
     }
     newdata <- split(newdata, newdata$stratum)
     out <- mapply(onestratum, newdata, 1:length(newdata), SIMPLIFY = FALSE)
