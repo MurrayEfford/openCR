@@ -1,6 +1,6 @@
 ############################################################################################
 ## package 'openCR'
-## openCR.make.newdata.R
+## makeNewData.openCR.R
 ## 2011 12 09
 ## Create (neutral) design data suitable for 'predict'
 ## 2015-02-06 reconciled this current version with forked 1.2.0:
@@ -14,6 +14,7 @@
 ## 2021-05-12 fixed bug in stratified sessioncov
 ## 2021-07-02 fixed backward incompatibility bug details$minimumage not specified
 ## 2021-07-30 makeNewData method for openCR objects
+## 2022-01-28 file renamed
 ############################################################################################
 
 makeNewData.openCR <- function (object, all.levels = FALSE, ...) {
