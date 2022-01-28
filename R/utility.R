@@ -737,18 +737,13 @@ lpredictor <- function (model, newdata, indx, beta, field, beta.vcv=NULL,
       notOK <- !validlevels[field,newdata$t]   ## BEFORE adjust levels
   }
   
-  # newdata1 <- adjustlevels(field, newdata, validlevels)
-  # avoid contrasts error 2021-04-26
-  # if (length(levels(newdata1$stratum))==1) {
-  #   newdata1$stratum <- rep(1, nrow(newdata1))
-  # }
-  # mat <- model.matrix(model, data=newdata1, contrasts.arg = contrasts)
-  
   # new wrapper function 2021-07-23
   mat <- get.model.matrix (model, field, newdata, validlevels, contrasts)
   
+  # if (field=='b') browser()  
+  
   ## drop pmix beta0 column from design matrix (always zero)
-  if (field=='pmix') {
+  if (field == 'pmix') {
     mat <- mat[,-1,drop=FALSE]
   }
   lpred[,1] <- mat %*% beta[indx]
