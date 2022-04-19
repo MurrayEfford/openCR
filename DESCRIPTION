@@ -8,7 +8,7 @@ Imports: utils, MASS, nlme, parallel, stats, Rcpp (>= 0.12.14), stringr, plyr,
 LinkingTo: Rcpp, RcppParallel, BH
 Suggests: knitr, RMark, rgdal, R2ucare, rmarkdown, testthat
 VignetteBuilder: knitr
-Date: 2022-01-29
+Date: 2022-04-19
 Authors@R: person("Murray", "Efford", email = "murray.efford@otago.ac.nz", role = c("aut","cre"), comment = c(ORCID = "0000-0001-5231-5184"))
 Description: Functions for non-spatial and spatial open-population capture-recapture analysis.
 License: GPL (>=2)
