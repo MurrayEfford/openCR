@@ -1,4 +1,4 @@
-version 2.2.3 (2022-01-29)
+version 2.2.3 (2022-05-25)
 
 New features and changed behaviour
     o none
@@ -7,6 +7,7 @@ Bugs fixed
     o predict() failed with parameters b & h2 when number of sessions differed 
       among strata
     o derived() not working with stratified model
+    o bad names in openCRlist output by par.openCR.fit()
 
 Other
     o fix accidental inclusion of GitHub README
