@@ -1,6 +1,7 @@
 ## 2017-05-12
 ## openCR parallel fit, derived, region.N
-## warning 2020-12-13
+## 2020-12-13 warning 
+## 2022-05-25 names bug fixed
 
 par.openCR.fit <- function (arglist, ncores = 1, seed = 123, trace = FALSE,
     logfile = NULL, prefix = "") {
@@ -56,7 +57,12 @@ par.openCR.fit <- function (arglist, ncores = 1, seed = 123, trace = FALSE,
         output <- openCRlist(output)
 
     ## apply standard naming convention
-    names(output) <- paste0(prefix, names(arglist))
+    if (is.null(names(arglist))) {
+        names(output) <- 1:length(output)
+    }
+    else {
+        names(output) <- paste0(prefix, names(arglist))
+    }
 
     output
 }
