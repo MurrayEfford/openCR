@@ -138,10 +138,7 @@ openCR.fit <- function (
   }
   ndvc <- length(details$dummyvariablecoding)
   if (ndvc>0) {
-    contr.none <-function(n) contrasts(factor(1:n), contrasts = FALSE)
     ## override any other specified contrasts for these predictors
-    details$contrasts <- replace (details$contrasts, details$dummyvariablecoding, 
-      list(contr.none))
     if (length(details$contrasts)==0) details$contrasts <- NULL
   }
   # and provide plausible starts for all beta coef, not just first

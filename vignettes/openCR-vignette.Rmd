@@ -527,17 +527,15 @@ addresidentcov2 <- function (ch, d = 1) {
 
 Factor predictors take a number of discrete values (levels). These are usually represented by columns of 0's and 1's in the design matrix, where the number of columns (and coefficients) relates to the number of levels. The default in R is to use 'treatment contrasts'; one coefficient describes a reference class (level) and other coefficients represent the effect size (difference from the reference class on the link scale). By default the first level is used as the reference: for time effects (t, session) the first primary session is the reference level[^footnote9].
 
-This may lead to trouble if the parameter is not identifiable in the reference class. One workaround is to specify a session covariate with differently ordered levels. Another is to switch from treatment contrasts to dummy variable coding in which each coefficient represents the magnitude of one real parameter on the link scale (useful in itself). Dummy variable coding is achieved by overriding the default contrasts and removing the intercept from the formula (-1). The following model fits yield the same estimates of 'real' parameters and the same log-likelihood, but with different 'beta' parameters:
+This may lead to trouble if the parameter is not identifiable in the reference class. One workaround is to specify a session covariate with differently ordered levels. Another is to switch to dummy variable coding in which each coefficient represents the magnitude of one real parameter on the link scale (useful in itself). Dummy variable coding is achieved by removing the intercept from the formula (-1). The following model fits yield the same estimates of 'real' parameters and the same log-likelihood, but with different 'beta' parameters:
 ```{r dummy, eval = TRUE, cache = mycache}
 fit0 <- openCR.fit(ovenCH, model = p~t)
-contr.none <- function(n) contrasts(factor(1:n), contrasts = FALSE)
-fitd <- openCR.fit(ovenCH, model = p ~ -1+t, 
-                   details = list(contrasts = list(t = contr.none)))
+fitd <- openCR.fit(ovenCH, model = p ~ -1+t)
 coef(fit0)
 coef(fitd)
 ```
 
-Dummy variable coding has proved useful for avoiding some maximization problems. From **openCR** 2.1.0, dummy variable coding can be selected with the 'details' argument 'dummyvariablecoding'. This sets the contrasts appropriately, updates the model to remove the intercept, and assigns the default starting value across all levels of a factor (rather than zero for non-reference levels). The following fit is therefore equivalent to the preceding `fitd`.
+Dummy variable coding has proved useful for avoiding some maximization problems. From **openCR** 2.1.0, dummy variable coding can be selected with the 'details' argument 'dummyvariablecoding'. This updates the model to remove the intercept, and assigns the default starting value across all levels of a factor (rather than zero for non-reference levels). The following fit is therefore equivalent to the preceding `fitd`.
 
 ```{r dummy2, eval = TRUE, cache = mycache}
 fitd2 <- openCR.fit(ovenCH, model = p~t, details = list(dummyvariablecoding = 't'))
@@ -1016,7 +1014,7 @@ Gimenez, O., Viallefont, A., Catchpole, E. A., Choquet, R. and Morgan,
   561--572.
 
 Gimenez, O., Lebreton, J.-D., Choquet, R. and Pradel, R. (2017) R2ucare: Goodness-of-Fit Tests
-  for Capture-Recapture Models. R package version 1.0.0. https://CRAN.R-project.org/package=R2ucare/
+  for Capture-Recapture Models. R package version 1.0.0. https://github.com/oliviergimenez/R2ucare/
 
 Gimenez, O., Lebreton, J.-D., Choquet, R. and Pradel, R. (2018) R2ucare: An R package to perform 
 goodness-of-fit tests for capture--recapture models. *Methods in Ecology and Evolution* **9**, 1749--1754.
