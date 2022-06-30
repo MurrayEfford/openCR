@@ -1,7 +1,7 @@
-cran-comments*.txt
-ONEWS
-ONEWS2
-.Rhistory
+^cran-comments*\.txt$
+^ONEWS$
+^ONEWS2$
+^\.Rhistory$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-README.md
+^README\.md$
