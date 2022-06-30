@@ -1,4 +1,4 @@
-version 2.2.3 (2022-05-25)
+version 2.2.3 (2022-07-01)
 
 New features and changed behaviour
     o none
@@ -8,10 +8,12 @@ Bugs fixed
       among strata
     o derived() not working with stratified model
     o bad names in openCRlist output by par.openCR.fit()
+    o dummy variable coding failed with R>4.0
 
 Other
     o fix accidental inclusion of GitHub README
-    o depends secr 4.5.0
+    o depends secr >=4.5.0
+    o does not expect R2ucare to be on CRAN
 
 version 2.2.2 (2022-01-17)
 

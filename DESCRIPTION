@@ -2,6 +2,12 @@ Package: openCR
 Type: Package
 Title: Open Population Capture-Recapture
 Version: 2.2.3
+Date: 2022-07-01
+Authors@R: person("Murray", "Efford", 
+    email = "murray.efford@otago.ac.nz", 
+    role = c("aut","cre"), 
+    comment = c(ORCID = "0000-0001-5231-5184"))
+Description: Non-spatial and spatial open-population capture-recapture analysis.
 Depends: 
     R (>= 3.5.0), 
     secr (>= 4.5.0)
@@ -28,9 +34,6 @@ LinkingTo:
     Rcpp, 
     RcppParallel
 VignetteBuilder: knitr
-Date: 2022-07-01
-Authors@R: person("Murray", "Efford", email = "murray.efford@otago.ac.nz", role = c("aut","cre"), comment = c(ORCID = "0000-0001-5231-5184"))
-Description: Functions for non-spatial and spatial open-population capture-recapture analysis.
 License: GPL (>=2)
 LazyData: yes
 LazyDataCompression: xz
