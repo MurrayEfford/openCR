@@ -2,13 +2,33 @@ Package: openCR
 Type: Package
 Title: Open Population Capture-Recapture
 Version: 2.2.3
-Depends: R (>= 3.5.0), secr (>= 4.5.0)
-Imports: utils, MASS, nlme, parallel, stats, Rcpp (>= 0.12.14), stringr, plyr, 
-         abind, methods, RcppParallel (>= 5.1.1)
-LinkingTo: Rcpp, RcppParallel, BH
-Suggests: knitr, RMark, rgdal, R2ucare, rmarkdown, testthat
+Depends: 
+    R (>= 3.5.0), 
+    secr (>= 4.5.0)
+Imports: 
+    abind, 
+    MASS, 
+    methods, 
+    nlme, 
+    parallel, 
+    plyr, 
+    Rcpp (>= 0.12.14), 
+    RcppParallel (>= 5.1.1),
+    stats, 
+    stringr, 
+    utils 
+Suggests: 
+    knitr, 
+    RMark, 
+    R2ucare, 
+    rmarkdown, 
+    testthat
+LinkingTo: 
+    BH,
+    Rcpp, 
+    RcppParallel
 VignetteBuilder: knitr
-Date: 2022-04-19
+Date: 2022-07-01
 Authors@R: person("Murray", "Efford", email = "murray.efford@otago.ac.nz", role = c("aut","cre"), comment = c(ORCID = "0000-0001-5231-5184"))
 Description: Functions for non-spatial and spatial open-population capture-recapture analysis.
 License: GPL (>=2)
