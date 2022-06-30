@@ -34,6 +34,13 @@ If \code{CH} is a multi-session object then it will first be collapsed to a sing
 
 If \code{by} is specified it should point to a categorical variable (factor or character) in the covariates attribute of \code{CH}. Separate tests will be conducted for each group.
 
+\pkg{R2ucare} was removed from CRAN in May 2022, but will return at some point. In the meantime, it may be necessary to install from GitHub with
+
+\code{
+if(!require(devtools)) install.packages("devtools")
+devtools::install_github("oliviergimenez/R2ucare")
+}
+
 }
 
 \value{
