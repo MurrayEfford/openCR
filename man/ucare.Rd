@@ -5,7 +5,7 @@
 
 \description{
 
-The package \pkg{R2ucare} (Gimenez et al. 2017, 2018) provides the standard tests for CJS models from Burnham et al. (1987) along with tests for multi-state models as described by Pradel et al. (2005). This function is a wrapper for the tests relevant to \pkg{openCR} (see Details). Original papers and the \href{https://cran.r-project.org/package=R2ucare/vignettes/vignette_R2ucare.html}{associated vignette} for \pkg{R2ucare} should be consulted for interpretation.
+The package \pkg{R2ucare} (Gimenez et al. 2017, 2018) provides the standard tests for CJS models from Burnham et al. (1987) along with tests for multi-state models as described by Pradel et al. (2005). This function is a wrapper for the tests relevant to \pkg{openCR} (see Details). Original papers and the vignette for \pkg{R2ucare} should be consulted for interpretation.
 
 }
 
@@ -49,7 +49,7 @@ Burnham, K. P., Anderson, D. R., White, G. C., Brownie, C. and Pollock, K. H. (1
 Choquet, R., Lebreton, J.-D., Gimenez, O., Reboulet, A.-M. and Pradel, R. (2009) U-CARE: Utilities for performing goodness of fit tests and manipulating CApture-REcapture data. \emph{Ecography} \bold{32}, 1071--1074.
 
 Gimenez, O., Lebreton, J.-D., Choquet, R. and Pradel, R. (2017) R2ucare: Goodness-of-Fit Tests
-  for Capture-Recapture Models. R package version 1.0.0. \url{https://CRAN.R-project.org/package=R2ucare/}
+  for Capture-Recapture Models. R package version 1.0.0. \url{https://github.com/oliviergimenez/R2ucare/}
 
 Gimenez, O., Lebreton, J.-D., Choquet, R. and Pradel, R. (2018) R2ucare: An R package to perform 
 goodness-of-fit tests for capture--recapture models. \emph{Methods in Ecology and Evolution} \bold{9}, 1749--1754.
