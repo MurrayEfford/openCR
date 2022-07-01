@@ -21,7 +21,7 @@ Sys.setenv(RCPP_PARALLEL_BACKEND = "tinythread")  ## to dodge CRAN ASAN issue
 
 \vspace{12pt}
 
-The R package **openCR** fits both non-spatial and spatial capture--recapture models to data from open animal populations, where there is turnover during sampling. The interface generally resembles that of **secr** (Efford 2021) upon which **openCR** depends for some functions. This document explains the purpose and general features of **openCR**. Help pages should be consulted for more detail on particular functions. The vignette [openCR-kernel.pdf][openCR-kernel.pdf] explains the intricacies of movement kernels; worked examples using published datasets are given in another vignette [openCR-examples.pdf][openCR-examples.pdf][^footnote1]. The spatial model was described by Efford and Schofield (2020).
+The R package **openCR** fits both non-spatial and spatial capture--recapture models to data from open animal populations, where there is turnover during sampling. The interface generally resembles that of **secr** (Efford 2022a) upon which **openCR** depends for some functions. This document explains the purpose and general features of **openCR**. Help pages should be consulted for more detail on particular functions. The vignette [openCR-kernel.pdf][openCR-kernel.pdf] explains the intricacies of movement kernels (see also Efford and Schofield 2022). Worked examples using published datasets are given in another vignette [openCR-examples.pdf][openCR-examples.pdf][^footnote1]. The spatial model was described by Efford and Schofield (2020).
 
 This is still something of a work in progress, so be careful to check results 'make sense' and be aware of [limitations](#limitations).
 
@@ -527,7 +527,7 @@ addresidentcov2 <- function (ch, d = 1) {
 
 Factor predictors take a number of discrete values (levels). These are usually represented by columns of 0's and 1's in the design matrix, where the number of columns (and coefficients) relates to the number of levels. The default in R is to use 'treatment contrasts'; one coefficient describes a reference class (level) and other coefficients represent the effect size (difference from the reference class on the link scale). By default the first level is used as the reference: for time effects (t, session) the first primary session is the reference level[^footnote9].
 
-This may lead to trouble if the parameter is not identifiable in the reference class. One workaround is to specify a session covariate with differently ordered levels. Another is to switch to dummy variable coding in which each coefficient represents the magnitude of one real parameter on the link scale (useful in itself). Dummy variable coding is achieved by removing the intercept from the formula (-1). The following model fits yield the same estimates of 'real' parameters and the same log-likelihood, but with different 'beta' parameters:
+This may lead to trouble if the parameter is not identifiable in the reference class. One workaround is to specify a session covariate with differently ordered levels. Another is to switch to dummy variable coding in which each coefficient represents the magnitude of one real parameter on the link scale (useful in itself). Dummy variable coding is achieved by removing the intercept from the formula (-1), assuming the default contrast function for factor coding (`contr.treatment`; check with `options()$contrasts`). The following model fits yield the same estimates of 'real' parameters and the same log-likelihood, but with different 'beta' parameters:
 ```{r dummy, eval = TRUE, cache = mycache}
 fit0 <- openCR.fit(ovenCH, model = p~t)
 fitd <- openCR.fit(ovenCH, model = p ~ -1+t)
@@ -622,7 +622,7 @@ A kernel function may be specified by the user and passed in the argument `movem
 
 ## Sparse kernels
 
-A big problem with standard kernels as defined in **openCR** <2.0.0 is that the number of cells increases with the square of the radius. Processing time is roughly proportional to the number of cells, and kernels with many cells fit slowly. **openCR** 2.0.0 introduces novel 'sparse' kernels that include only those grid cells that lie on 4 axes (N-S, E-W, NW-SE, NE-SW). The number of cells then increases only linearly with radius. Cell-wise movement probabilities are adjusted so that the distribution of dispersal distances is almost unchanged (essentially multiplying by $2\pi r$ at radius $r$, and adjusting cells on the oblique axes by $\sqrt 2$).
+A big problem with standard kernels as defined in **openCR** <2.0.0 is that the number of cells increases with the square of the radius. Processing time is roughly proportional to the number of cells, and kernels with many cells fit slowly. **openCR** 2.0.0 introduces novel 'sparse' kernels that include only those grid cells that lie on 4 axes (N-S, E-W, NW-SE, NE-SW) (Efford 2022b). The number of cells then increases only linearly with radius. Cell-wise movement probabilities are adjusted so that the distribution of dispersal distances is almost unchanged (essentially multiplying by $2\pi r$ at radius $r$, and adjusting cells on the oblique axes by $\sqrt 2$).
 
 Sparse kernels are obtained by setting `sparsekernel = TRUE` when fitting a model with `openCR.fit()`. Here is an example.
 
@@ -871,14 +871,16 @@ This is generally an undeveloped field for spatially explicit capture--recapture
 
 For Cormack-Jolly-Seber (nonspatial) models there is an established suite of tests following Burnham et al. (1987). The tests have been implemented in the U-CARE software of Choquet et al. (2009), recently translated into R by Gimenez et al (2018) as package **R2ucare**. Program RELEASE (Burnham et al. 1987) also implements the core CJS tests and is available through MARK.
 
-The **openCR** function `ucare.cjs` is a wrapper for relevant functions in **R2ucare**, which should be installed. We briefly demonstrate it here for the dipper data of Marzolin (1988).
+Previous versions of **openCR** included the function `ucare.cjs` as a wrapper for relevant functions in **R2ucare**. This has been suspended, perhaps temporarily, owing to the removal of **R2ucare** from CRAN.
 
-```{r ucare}
-if (requireNamespace("R2ucare"))
-    ucare.cjs(dipperCH, verbose = FALSE, by = 'sex')
-```
+<!-- The **openCR** function `ucare.cjs` is a wrapper for relevant functions in **R2ucare**, which should be installed. We briefly demonstrate it here for the dipper data of Marzolin (1988). -->
 
-This invocation of `ucare.cjs` calls the **R2ucare** functions `test3sr`, `test3sm`, `test2ct`, `test2cl` and `overall_CJS` for each sex and provides a condensed report. For interpretation see the original papers, the **R2ucare** [vignette](https://cran.r-project.org/package=R2ucare/vignettes/vignette_R2ucare.html), and Chapter 5 of the MARK book (Cooch and White 2019).  Lebreton et al. (1992: 86) indicate only Test 3SR is meaningful for these data (see also [openCR-examples.pdf][openCR-examples.pdf]).
+<!-- ```{r ucare} -->
+<!-- if (requireNamespace("R2ucare")) -->
+<!--     ucare.cjs(dipperCH, verbose = FALSE, by = 'sex') -->
+<!-- ``` -->
+
+<!-- This invocation of `ucare.cjs` calls the **R2ucare** functions `test3sr`, `test3sm`, `test2ct`, `test2cl` and `overall_CJS` for each sex and provides a condensed report. For interpretation see the original papers, the **R2ucare** [vignette](https://cran.r-project.org/package=R2ucare/vignettes/vignette_R2ucare.html), and Chapter 5 of the MARK book (Cooch and White 2019).  Lebreton et al. (1992: 86) indicate only Test 3SR is meaningful for these data (see also [openCR-examples.pdf][openCR-examples.pdf]). -->
 
 ## Limitations of **openCR** {#limitations}
 
@@ -964,23 +966,28 @@ Chandler, R. B. and Clark, J. D. (2014) Spatially explicit integrated population
 *Methods in Ecology and Evolution* **5**, 1351--1360.
 
 Choquet, R., Lebreton, J.-D., Gimenez, O., Reboulet, A.-M. and Pradel, R. (2009) 
-U-CARE: Utilities for performing goodness of fit tests and manipulating CApture-REcapture data.
- *Ecography* **32**, 1071--1074.
+  U-CARE: Utilities for performing goodness of fit tests and manipulating 
+  CApture-REcapture data. *Ecography* **32**, 1071--1074.
  
-Clark, J. S., Silman, M., Kern, R., Macklin, E., and HilleRisLambers, J. (1999) Seed dispersal near and far: patterns across temperate and tropical forests. *Ecology* **80**, 1475--1494.
+Clark, J. S., Silman, M., Kern, R., Macklin, E., and HilleRisLambers, J. (1999) 
+  Seed dispersal near and far: patterns across temperate and tropical forests. 
+  *Ecology* **80**, 1475--1494.
 
-Cooch, E. and White, G. (eds) (2019) *Program MARK: A Gentle
-Introduction*. 19th edition. Available online at
-http://www.phidot.org/software/mark/docs/book/.
+Cooch, E. and White, G. (eds) (2019) *Program MARK: A Gentle Introduction*. 
+  19th edition. Available online at http://www.phidot.org/software/mark/docs/book/.
 
-Crosbie, S. F. and Manly, B. F. J. (1985) Parsimonious modelling of capture--mark--recapture studies.
-*Biometrics* **41**, 385--398.
+Crosbie, S. F. and Manly, B. F. J. (1985) Parsimonious modelling of 
+  capture--mark--recapture studies. *Biometrics* **41**, 385--398.
 
 Efford, M. G. (2004) Density estimation in live-trapping
 studies. *Oikos* **106**, 598--610.
 
-Efford, M. G. (2021). secr: Spatially explicit capture--recapture models. R package version
-  4.5.0. https://CRAN.R-project.org/package=secr/
+Efford, M. G. (2022a) secr: Spatially explicit capture--recapture models. 
+  R package version 4.5.5. https://CRAN.R-project.org/package=secr/
+  
+Efford, M. G. (2022b) Efficient discretization of movement kernels
+  for spatiotemporal capture--recapture. 
+  *Journal of Agricultural, Biological and Environmental Statistics* In press.
   
 Efford, M. G., Borchers D. L. and Byrom, A. E. (2009) Density
   estimation by spatially explicit capture--recapture:
@@ -989,66 +996,74 @@ Efford, M. G., Borchers D. L. and Byrom, A. E. (2009) Density
   Populations*. Springer. Pp 255--269.
 
 Efford, M. G., Borchers D. L. and Mowat, G. (2013) Varying effort in
-capture--recapture studies. *Methods in Ecology and Evolution* **4**,
-629--636.
+  capture--recapture studies. *Methods in Ecology and Evolution* **4**,
+  629--636.
 
 Efford, M. G. and Fewster, R. M. (2013) Estimating population size by
-spatially explicit capture--recapture. *Oikos* **122**, 918--928.
+  spatially explicit capture--recapture. *Oikos* **122**, 918--928.
 
-Efford, M. G. and Schofield, M. R. (2020) A spatial open-population capture--recapture model.
-  *Biometrics* **76**, 392--402.
+Efford, M. G. and Schofield, M. R. (2020) A spatial open-population 
+  capture--recapture model. *Biometrics* **76**, 392--402.
 
-Ergon, T. and Gardner, B. (2014) Separating mortality and emigration: modelling space
-use, dispersal and survival with robust-design spatial capture--recapture data. 
-*Methods in Ecology and Evolution* **5**, 1327--1336.
+Efford, M. G. and Schofield, M. R. (2022) A review of movement models in 
+  open population capture--recapture. *Methods in Ecology and Evolution* In press.
 
-Fletcher, D. J. (2012) Estimating overdispersion when fitting a generalized linear model to sparse data. *Biometrika* **99**, 230--237.
+Ergon, T. and Gardner, B. (2014) Separating mortality and emigration: modelling 
+  space use, dispersal and survival with robust-design spatial 
+  capture--recapture data. *Methods in Ecology and Evolution* **5**, 1327--1336.
 
-Gardner, B. J., Reppucci, J., Lucherini, M. and Royle, J. A. (2010) Spatially-explicit 
-inference for open populations: estimating demographic parameters from camera-trap studies. 
-*Ecology* **91**, 3376--3383.
+Fletcher, D. J. (2012) Estimating overdispersion when fitting a generalized 
+  linear model to sparse data. *Biometrika* **99**, 230--237.
+
+Gardner, B. J., Reppucci, J., Lucherini, M. and Royle, J. A. (2010) 
+  Spatially-explicit inference for open populations: estimating demographic 
+  parameters from camera-trap studies. *Ecology* **91**, 3376--3383.
 
 Gimenez, O., Viallefont, A., Catchpole, E. A., Choquet, R. and Morgan,
   B. J. T. (2004) Methods for investigating parameter
   redundancy. *Animal Biodiversity and Conservation* **27**,
   561--572.
 
-Gimenez, O., Lebreton, J.-D., Choquet, R. and Pradel, R. (2017) R2ucare: Goodness-of-Fit Tests
-  for Capture-Recapture Models. R package version 1.0.0. https://github.com/oliviergimenez/R2ucare/
+Gimenez, O., Lebreton, J.-D., Choquet, R. and Pradel, R. (2017) R2ucare: 
+  Goodness-of-Fit Tests for Capture-Recapture Models. R package version 1.0.0. 
+  https://github.com/oliviergimenez/R2ucare/
 
-Gimenez, O., Lebreton, J.-D., Choquet, R. and Pradel, R. (2018) R2ucare: An R package to perform 
-goodness-of-fit tests for capture--recapture models. *Methods in Ecology and Evolution* **9**, 1749--1754.
+Gimenez, O., Lebreton, J.-D., Choquet, R. and Pradel, R. (2018) R2ucare: 
+  An R package to perform goodness-of-fit tests for capture--recapture models. 
+  *Methods in Ecology and Evolution* **9**, 1749--1754.
 
-Glennie, R., Borchers, D. L., Murchie, M. Harmsen, B. J. and Foster, R. J. (2019) Open population maximum likelihood spatial capture--recapture. *Biometrics* **75**, 1345--1355.
+Glennie, R., Borchers, D. L., Murchie, M. Harmsen, B. J. and Foster, R. J. (2019) 
+  Open population maximum likelihood spatial capture--recapture. *Biometrics* **75**, 1345--1355.
 
-Hines, J. E., Kendall, W. L. and Nichols, J. D. (2003) On the use of the robust design with transient capture--recapture models. *The Auk* **120**, 1151--1158.
+Hines, J. E., Kendall, W. L. and Nichols, J. D. (2003) On the use of the robust 
+  design with transient capture--recapture models. *The Auk* **120**, 1151--1158.
 
 Huggins, R. M. (1989) On the statistical analysis of capture
   experiments. *Biometrika* **76**, 133--140.
 
-Laake, J.L., Johnson, D. S. and Conn, P.B. (2013) marked: An R package for maximum-likelihood and MCMC
-  analysis of capture-recapture data. *Methods in Ecology and Evolution* **4**, 885--890.
+Laake, J.L., Johnson, D. S. and Conn, P.B. (2013) marked: An R package for 
+  maximum-likelihood and MCMC analysis of capture-recapture data. 
+  *Methods in Ecology and Evolution* **4**, 885--890.
   
 Laake, J. and Rexstad E. (2014) Appendix C. RMark - an alternative
     approach to building linear models in MARK. In: Cooch, E. and
     White, G. (eds) *Program MARK: A Gentle Introduction*. 13th
     edition. http://www.phidot.org/software/mark/docs/book/.
 
-Lebreton, J.-D., Burnham, K. P., Clobert, J., and Anderson,
-D. R. (1992) Modeling survival and testing biological hypotheses using
-marked animals: a unified approach with case studies. 
-*Ecological Monographs* **62**, 67--118.
+Lebreton, J.-D., Burnham, K. P., Clobert, J., and Anderson, D. R. (1992) 
+  Modeling survival and testing biological hypotheses using marked animals: 
+  a unified approach with case studies. *Ecological Monographs* **62**, 67--118.
 
 Lele, S.R., Nadeem, K. and Schmuland, B. (2010) Estimability and likelihood 
-inference for generalized linear mixed models using data cloning. 
-*Journal of the American Statistical Association* **105**, 1617--1625.
+  inference for generalized linear mixed models using data cloning. 
+  *Journal of the American Statistical Association* **105**, 1617--1625.
 
 Link, W. A. and Barker, R. J. (2005) Modeling association among demographic 
-parameters in analysis of open-population capture--recapture data.
-*Biometrics* **61**, 46--54.
+  parameters in analysis of open-population capture--recapture data.
+  *Biometrics* **61**, 46--54.
 
 Link, W. A. and Barker, R. J. (2010) *Bayesian Inference with Ecological Applications*. 
-Academic Press, Amsterdam.
+  Academic Press, Amsterdam.
 
 Marzolin, G. (1988) Polygynie du CineIe plongeur (*Cinclus cinclus*) dans 
 les cotes de Lorraine. L'Oiseau et la Revue Francaise d'Ornithologie 58:277-286.
@@ -1079,28 +1094,36 @@ Pradel, R. (1996) Utilization of capture-mark-recapture for the study
   of recruitment and population growth rate. *Biometrics* **52**,
   703--709.
 
-Pradel, R., Hines, J. E., Lebreton, J.-D. and Nichols, J. D. (1997) Capture--recapture survival models taking account of transients. *Biometrics* **53**, 60--72.
+Pradel, R., Hines, J. E., Lebreton, J.-D. and Nichols, J. D. (1997) 
+  Capture--recapture survival models taking account of transients. 
+  *Biometrics* **53**, 60--72.
 
-Royle, J. A., Chandler, R. B., Sollmann, R. and Gardner, B. (2014) *Spatial capture--recapture*. Academic Press.
+Royle, J. A., Chandler, R. B., Sollmann, R. and Gardner, B. (2014) 
+  Spatial capture--recapture*. Academic Press.
 
-Schwarz, C. J. (2001) The Jolly-Seber model: more than just abundance. *Journal of Agricultural, Biological, and Environmental Statistics* **6**, 195--205.
+Schwarz, C. J. (2001) The Jolly-Seber model: more than just abundance. 
+  *Journal of Agricultural, Biological, and Environmental Statistics* **6**, 195--205.
 
 Schwarz, C. J. and Arnason, A. N. (1996) A general methodology for the
   analysis of capture-recapture experiments in open
   populations. *Biometrics* **52**, 860--873.
   
-Schofield, M. and Barker, R. (2016) 50-year-old curiosities: ancillarity and inference in capture--recapture models. *Statistical Science* **31**, 161--174.
+Schofield, M. and Barker, R. (2016) 50-year-old curiosities: ancillarity and 
+  inference in capture--recapture models. *Statistical Science* **31**, 161--174.
 
-Seber, G. A. F. (1982) *The estimation of animal abundance and related parameters*. 2nd edition. Griffin.
+Seber, G. A. F. (1982) *The estimation of animal abundance and related parameters*.
+  2nd edition. Griffin.
 
-White, G. C. and Burnham, K. P. (1999) Program MARK: survival estimation from populations of marked animals. *Bird Study* **46**, Supplement S120--S139.
+White, G. C. and Burnham, K. P. (1999) Program MARK: survival estimation from 
+  populations of marked animals. *Bird Study* **46**, Supplement S120--S139.
 
-Whittington, J. and Sawaya, M. A. (2015) A comparison of grizzly bear demographic parameters
-estimated from non-spatial and spatial open population capture--recapture models. 
-*PLoS ONE* **10**, e0134446. https://doi.org/10.1371/journal.pone.0134446
+Whittington, J. and Sawaya, M. A. (2015) A comparison of grizzly bear 
+  demographic parameters estimated from non-spatial and spatial open population 
+  capture--recapture models. *PLoS ONE* **10**, e0134446. 
+  https://doi.org/10.1371/journal.pone.0134446
  
-Williams, B. K., Nichols, J. D. and Conroy, M. J. (2002) *Analysis and management of animal populations*. 
-Academic Press, San Diego.
+Williams, B. K., Nichols, J. D. and Conroy, M. J. (2002) *Analysis and 
+  management of animal populations*. Academic Press, San Diego.
 
 <!-- # Appendix. Relationships between parameterisations of recruitment {#appendix1} -->
 
