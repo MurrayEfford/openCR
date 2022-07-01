@@ -558,7 +558,7 @@ The mean is backtransformed from the link scale. This results in some bias owing
 
 # Movement models
 
-Potential movement of home ranges between primary sessions (= dispersal) is a critical part of open-population models. The argument `movementmodel` of `openCR.fit` allows the possibilities in Table 7. Two of these do not model movement at all. The default 'static' is a null model in which each animal retains the same home range. The 'uncorrelated' option models the locations of an animal independently in each primary session; information is sacrificed and no particular movement model is implied.
+Potential movement of home ranges between primary sessions (= dispersal) is a critical part of open-population models (Efford and Schofield 2022). The argument `movementmodel` of `openCR.fit` allows the possibilities in Table 7. Two of these do not model movement at all. The default 'static' is a null model in which each animal retains the same home range. The 'IND' option models the locations of an animal independently in each primary session; information is sacrificed and the implied movement depends on the size of the habitat mask.
 
 The remaining options ('BVN', 'BVE', 'BVC', 'BVT', etc.) fit a dispersal kernel (Nathan et al. 2012) to represent movement between primary sessions. This usually requires at least one more parameter to represent the spatial scale of dispersal. 
 
