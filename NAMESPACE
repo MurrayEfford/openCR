@@ -55,7 +55,7 @@ export (strata)                # generic
 export ('strata<-')
 export (stratify)
 export (sumsims)
-export (ucare.cjs)
+# export (ucare.cjs)   # temporarily blocked in version 2.2.4
 export (unsqueeze)
 
 S3method('[', openCRlist)
@@ -91,5 +91,3 @@ useDynLib (openCR, .registration = TRUE)
 
 ## DEBUGGING ONLY (cpp functions not documented)
 ## exportPattern("*cpp")
-
-

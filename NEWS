@@ -1,3 +1,11 @@
+version 2.2.4 (2022-07-01)
+
+New features and changed behaviour
+    o ucare.cjs() temporarily removed (requires R2ucare)
+
+Other
+    o vignette - new references and tweaked mention of ucare.cjs ()
+
 version 2.2.3 (2022-07-01)
 
 New features and changed behaviour

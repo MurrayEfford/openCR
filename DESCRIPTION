@@ -1,7 +1,7 @@
 Package: openCR
 Type: Package
 Title: Open Population Capture-Recapture
-Version: 2.2.3
+Version: 2.2.4
 Date: 2022-07-01
 Authors@R: person("Murray", "Efford", 
     email = "murray.efford@otago.ac.nz", 
@@ -26,7 +26,6 @@ Imports:
 Suggests: 
     knitr, 
     RMark, 
-    R2ucare, 
     rmarkdown, 
     testthat
 LinkingTo: 
