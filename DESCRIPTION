@@ -1,8 +1,8 @@
 Package: openCR
 Type: Package
 Title: Open Population Capture-Recapture
-Version: 2.2.4
-Date: 2022-07-02
+Version: 2.2.5
+Date: 2022-07-03
 Authors@R: person("Murray", "Efford", 
     email = "murray.efford@otago.ac.nz", 
     role = c("aut","cre"), 
@@ -37,5 +37,6 @@ License: GPL (>=2)
 LazyData: yes
 LazyDataCompression: xz
 SystemRequirements: GNU make
-URL: https://www.otago.ac.nz/density/
+URL: https://www.otago.ac.nz/density/,
+   https://github.com/MurrayEfford/openCR/
 BugReports: https://github.com/MurrayEfford/openCR/issues/
