@@ -10,15 +10,15 @@ and seniority γ). Spatially explicit analyses may assume home-range centres are
 dispersal between primary sessions according to various probability kernels, including bivariate
 normal (BVN) and bivariate t (BVT).
 
-**openCR** 2.2.2 is available on [CRAN](https://CRAN.R-project.org/package=openCR).
+**openCR** 2.2.4 is available on [CRAN](https://CRAN.R-project.org/package=openCR).
 
 See also --
 
 www.otago.ac.nz/density/openCR.html
 
-[openCR-vignette.pdf](https://www.otago.ac.nz/density/pdfs/openCR-vignette.pdf)
+[openCR-vignette.pdf](https://www.otago.ac.nz/density/pdfs/openCR-vignette 2.2.4.pdf)
 
-[openCR-manual.pdf](https://www.otago.ac.nz/density/pdfs/openCR-manual.pdf)
+[openCR-manual.pdf](https://www.otago.ac.nz/density/pdfs/openCR-manual 2.2.4.pdf)
 
 [openCR-examples.pdf](https://www.otago.ac.nz/density/pdfs/openCR-examples.pdf)
 
