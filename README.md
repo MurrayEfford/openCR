@@ -16,7 +16,7 @@ See also --
 
 www.otago.ac.nz/density/openCR.html
 
-[openCR-vignette.pdf]("https://www.otago.ac.nz/density/pdfs/openCR-vignette 2.2.4.pdf")
+[openCR-vignette.pdf](https://www.otago.ac.nz/density/pdfs/openCR-vignette_2.2.4.pdf)
 
 [openCR-manual.pdf](https://www.otago.ac.nz/density/pdfs/openCR-manual 2.2.4.pdf)
 
