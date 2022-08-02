@@ -988,7 +988,8 @@ Efford, M. G. (2022a) secr: Spatially explicit capture--recapture models.
 Efford, M. G. (2022b) Efficient discretization of movement kernels
   for spatiotemporal capture--recapture. 
   *Journal of Agricultural, Biological and Environmental Statistics* In press.
-  
+  https://doi.org/10.1007/s13253-022-00503-4
+
 Efford, M. G., Borchers D. L. and Byrom, A. E. (2009) Density
   estimation by spatially explicit capture--recapture:
   likelihood-based methods. In: D. L. Thomson, E. G. Cooch,
@@ -1007,6 +1008,7 @@ Efford, M. G. and Schofield, M. R. (2020) A spatial open-population
 
 Efford, M. G. and Schofield, M. R. (2022) A review of movement models in 
   open population capture--recapture. *Methods in Ecology and Evolution* In press.
+  https://doi.org/10.1111/2041-210X.13947
 
 Ergon, T. and Gardner, B. (2014) Separating mortality and emigration: modelling 
   space use, dispersal and survival with robust-design spatial 

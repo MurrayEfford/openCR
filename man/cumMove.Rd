@@ -10,7 +10,7 @@ Probability Distribution After Movement
 
 \description{
 
-Compute the compounding effect of a random walk defined by a discrete kernel. The number of steps and the edge algorithm are specified by the user. The final distribution may be summed for points lying within an arbitrary polygon. This is a simple way to compute the expected proportion remaining within a particular region (i.e. not ``emigrating").
+Compute the compounding effect of a random walk defined by a discrete kernel. The number of steps and the edge algorithm are specified by the user. The function was used to generate Fig. 3 of Efford (2022). The final distribution may be summed for points lying within an arbitrary polygon. This is a simple way to compute the expected proportion remaining within a particular region (i.e. not ``emigrating").
 
 }
 
@@ -68,6 +68,15 @@ For proportionInPolygon - vector of the summed weights (probabilities) for cells
 
 }
 
+\references{
+
+Efford, M. G. (2022) . Efficient discretization of movement kernels for 
+spatiotemporal capture--recapture. \emph{Journal of Agricultural, Biological and 
+Environmental Statistics}. In press. https://doi.org/10.1007/s13253-022-00503-4
+
+}
+
+}
 \examples{
 
 sp <- 10

@@ -67,6 +67,14 @@ A numeric value (zero for 'static' model, NA if model unrecognised).
 
 }
 
+\references{
+
+Efford, M. G. and Schofield, M. R. (2022) A review of movement models in open population 
+capture--recapture. \emph{Methods in Ecology and Evolution}. In press. 
+https://doi.org/10.1111/2041-210X.13947
+
+}
+
 \examples{
 
 expected.d('BVT', move.a = 20, move.b = 1)

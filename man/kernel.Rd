@@ -137,6 +137,10 @@ The plot method for kernels supercedes the function \code{plotKernel} that has b
 
 Clark, J. S, Silman, M., Kern, R., Macklin, E. and HilleRisLambers, J. (1999) Seed dispersal near and far: patterns across temperate and tropical forests. \emph{Ecology} \bold{80}, 1475--1494.
 
+Efford, M. G. and Schofield, M. R. (2022) A review of movement models in open population 
+capture--recapture. \emph{Methods in Ecology and Evolution}. In press. 
+https://doi.org/10.1111/2041-210X.13947
+
 Ergon, T. and Gardner, B. (2014) Separating mortality and emigration: modelling space use, dispersal and survival with robust-design spatial capture--recapture data. \emph{Methods in Ecology and Evolution} \bold{5}, 1327--1336.
 
 Nathan, R., Klein, E., Robledo-Arnuncio, J. J. and Revilla, E. (2012) Dispersal kernels: review. In: J. Clobert et al. (eds) \emph{Dispersal Ecology and Evolution}. Oxford University Press. Pp. 187--210.
