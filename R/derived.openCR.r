@@ -220,8 +220,11 @@ derived.openCR <- function (object, newdata = NULL, all.levels = FALSE,
             df$f <- df$lambda - df$phi
             df$gamma <- c(NA, (df$phi / (df$f + df$phi))[-J])
             
+            ###############################
             ## Nonspatial
             ## superN and time-specific Nj
+            ###############################
+            
             if (type %in% c('JSSAN',
                 'JSSAf', 'JSSAfCL', 'PLBf',
                 'JSSAl', 'JSSAlCL', 'PLBl',
@@ -267,8 +270,10 @@ derived.openCR <- function (object, newdata = NULL, all.levels = FALSE,
                 out <- list(totalobserved = stratumn, parameters = parnames, superN = superN, estimates = df)
             }
             
+            ###############################
             ## Spatial
             ## superD and time-specific Dj
+            ###############################
             
             if (type %in% c('JSSAsecrf','JSSAsecrfCL', 'PLBsecrf',
                 'JSSAsecrl','JSSAsecrlCL', 'PLBsecrl',
