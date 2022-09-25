@@ -1026,13 +1026,13 @@ Gimenez, O., Viallefont, A., Catchpole, E. A., Choquet, R. and Morgan,
   redundancy. *Animal Biodiversity and Conservation* **27**,
   561--572.
 
-Gimenez, O., Lebreton, J.-D., Choquet, R. and Pradel, R. (2017) R2ucare: 
-  Goodness-of-Fit Tests for Capture-Recapture Models. R package version 1.0.0. 
-  https://github.com/oliviergimenez/R2ucare/
-
 Gimenez, O., Lebreton, J.-D., Choquet, R. and Pradel, R. (2018) R2ucare: 
   An R package to perform goodness-of-fit tests for capture--recapture models. 
   *Methods in Ecology and Evolution* **9**, 1749--1754.
+
+Gimenez, O., Lebreton, J.-D., Choquet, R. and Pradel, R. (2022) R2ucare: 
+  Goodness-of-Fit Tests for Capture-Recapture Models. R package version 1.0.2. 
+  https://github.com/oliviergimenez/R2ucare/
 
 Glennie, R., Borchers, D. L., Murchie, M. Harmsen, B. J. and Foster, R. J. (2019) 
   Open population maximum likelihood spatial capture--recapture. *Biometrics* **75**, 1345--1355.
