@@ -76,7 +76,6 @@ Environmental Statistics}. In press. https://doi.org/10.1007/s13253-022-00503-4
 
 }
 
-}
 \examples{
 
 sp <- 10

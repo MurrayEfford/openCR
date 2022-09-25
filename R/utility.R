@@ -739,7 +739,6 @@ lpredictor <- function (model, newdata, indx, beta, field, beta.vcv=NULL,
   
   # new wrapper function 2021-07-23
   mat <- get.model.matrix (model, field, newdata, validlevels, contrasts)
-  
   # if (field=='b') browser()  
   
   ## drop pmix beta0 column from design matrix (always zero)
