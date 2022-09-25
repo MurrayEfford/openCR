@@ -1,7 +1,10 @@
-version 2.2.5 (2022-07-03)
+version 2.2.5 (2022-09-24)
 
 New features and changed behaviour
-    o none
+    o ucare.cjs() restored
+
+Bugs fixed
+    o modelAverage.openCR() did not pass arguments to modelAverage.openCRlist()
 
 version 2.2.4 (2022-07-02)
 

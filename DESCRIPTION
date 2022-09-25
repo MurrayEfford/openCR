@@ -2,7 +2,7 @@ Package: openCR
 Type: Package
 Title: Open Population Capture-Recapture
 Version: 2.2.5
-Date: 2022-07-03
+Date: 2022-09-24
 Authors@R: person("Murray", "Efford", 
     email = "murray.efford@otago.ac.nz", 
     role = c("aut","cre"), 
@@ -27,7 +27,8 @@ Suggests:
     knitr, 
     RMark, 
     rmarkdown, 
-    testthat
+    testthat,
+    R2ucare
 LinkingTo: 
     BH,
     Rcpp, 

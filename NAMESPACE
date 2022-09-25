@@ -55,7 +55,7 @@ export (strata)                # generic
 export ('strata<-')
 export (stratify)
 export (sumsims)
-# export (ucare.cjs)   # temporarily blocked in version 2.2.4
+export (ucare.cjs)   # temporarily blocked in version 2.2.4, restored 2.2.5
 export (unsqueeze)
 
 S3method('[', openCRlist)

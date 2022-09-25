@@ -871,16 +871,16 @@ This is generally an undeveloped field for spatially explicit capture--recapture
 
 For Cormack-Jolly-Seber (nonspatial) models there is an established suite of tests following Burnham et al. (1987). The tests have been implemented in the U-CARE software of Choquet et al. (2009), recently translated into R by Gimenez et al (2018) as package **R2ucare**. Program RELEASE (Burnham et al. 1987) also implements the core CJS tests and is available through MARK.
 
-Previous versions of **openCR** included the function `ucare.cjs` as a wrapper for relevant functions in **R2ucare**. This has been suspended, perhaps temporarily, owing to the removal of **R2ucare** from CRAN.
+<!-- **openCR** includes the function `ucare.cjs` as a wrapper for relevant functions in **R2ucare**. (This was suspended in 2.2.4 and restored in 2.2.5, owing to the temporary removal of **R2ucare** from CRAN). -->
 
-<!-- The **openCR** function `ucare.cjs` is a wrapper for relevant functions in **R2ucare**, which should be installed. We briefly demonstrate it here for the dipper data of Marzolin (1988). -->
+The **openCR** function `ucare.cjs` is a wrapper for relevant functions in **R2ucare**, which should be installed. We briefly demonstrate it here for the dipper data of Marzolin (1988).
 
-<!-- ```{r ucare} -->
-<!-- if (requireNamespace("R2ucare")) -->
-<!--     ucare.cjs(dipperCH, verbose = FALSE, by = 'sex') -->
-<!-- ``` -->
+```{r ucare}
+if (requireNamespace("R2ucare"))
+    ucare.cjs(dipperCH, verbose = FALSE, by = 'sex')
+```
 
-<!-- This invocation of `ucare.cjs` calls the **R2ucare** functions `test3sr`, `test3sm`, `test2ct`, `test2cl` and `overall_CJS` for each sex and provides a condensed report. For interpretation see the original papers, the **R2ucare** [vignette](https://cran.r-project.org/package=R2ucare/vignettes/vignette_R2ucare.html), and Chapter 5 of the MARK book (Cooch and White 2019).  Lebreton et al. (1992: 86) indicate only Test 3SR is meaningful for these data (see also [openCR-examples.pdf][openCR-examples.pdf]). -->
+This invocation of `ucare.cjs` calls the **R2ucare** functions `test3sr`, `test3sm`, `test2ct`, `test2cl` and `overall_CJS` for each sex and provides a condensed report. For interpretation see the original papers, the **R2ucare** [vignette](https://cran.r-project.org/package=R2ucare/vignettes/vignette_R2ucare.html), and Chapter 5 of the MARK book (Cooch and White 2019).  Lebreton et al. (1992: 86) indicate only Test 3SR is meaningful for these data (see also [openCR-examples.pdf][openCR-examples.pdf]).
 
 ## Limitations of **openCR** {#limitations}
 
