@@ -66,7 +66,8 @@ openCR.esa <- function (object, bysession = FALSE, stratum = 1) {
     # 2021-02-21 modified for annular
     if (object$movementmodel %in% .openCRstuff$kernelmodels) {
         k2 <- object$kernelradius
-        cellsize <- attr(mask,'area')^0.5 * 100   ## metres, equal mask cellsize
+        # cellsize <- attr(mask,'area')^0.5 * 100   ## metres, equal mask cellsize
+        cellsize <- spacing(mask)
         kernel <- expand.grid(x = -k2:k2, y = -k2:k2)
         kernel <- kernel[(kernel$x^2 + kernel$y^2) <= (k2+0.5)^2, ]
         if (object$movementmodel == 'annular') {
@@ -80,6 +81,7 @@ openCR.esa <- function (object, bysession = FALSE, stratum = 1) {
             ring2 <- r > (k2-0.5)
             kernel <- kernel[origin | ring1 | ring2, ]
         }
+        kernel <- linearisekernel (kernel, mask) 
         mqarray <- mqsetup (mask, kernel, cellsize, edgecode)   
     }
 
@@ -112,7 +114,7 @@ openCR.esa <- function (object, bysession = FALSE, stratum = 1) {
 
     usge <- usage(trps)
     if (is.null(usge)) usge <- matrix(1, nrow = k, ncol = ncol(capthist))
-    distmat <- getdistmat(trps, mask, object$detectfn == 20)
+    distmat <- getdistmat(trps, mask, details$userdist, object$detectfn == 20)
     temp <- makegkParalleldcpp (as.integer(object$detectfn), 
         as.integer(.openCRstuff$sigmai[type]),
         as.integer(details$grain),

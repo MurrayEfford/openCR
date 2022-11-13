@@ -1,7 +1,7 @@
-version 2.2.6 (2022-09-26)
+version 2.2.6 (2022-11-14)
 
 New features and changed behaviour
-    o none
+    o static userdist option; linear mask
 
 version 2.2.5 (2022-09-25)
 

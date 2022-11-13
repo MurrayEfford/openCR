@@ -1165,6 +1165,21 @@ rectwrap <- function(oldx, oldy, newx, newy, concat = TRUE) {
     list(newx=newx, newy=newy)
 }
 ###############################################################################
+linearisekernel <- function(kernel, mask) {
+    # optional linear kernel (saves time)
+    if (inherits(mask, 'linearmask')) {
+        if (!requireNamespace("secrlinear")) {
+            stop("linearmask but package secrlinear not available")
+        }
+        if (secrlinear::branched(mask)) {
+            stop ("movement models not available for branched linear mask")
+        }
+        else {
+            kernel <- kernel[kernel$x==0,]  # drop x dimension
+        }
+    }
+    kernel
+}
 
 mqsetup <- function (
   mask,      ## x,y points on mask (first x, then y)
@@ -1177,23 +1192,37 @@ mqsetup <- function (
     lapply(mask, mqsetup, kernel, cellsize, edgecode)
   }
   else {
-    ## assuming cells of mask and kernel are same size
-    ## and kernel takes integer values centred on current mask point
-    oldx <- round((mask$x-min(mask$x))/cellsize)
-    oldy <- round((mask$y-min(mask$y))/cellsize)
-    
-    newx <- as.integer(outer(oldx, kernel$x, "+"))
-    newy <- as.integer(outer(oldy, kernel$y, "+"))
-    
-    # mqarray shared with C++ so indices are zero-based
-    if (edgecode == 1)    # "wrap"
-      newxy <- rectwrap(oldx,oldy,newx,newy)
-    else                  # "truncate", "none"
-      newxy <- paste(newx, newy)
-    
-    i <- match(newxy, paste(oldx,oldy)) - 1
-    i[is.na(i)] <- -1
-    matrix(i, nrow = nrow(mask), ncol = nrow(kernel))
+      if (inherits(mask, 'linearmask')) {
+          # 2022-11-14
+          ymin <- min(kernel$y)
+          ymax <- max(kernel$y)
+          mat <- matrix(-1, nrow = nrow(mask), ncol = nrow(kernel))
+          mat[, kernel$x==0] <- outer(1:nrow(mask), ymin:ymax, '+') - 1
+          if (edgecode == 1)    # "wrap"
+              mat[mat<ymin | mat>ymin] <- -1 # TEMPORARY
+          else                  # "truncate", "none"
+              mat[mat<0 | mat>=nrow(mask)] <- -1
+          mat
+      }
+      else {
+          ## assuming cells of mask and kernel are same size
+          ## and kernel takes integer values centred on current mask point
+          oldx <- round((mask$x-min(mask$x))/cellsize)
+          oldy <- round((mask$y-min(mask$y))/cellsize)
+          
+          newx <- as.integer(outer(oldx, kernel$x, "+"))
+          newy <- as.integer(outer(oldy, kernel$y, "+"))
+          
+          # mqarray shared with C++ so indices are zero-based
+          if (edgecode == 1)    # "wrap"
+              newxy <- rectwrap(oldx,oldy,newx,newy)
+          else                  # "truncate", "none"
+              newxy <- paste(newx, newy)
+          
+          i <- match(newxy, paste(oldx,oldy)) - 1
+          i[is.na(i)] <- -1
+          matrix(i, nrow = nrow(mask), ncol = nrow(kernel))
+      }
   }
 }
 ###############################################################################
@@ -1225,30 +1254,43 @@ xydist <- function (xy1, xy2) {
 }
 ###############################################################################
 
-getdistmat <- function (traps, mask, HPX = FALSE) {
-  ## Static distance matrix
-  if (HPX) {
-    if (any(detector(traps) %in% .openCRstuff$polydetectors)) {
-      trps <- split(traps, polyID(traps))
-      inside <- t(sapply(trps, pointsInPolygon, xy = mask))
-      d <- 1-inside   # 0 inside, 1 outside
-      d[d>0] <- 1e10  # 0 inside, 1e10 outside
-      d
+getdistmat <- function (traps, mask, userdist = NULL, HPX = FALSE) {
+    ## Static distance matrix
+    if (HPX) {
+        if (!is.null(userdist)) {
+            stop("userdist cannot be used with HPX")
+        }
+        if (any(detector(traps) %in% .openCRstuff$polydetectors)) {
+            trps <- split(traps, polyID(traps))
+            inside <- t(sapply(trps, pointsInPolygon, xy = mask))
+            d <- 1-inside   # 0 inside, 1 outside
+            d[d>0] <- 1e10  # 0 inside, 1e10 outside
+            d
+        }
+        else {
+            # maximum of squared distance in x- or y- directions
+            xydist(traps, mask)
+        }
     }
     else {
-      # maximum of squared distance in x- or y- directions
-      xydist(traps, mask)
-    }
-  }
-  else {
-    if (any(detector(traps) %in% .openCRstuff$polydetectors)) {
-      ## do not use result if detector is one of
-      ## polygonX, polygon, transectX, transect, telemetry
-      stop("polygon detectors can only be used with detectfn = 'HPX' in openCR")
-    }
-    else {
-      # Euclidean distance
-      edist(traps, mask)
+        if (any(detector(traps) %in% .openCRstuff$polydetectors)) {
+            ## do not use result if detector is one of
+            ## polygonX, polygon, transectX, transect, telemetry
+            stop("polygon detectors can only be used with detectfn = 'HPX' in openCR")
+        }
+        else {
+            if (is.null(userdist)) {
+                # Euclidean distance
+                edist(traps, mask)
+            }
+            else {
+                # Non-euclidean distance (trial 2022-11-13)
+                OK <- secr:::getuserdistnames(userdist) %in% names(covariates(mask))
+                if ((length(OK)>0) & !all(OK))
+                    stop ("covariates required by userdist function not in mask : ",
+                        paste(secr:::getuserdistnames(userdist)[!OK], collapse=','))
+                result <- do.call(userdist, c(list(traps, mask, mask)))
+            }
     }
   }
 }

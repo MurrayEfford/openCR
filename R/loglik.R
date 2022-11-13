@@ -147,7 +147,6 @@ open.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
                 }
                 freq * log(sump)  ## return vector of individual LL contributions
             }
-            
             pmix <- fillpmix2(stratum$nc, data$details$nmix, PIA, realparval)
             
             #####################################################################

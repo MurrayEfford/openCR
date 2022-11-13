@@ -17,12 +17,14 @@ cumMove <- function (X, mask, kernel, edgemethod = c('truncate', 'wrap', 'none')
         if (nstep>0)
         settlement <- matrix(covariates(mask)[,settlecov], nrow=nrow(mask), ncol=nstep)
     }
+    
     # cell probabilities
     kernelp <- matrix(covariates(kernel)$kernelp, nrow = nrow(kernel), 
         ncol = max(1,nstep))
     
     # integer cell positions
-    cellsize <- attr(mask,'area')^0.5 * 100   ## metres, equal mask cellsize
+    # cellsize <- attr(mask,'area')^0.5 * 100   ## metres, equal mask cellsize
+    cellsize <- spacing(mask)  # metres 
     kernel <- round(kernel / cellsize)
     
     # edge method will usually be 'truncate and normalise'
@@ -33,6 +35,7 @@ cumMove <- function (X, mask, kernel, edgemethod = c('truncate', 'wrap', 'none')
     }
     # generate lookup array
     if (is.null(mqarray)) {
+        kernel <- linearisekernel (kernel, mask) 
         mqarray <- mqsetup (mask, kernel, cellsize, edgecode)  
     }
 

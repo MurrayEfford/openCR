@@ -110,13 +110,15 @@ classMembership.openCR <- function (object, fullCH = NULL, ...) {
         if (movementcode %in% c(2:5, 7,8)) {
             ## movement kernel
             k2 <- object$kernelradius
-            cellsize <- attr(object$mask,'area')^0.5 * 100   ## metres, equal mask cellsize
+            # cellsize <- attr(object$mask,'area')^0.5 * 100   ## metres, equal mask cellsize
+            cellsize <- spacing(object$mask)
             kernel <- expand.grid(x = -k2:k2, y = -k2:k2)
             kernel <- kernel[(kernel$x^2 + kernel$y^2) <= (k2+0.5)^2, ]   ## autoclip
             if (sparsekernel) {
                 ok <- kernel$x==0 | kernel$y == 0 | kernel$x == kernel$y | kernel$x == -kernel$y
                 kernel <- kernel[ok,]
             }
+            kernel <- linearisekernel (kernel, object$mask) 
             mqarray <- mqsetup (object$mask, kernel, cellsize, edgecode) # 2020-11-02
         }
         
@@ -135,7 +137,7 @@ classMembership.openCR <- function (object, fullCH = NULL, ...) {
             traps(CH) <- traps(capthist)
         }
         ##--------------------------------------------------------------
-        distmat <- getdistmat(trps, object$mask, object$detectfn==20)
+        distmat <- getdistmat(trps, object$mask, object$details$userdist, object$detectfn==20)
         temp <- makegkParalleldcpp (as.integer(object$detectfn),
             as.integer(.openCRstuff$sigmai[type]),
             as.integer(object$details$grain),

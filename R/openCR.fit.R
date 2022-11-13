@@ -107,7 +107,8 @@ openCR.fit <- function (
     dummyvariablecoding = NULL,
     anchored = FALSE,
     r0 = 1/sqrt(pi),      # effective radius of zero cell in movement kernel
-    settlemodel = FALSE   # TRUE if differential settlement to be modelled
+    settlemodel = FALSE,   # TRUE if differential settlement to be modelled
+    userdist = NULL  
   )
   
   if (is.logical(details$hessian)) {
@@ -188,8 +189,13 @@ openCR.fit <- function (
     stop (type, " not currently available")
   secr <- grepl('secr', type)
   if (secr) {
-    if (is.null(mask))
-      stop("requires valid mask")
+      if (is.null(mask)) {
+          stop("requires valid mask")
+      }
+      if (is.null(details$userdist) & inherits(mask, 'linearmask')) {
+          warning ("using Euclidean distances with linear mask")
+      }
+      
     if (ms(mask)) {
       if (!stratified) {
         mask <- mask[[1]]
@@ -546,7 +552,12 @@ openCR.fit <- function (
       ring2 <- r >= (k2-0.5)
       kernel <- kernel[origin | ring1 | ring2, ]
     }
-    if (sparsekernel) {
+    
+    if (inherits(mask, 'linearmask')) {
+        kernel <- linearisekernel (kernel, mask) 
+        sparsekernel <- FALSE
+    }
+    else if (sparsekernel) {
       tol <- 1e-8
       ok <- 
         abs(kernel$x) < tol |
@@ -555,6 +566,7 @@ openCR.fit <- function (
         abs(kernel$x + kernel$y) < tol
       kernel <- kernel[ok,]
     }
+    
   }
   else {
     kernel <- mqarray <- matrix(0,1,2)  ## default
@@ -615,7 +627,12 @@ openCR.fit <- function (
   J <- sum(intervals(ch1)>0)+1
   msk1 <- if (stratified) mask[[details$initialstratum]] else mask
   freq <- covariates(ch1)$freq
-  marea <- if (is.null(msk1)) NA else maskarea(msk1)
+  msize <- if (is.null(msk1)) 
+      NA 
+  else if (inherits(msk1, "linearmask"))
+      masklength(msk1)
+  else
+      maskarea(msk1)
   ncf <- if (!is.null(freq)) sum(freq) else nrow(ch1)
   
   if (any(is.na(start)) | is.list(start)) {
@@ -634,11 +651,11 @@ openCR.fit <- function (
       g = 0.2,   # random temporary emigration parameter
       # tau = 1/(details$M+1),
       BN = 20,
-      BD = (ncf + 1) / marea,
-      D = (ncf + 1) / marea,
+      BD = (ncf + 1) / msize,
+      D = (ncf + 1) / msize,
       N = ncf + 1,
       superN = ncf*(1-distrib) + 20,   ## use N-n for binomial 2018-03-12
-      superD = (ncf + 20) / marea,
+      superD = (ncf + 20) / msize,
       sigma =  rpsv,
       z = 2,
       move.a = if (secr) (if (movementmodel %in% c('annular', 'UNIzi','INDzi', 'UNIzi')) 0.4 else rpsv) else 0.6,    # increased rpsv/2 to rpsv 2021-04-11
@@ -650,7 +667,6 @@ openCR.fit <- function (
     
     getdefault <- function (par) transform (default[[par]], link[[par]])
     defaultstart <- rep(0, NP)
-    
     startindx <- parindx
     if (ndvc==0) {
       startindx <- lapply(startindx, '[', 1)   ## only first
@@ -789,10 +805,11 @@ openCR.fit <- function (
         class (CH) <- 'capthist'
         traps(CH) <- traps(capthist)
       }
-      distmat <- getdistmat (traps(CH), mask, detectfn == 20)
-      cellsize <- attr(mask,'area')^0.5 * 100   ## metres, equal mask cellsize
+      distmat <- getdistmat (traps(CH), mask, details$userdist, detectfn == 20)
+      # cellsize <- attr(mask,'area')^0.5 * 100   ## metres, equal mask cellsize
+      cellsize <- spacing(mask)   ## allows linearmask
       if (!(movementmodel %in% c('static','IND','INDzi'))) {
-        mqarray <- mqsetup (mask, kernel, cellsize, edgecode)  
+          mqarray <- mqsetup (mask, kernel, cellsize, edgecode)  
       }
     }
     else {

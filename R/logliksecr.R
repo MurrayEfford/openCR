@@ -136,15 +136,18 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
             if (any(is.na(sump)) || any(sump<=0)) NA else freq * log(sump)
         }
         ########################################################################
-        
         freq <- covariates(stratum$capthist)$freq
         if (is.null(freq)) freq <- rep(1, stratum$nc)
         if (length(freq) == 1) freq <- rep(freq, stratum$nc)
         ncf <- sum(freq)
-
+        
+        # if(.openCRstuff$iter>4) browser()            
+        
         trps <- traps(stratum$capthist)
-        if (!is.null(stratum$mask)) area <- attr(stratum$mask,'area')
-        else area <- 0
+        
+        # apparently redundant code 2022-11-13
+        # if (!is.null(stratum$mask)) area <- attr(stratum$mask,'area')
+        # else area <- 0
         
         detectr <- detector(trps)[1]
         if (detectr == 'count') {
@@ -337,7 +340,12 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
                     realparval, PIAJ,
                     stratum$primaryintervals)
             }
-            A <- maskarea(stratum$mask)
+            A <- if (inherits(stratum$mask, "linearmask")) {
+                masklength(stratum$mask)
+            }
+            else {
+                maskarea(stratum$mask)
+            }
             N <- Dsuper * A
             # impose constraint: return with invalid result code if not possible
             if (N < ncf) return (1e10);
@@ -400,6 +408,7 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
     if (data$details$debug>2) browser()
     
     #------------------------------------------------------------
+    
     ## call onestratumll
     compbystratum <- lapply(data$stratumdata, onestratumll)
     compbystratum <- matrix(unlist(compbystratum), ncol = 4, byrow = TRUE)
