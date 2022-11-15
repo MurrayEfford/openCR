@@ -808,6 +808,16 @@ AIC(fitnm,fitnr)
 ```
 In the longer term, better maximizers are needed.
 
+### Step into infeasible parameter space
+
+The Newton-Raphson algorithm typically takes a large step in parameter space after a few iterations, and the resulting log-likelihood may be undefined (NA). Recovery is usually automatic, but sometimes maximization gets stuck at this point. From 2.2.6 it is possible to control the step size with the details argument 'stepmax'. The default stepmax is generally 1000 on the link scale; and often stepmax = 2 works just as well:
+
+
+```{r stepmax, cache = mycache}
+fitnr2 <- openCR.fit(ovenCH, type = 'JSSAlCL', model = list(phi ~ t, lambda~t),
+    details = list(stepmax = 2))
+```
+
 ### Number of iterations {#iterlim}
 
 Exceeding the iteration limit of `nlm` results in code 4. The default number of iterations was increased to 300 in **openCR** 2.1.0 from the previous default of 100. Each iteration in `nlm` completes one evaluation of the gradient of the likelihood function, and requires multiple likelihood evaluations. For many parameters 300 iterations may still not be enough: increase it with the details argument `control` (e.g., `details = list(control = list(iterlim = 500))`). See the help for `optim` for the relevant control settings of other maximizers such as 'Nelder-Mead'.

@@ -32,6 +32,7 @@
 ## 2021-10-05 revamp of preferred aliases for movementmodel
 ## 2021-10-06 allow RDL
 ## 2021-11-30 completed settlement model
+## 2022-11-15 stepmax
 ################################################################################
 
 openCR.fit <- function (
@@ -106,9 +107,10 @@ openCR.fit <- function (
     log = '',
     dummyvariablecoding = NULL,
     anchored = FALSE,
-    r0 = 1/sqrt(pi),      # effective radius of zero cell in movement kernel
-    settlemodel = FALSE,   # TRUE if differential settlement to be modelled
-    userdist = NULL  
+      r0 = 1/sqrt(pi),      # effective radius of zero cell in movement kernel
+      settlemodel = FALSE,   # TRUE if differential settlement to be modelled
+      userdist = NULL,
+      stepmax = NULL
   )
   
   if (is.logical(details$hessian)) {
@@ -907,6 +909,7 @@ openCR.fit <- function (
       betaw    = betaw,
       hessian  = tolower(details$hessian)=='auto')
     if (!is.null(details$control) && is.list(details$control)) args <- c(args, details$control)
+    if (!is.null(details$stepmax)) args <- c(args, stepmax = details$stepmax)
     this.fit <- do.call (nlm, args)
     this.fit$par <- this.fit$estimate     # copy for uniformity
     this.fit$value <- this.fit$minimum    # copy for uniformity

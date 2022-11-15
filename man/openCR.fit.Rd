@@ -237,6 +237,10 @@ slower functions in native R (useful for debugging; not all models) \cr
 
 \code{squeeze} \tab TRUE \tab  Apply \code{\link{squeeze}} to capthist before analysis. Non-spatial models fit faster, because histories often non-unique.\cr
 
+\code{userdist} \tab NULL \tab Function to compute distances (see \pkg{secr}) \cr
+
+\code{stepmax} \tab NULL \tab stepmax argument of \code{\link[stats]{nlm}} (step on link scale) \cr
+
 }
 
 If \code{method = "Newton-Raphson"} then \code{\link[stats]{nlm}} is
