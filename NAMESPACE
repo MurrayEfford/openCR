@@ -90,4 +90,4 @@ S3method (vcov, openCR)
 useDynLib (openCR, .registration = TRUE)
 
 ## DEBUGGING ONLY (cpp functions not documented)
-exportPattern("*cpp")
+## exportPattern("*cpp")
