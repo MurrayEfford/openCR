@@ -301,7 +301,7 @@ Otherwise, an object of class `openCR' with components
   \item{parindx }{list with one component for each real parameter giving
     the indices of the `beta' parameters associated with each real
     parameter}  
-  \item{intervals}{intervals between primary sessions}
+  \item{primaryintervals}{intervals between primary sessions}
   \item{vars }{vector of unique variable names in \code{model} }
   \item{betanames }{names of beta parameters}
   \item{realnames }{names of fitted (real) parameters }
