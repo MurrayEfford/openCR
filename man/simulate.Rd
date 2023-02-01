@@ -30,13 +30,11 @@ sumsims (sims, parm = 'phi', session = 1, dropifnoSE = TRUE, svtol = NULL,
 runsim.RMark (nrepl = 100, model = "CJS", model.parameters = NULL, extractfn,
     seed = NULL, ...)
 
-    
-
 }
 \arguments{
 
   \item{N}{integer population size}
-  \item{turnover}{list as described for \link{turnover}}
+  \item{turnover}{list as described for \link[secr]{turnover}}
   \item{p}{numeric detection probability}
   \item{nsessions}{number of primary sessions}
   \item{noccasions}{number of secondary sessions per primary session}
