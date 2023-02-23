@@ -1,3 +1,7 @@
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/MurrayEfford/openCR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/MurrayEfford/openCR/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+  
 # openCR
 Open Population Capture-Recapture
 
