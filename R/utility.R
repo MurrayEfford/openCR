@@ -1171,12 +1171,12 @@ linearisekernel <- function(kernel, mask) {
         if (!requireNamespace("secrlinear")) {
             stop("linearmask but package secrlinear not available")
         }
-        if (packageVersion('secrlinear') >= '1.2.0' && secrlinear::branched(mask)) {
-            stop ("movement models not available for branched linear mask")
-        }
-        else {
+        # if (packageVersion('secrlinear') >= '1.2.0' && secrlinear::branched(mask)) {
+        #     stop ("movement models not available for branched linear mask")
+        # }
+        # else {
             warning ("movement models do not apply if linear mask is branched")
-        }
+        # }
         kernel <- kernel[kernel$x==0,]  # drop x dimension
     }
     kernel
