@@ -1,4 +1,6 @@
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/openCR)](https://cran.r-project.org/package=openCR)
+[![Downloads (total)](https://cranlogs.r-pkg.org/badges/grand-total/openCR)](https://www.r-pkg.org/pkg/openCR)
 [![R-CMD-check](https://github.com/MurrayEfford/openCR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/MurrayEfford/openCR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
   
