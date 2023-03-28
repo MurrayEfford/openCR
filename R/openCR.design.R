@@ -24,7 +24,7 @@
 openCR.design <- function (capthist, models, type, naive = FALSE, 
     stratumcov = NULL, sessioncov = NULL, timecov = NULL, agecov = NULL, 
     dframe = NULL, contrasts = NULL, initialage = 0, minimumage = 0, 
-    maximumage = 1, CJSp1 = FALSE, ...) {
+    maximumage = 1, ageclassfn = NULL, CJSp1 = FALSE, ...) {
     
 ## Generate design matrix, reduced parameter array, and parameter index array (PIA)
 ## for each parameter
@@ -195,7 +195,6 @@ openCR.design <- function (capthist, models, type, naive = FALSE,
     timecov    <- stdcovlist(timecov, 'tcov', R, if(MS) sapply(capthist, ncol) else ncol(capthist))
     agecov     <- stdcovlist(agecov, 'acov', R, (maximumage - minimumage + 1))
     stratumcov <- stdcovlist(stratumcov, 'stratumcov', 1, NULL)
-    
     #--------------------------------------------------------------------------
     dims <- c(R,n,S,K,nmix)       # virtual dimensions
     dframenrow <- prod(dims)    # number of rows
@@ -249,7 +248,13 @@ openCR.design <- function (capthist, models, type, naive = FALSE,
         }
         
         if ('age' %in% vars) {
-            dframe$age <- factor(secr::insertdim (factor(age), c(2,3,1), dims))
+            if (is.null(ageclassfn)) {
+                agefactor <- factor(age)
+            }
+            else {
+                agefactor <- ageclassfn(age)
+            }
+            dframe$age <- factor(secr::insertdim (agefactor, c(2,3,1), dims))
         } 
         if ('Age' %in% vars) {
             dframe$Age <- secr::insertdim (age, c(2,3,1), dims)

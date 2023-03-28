@@ -404,6 +404,18 @@ If age is modelled as a factor then it is useful to group older animals in a max
 
 The agecov argument of `openCR.fit` may be used to specify a recoding of numerical age, analogous to the sessioncov argument of `secr.fit`. Thus numerical ages may be bracketed into 'young', 'middle' and 'old'. The length of agecov should match the number of numerical ages (maximumage - minimumage + 1).
 
+The 'agecov' mechanism is limited to sampling sessions separated by one time unit. A more flexible method is provided from 2.2.6: specify the details argument `ageclassfn`, a simple function to group numeric ages into age classes. Test your function by applying it to the matrix of numeric ages in your data. For example,
+```{r ageclass}
+# a possible ageclassfn (should return a factor)
+agefn <- function(age) cut(age, breaks = c(0,1.99,Inf), 
+  labels = c('young', 'old'), include.lowest = TRUE)
+# construct matrix of numeric ages (animal x secondary session)
+age <- age.matrix(join(ovenCH), maximumage = 6)
+# tabulate the grouped ages
+aclass <- agefn(age)
+table(age, aclass)
+```
+
 For a quadratic relationship with age, specify an additive model with both Age and Age2 terms (e.g., model = phi ~ Age + Age2).
 
 ## Sampling intervals

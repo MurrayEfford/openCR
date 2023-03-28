@@ -36,7 +36,7 @@
 ################################################################################
 
 openCR.fit <- function (
-  capthist, 
+    capthist, 
   type          = "CJS", 
   model         = list(p~1, phi~1, sigma~1),
   distribution  = c("poisson", "binomial"), 
@@ -44,7 +44,7 @@ openCR.fit <- function (
   detectfn      = c('HHN','HHR','HEX','HAN','HCG','HVP', 'HPX'), 
   binomN        = 0, 
   movementmodel = c('static', 'BVN', 'BVE', 'BVT', 'RDE', 'RDG','RDL','IND', 
-                    'UNI', 'BVNzi', 'BVEzi', 'RDEzi', 'INDzi', 'UNIzi'),
+    'UNI', 'BVNzi', 'BVEzi', 'RDEzi', 'INDzi', 'UNIzi'),
   edgemethod    = c('truncate', 'wrap', 'none'), 
   kernelradius  = 30,          # 10 until 2.2.0
   sparsekernel  = TRUE,        # FALSE until 2.2.0
@@ -63,7 +63,7 @@ openCR.fit <- function (
   ncores        = NULL, 
   stratified    = FALSE, 
   ...)
-  
+
 {
   # Fit open population capture recapture model
   #
@@ -99,6 +99,7 @@ openCR.fit <- function (
     LLonly = FALSE,
     minimumage = 0, 
     maximumage = 1,
+    ageclassfn = NULL,
     multinom = FALSE,
     R = FALSE, 
     squeeze = TRUE, 
@@ -107,10 +108,10 @@ openCR.fit <- function (
     log = '',
     dummyvariablecoding = NULL,
     anchored = FALSE,
-      r0 = 1/sqrt(pi),      # effective radius of zero cell in movement kernel
-      settlemodel = FALSE,   # TRUE if differential settlement to be modelled
-      userdist = NULL,
-      stepmax = NULL
+    r0 = 1/sqrt(pi),      # effective radius of zero cell in movement kernel
+    settlemodel = FALSE,   # TRUE if differential settlement to be modelled
+    userdist = NULL,
+    stepmax = NULL
   )
   
   if (is.logical(details$hessian)) {
@@ -191,13 +192,13 @@ openCR.fit <- function (
     stop (type, " not currently available")
   secr <- grepl('secr', type)
   if (secr) {
-      if (is.null(mask)) {
-          stop("requires valid mask")
-      }
-      if (is.null(details$userdist) & inherits(mask, 'linearmask')) {
-          warning ("using Euclidean distances with linear mask")
-      }
-      
+    if (is.null(mask)) {
+      stop("requires valid mask")
+    }
+    if (is.null(details$userdist) & inherits(mask, 'linearmask')) {
+      warning ("using Euclidean distances with linear mask")
+    }
+    
     if (ms(mask)) {
       if (!stratified) {
         mask <- mask[[1]]
@@ -236,9 +237,9 @@ openCR.fit <- function (
       
       movementmodel <- stdmovement(movementmodel)
       if (details$r0 <= 0 && movementmodel %in% c('RDG','RDL','RDLS','BVC','RDE')) {
-          warning ("cannot use zero value for r0 with movement model ", movementmodel, 
-              "; setting r0 to 1/sqrt(pi)");
-          details$r0 <- 1/sqrt(pi)
+        warning ("cannot use zero value for r0 with movement model ", movementmodel, 
+          "; setting r0 to 1/sqrt(pi)");
+        details$r0 <- 1/sqrt(pi)
       }
       
       
@@ -454,6 +455,7 @@ openCR.fit <- function (
     initialage = details$initialage,
     minimumage = details$minimumage,
     maximumage = details$maximumage,
+    ageclassfn = details$ageclassfn,
     CJSp1      = details$CJSp1
   )
   allvars <- unlist(lapply(model, all.vars))
@@ -475,6 +477,7 @@ openCR.fit <- function (
       initialage = details$initialage,
       minimumage = details$minimumage,
       maximumage = details$maximumage,
+      ageclassfn = details$ageclassfn,
       CJSp1      = details$CJSp1)
   }
   else {
@@ -514,7 +517,7 @@ openCR.fit <- function (
     attr(design$designMatrices$settle, 'dimmaskdesign') <- attr(dframe, 'dimmaskdesign')
     
   }
-
+  
   ############################
   # Parameter mapping (general)
   #############################
@@ -556,8 +559,8 @@ openCR.fit <- function (
     }
     
     if (inherits(mask, 'linearmask')) {
-        kernel <- linearisekernel (kernel, mask) 
-        sparsekernel <- FALSE
+      kernel <- linearisekernel (kernel, mask) 
+      sparsekernel <- FALSE
     }
     else if (sparsekernel) {
       tol <- 1e-8
@@ -630,11 +633,11 @@ openCR.fit <- function (
   msk1 <- if (stratified) mask[[details$initialstratum]] else mask
   freq <- covariates(ch1)$freq
   msize <- if (is.null(msk1)) 
-      NA 
+    NA 
   else if (inherits(msk1, "linearmask"))
-      masklength(msk1)
+    masklength(msk1)
   else
-      maskarea(msk1)
+    maskarea(msk1)
   ncf <- if (!is.null(freq)) sum(freq) else nrow(ch1)
   
   if (any(is.na(start)) | is.list(start)) {
@@ -811,7 +814,7 @@ openCR.fit <- function (
       # cellsize <- attr(mask,'area')^0.5 * 100   ## metres, equal mask cellsize
       cellsize <- spacing(mask)   ## allows linearmask
       if (!(movementmodel %in% c('static','IND','INDzi'))) {
-          mqarray <- mqsetup (mask, kernel, cellsize, edgecode)  
+        mqarray <- mqsetup (mask, kernel, cellsize, edgecode)  
       }
     }
     else {

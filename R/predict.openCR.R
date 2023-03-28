@@ -21,7 +21,6 @@ predict.openCR <- function (object, newdata = NULL, se.fit = TRUE, alpha = 0.05,
     return(NULL)
   }
   if (is.null(newdata)) {
-    # newdata <- openCR.make.newdata (object, ...)
     newdata <- makeNewData (object, ...)
   }
   nstrata <- length(strata(object$capthist))

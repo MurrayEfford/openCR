@@ -1,8 +1,6 @@
 \name{makeNewData}
 \alias{makeNewData}
 \alias{makeNewData.openCR}
-%\name{openCR.make.newdata}
-%\alias{openCR.make.newdata}
 
 \title{ Create Default Design Data }
 
@@ -16,7 +14,6 @@ for the base levels of all predictors in an openCR object.
 \usage{
 
 \method{makeNewData}{openCR}(object, all.levels = FALSE, ...)
-%openCR.make.newdata(object, all.levels = FALSE, ...)
 
 }
 
@@ -30,13 +27,12 @@ for the base levels of all predictors in an openCR object.
 
 \details{
 
-%\code{openCR.make.newdata} is used by \code{predict} in lieu of
-%user-specified `newdata'. There is seldom any need to call
-%\code{openCR.make.newdata} directly.
-
 \code{makeNewData} is used by \code{predict} in lieu of
 user-specified `newdata'. There is seldom any need to call
 \code{makeNewData} directly.
+
+\code{makeNewData} respects the details argument 'ageclassfn' for grouping ages 
+(\pkg{openCR} >= 2.2.6), but only considers integer ages minimumage:maximumage.
 
 }
 

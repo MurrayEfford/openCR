@@ -1,8 +1,13 @@
-version 2.2.6 (2022-11-14)
+version 2.2.6 (2023-03-28)
 
 New features and changed behaviour
     o static userdist option; linear mask
     o details may include stepmax argument of nlm
+    o openCR.fit() acquires details argument 'ageclassfn' that is passed to 
+      openCR.design()
+
+Other
+    o makeNewData.openCR() rejects covariates with reserved names
 
 version 2.2.5 (2022-09-25)
 

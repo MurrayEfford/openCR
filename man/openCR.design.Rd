@@ -11,7 +11,7 @@
 openCR.design(capthist, models, type, naive = FALSE, stratumcov = NULL, 
     sessioncov = NULL, timecov = NULL, agecov = NULL, 
     dframe = NULL, contrasts = NULL, initialage = 0, 
-    minimumage = 0, maximumage = 1, CJSp1 = FALSE, ...)
+    minimumage = 0, maximumage = 1, ageclassfn = NULL, CJSp1 = FALSE, ...)
 
 }
 
@@ -31,6 +31,7 @@ openCR.design(capthist, models, type, naive = FALSE, stratumcov = NULL,
   \item{initialage}{numeric or character (name of individual covariate containing initial ages)}
   \item{minimumage}{numeric; ages younger than minimum are truncated up}
   \item{maximumage}{numeric; ages older than maximum are truncated down}
+  \item{ageclassfn}{function to group age into classes}
   \item{CJSp1}{logical; if TRUE detection is modelled on first primary session in CJS models}
   \item{\dots}{ other arguments passed to the \R function \code{\link{model.matrix}} }
 }
@@ -65,7 +66,7 @@ The \code{initialage} and \code{maximumage} arguments are usually passed via the
 \code{openCR.fit} `details' argument.
 
 \code{agecov} may be used to group ages. It should have length (or number of rows) 
-equal to \code{maximumage} + 1.
+equal to \code{maximumage} + 1. Alternatively, and preferred from 2.2.6, a function may be provided in the argument \code{ageclassfn} to group numeric ages into classes. \code{ageclassfn} should return a factor.
 
 }
 

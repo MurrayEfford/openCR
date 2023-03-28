@@ -15,18 +15,19 @@
 ## 2021-07-02 fixed backward incompatibility bug details$minimumage not specified
 ## 2021-07-30 makeNewData method for openCR objects
 ## 2022-01-28 file renamed
+## 2023-03-28 object$details$ageclassfn used if provided
+## 2023-03-28 do not search for autovars in covariates
 ############################################################################################
 
 makeNewData.openCR <- function (object, all.levels = FALSE, ...) {
-# openCR.make.newdata <- function (object, all.levels = FALSE, ...) {
-        
+
     # 'Session', 't' are handled separately at end
-    autovars <- c(.openCRstuff$learnedresponses, 'stratum', 'session','tt', 'h2','h3')
+    autovars <- c(.openCRstuff$learnedresponses, 'stratum', 'session','Session','t', 'tt', 
+      'h2','h3','age','Age','Age2')
     capthist <- object$capthist
     mask <- object$mask
     
     vars <- object$vars
-    
     dframe <- object$dframe
     stratanames <- factor(strata(capthist))
     nstrata <- length(stratanames)
@@ -36,7 +37,7 @@ makeNewData.openCR <- function (object, all.levels = FALSE, ...) {
     # fix backward compatibility bug 2021-07-02
     if (is.null(object$details$minimumage)) object$details$minimumage <- 0
     if (is.null(object$details$maximumage)) object$details$maximumage <- 1
-    
+   
     agerange <- object$details$minimumage:object$details$maximumage
     sessioncov <- stdcovlist(object$sessioncov, 'scov', nstrata, J)
     timecov    <- stdcovlist(object$timecov, 'tcov', nstrata, S)
@@ -57,7 +58,7 @@ makeNewData.openCR <- function (object, all.levels = FALSE, ...) {
             else {
                 found <- ''
                 for (v in stratumvars) {
-                    if (v %in% names(cov)) {
+                    if (v %in% names(cov) && !(v %in% autovars)) {
                         vals <- cov[,v]
                         if (is.character(vals)) vals <- factor(vals)
                         basevars[[v]] <- if (is.factor(vals))
@@ -78,7 +79,7 @@ makeNewData.openCR <- function (object, all.levels = FALSE, ...) {
         interv <- intervals(capthist)
         
         stratumvars <- vars
-        
+   
         # single stratum label, levels of factor apply to whole
         basevars <- list(stratum = factor(stratanames[stratum], levels=stratanames))
 
@@ -98,14 +99,20 @@ makeNewData.openCR <- function (object, all.levels = FALSE, ...) {
                 if (v == i) basevars[[i]] <- factor(0:1)  
             }
             
-            if (v=='age')  basevars$age <- factor(agerange)
+            if (v=='age')  basevars$age <- if (is.null(object$details$ageclassfn)) {
+              factor(agerange)
+            }
+            else {
+              agefact <- object$details$ageclassfn(agerange)
+              factor(levels(agefact), levels = levels(agefact))     # note agerange is integer
+            }
             if (v=='Age')  basevars$Age <- agerange
             if (v=='Age2')  basevars$Age2 <- agerange^2
         }
         ## all autovars should now have been dealt with
         stratumvars <- stratumvars[!stratumvars %in% autovars]
-        basevars <- findvars (basevars, covariates(capthist)) ## individual covariates
         
+        basevars <- findvars (basevars, covariates(capthist)) ## individual covariates
         basevars <- findvars (basevars, covariates(traps(capthist)))
         basevars <- findvars (basevars, covariates(mask))
         basevars <- findvars (basevars, timecov)
@@ -115,7 +122,6 @@ makeNewData.openCR <- function (object, all.levels = FALSE, ...) {
             basevars <- findvars (basevars, covariates(mask))
         if (!is.null(dframe))
             basevars <- findvars (basevars, dframe)
-        
         ## revert to first level
         for (v in names(basevars)) {
             if (!all.levels & !(v %in% c('stratum', 'session', 'tt', 'h2','h3'))) {

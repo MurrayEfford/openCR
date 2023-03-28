@@ -745,6 +745,7 @@ lpredictor <- function (model, newdata, indx, beta, field, beta.vcv=NULL,
   if (field == 'pmix') {
     mat <- mat[,-1,drop=FALSE]
   }
+  
   lpred[,1] <- mat %*% beta[indx]
   if ('session' %in% names(newdata) | 't' %in% names(newdata))
     lpred[notOK,1] <- NA
