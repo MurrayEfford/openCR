@@ -88,7 +88,6 @@ openCR.fit <- function (
   ## Use input 'details' to override various defaults
   defaultdetails <- list(
     agebreaks = NULL,
-    agelabels = NULL,
     autoini = NULL, 
     CJSp1 = FALSE, 
     contrasts = NULL, 

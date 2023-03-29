@@ -193,8 +193,6 @@ Component \tab Default \tab Description \cr
 
 \code{agebreaks} \tab minimumage:maximumage \tab Limits of age classes (vector passed to \code{\link{cut}}) \cr
 
-\code{agelabels} \tab NULL \tab Labels for classes defined with agebreaks\cr
-
 \code{autoini} \tab 1 \tab Number of the session used to determine 
 initial values of D, lambda0 and sigma (secr types only) \cr
 
