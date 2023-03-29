@@ -1,4 +1,5 @@
 ## Started 2020-12-13
+## 2023-03-29 test grouped-age CJS (details$agebreaks)
 
 library(openCR)
 
@@ -37,4 +38,16 @@ test_that("Pradel model results match Williams et al. Table 18.4", {
     pred <- predict(fitmpradelg)
     expect_equal(pred$gamma[3,'estimate'], 0.7052, tolerance = 1e-3)
     expect_equal(pred$gamma[3,'SE.estimate'], 0.068, tolerance = 1e-3)
+})
+
+test_that("Correct coefficients from grouped-age CJS of poss8088F", {
+  # tests openCR.fit, predict.openCR and makeNewdata.openCR
+  datadir <- system.file('extdata', package = 'openCR')
+  CH <- readRDS(paste0(datadir,'/poss8088F.RDS'))
+  fit <- openCR.fit(CH, model = list(phi ~ age), ncores = 2, details = list(
+    agebreaks = c(0,3,6,Inf), initialage = 'age', maximumage = 6))
+  # select Feb1980 estimates
+  expect_equal(predict(fit,all.levels=TRUE)$phi$estimate[c(1,28,55)],  
+    c(0.6660459, 0.9177610, 0.8211389), tolerance = 1e-4)
+  
 })
