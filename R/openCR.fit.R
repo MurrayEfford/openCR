@@ -87,6 +87,8 @@ openCR.fit <- function (
   #########################################################################
   ## Use input 'details' to override various defaults
   defaultdetails <- list(
+    agebreaks = NULL,
+    agelabels = NULL,
     autoini = NULL, 
     CJSp1 = FALSE, 
     contrasts = NULL, 
@@ -99,7 +101,6 @@ openCR.fit <- function (
     LLonly = FALSE,
     minimumage = 0, 
     maximumage = 1,
-    ageclassfn = NULL,
     multinom = FALSE,
     R = FALSE, 
     squeeze = TRUE, 
@@ -108,7 +109,7 @@ openCR.fit <- function (
     log = '',
     dummyvariablecoding = NULL,
     anchored = FALSE,
-    r0 = 1/sqrt(pi),      # effective radius of zero cell in movement kernel
+    r0 = 1/sqrt(pi),       # effective radius of zero cell in movement kernel
     settlemodel = FALSE,   # TRUE if differential settlement to be modelled
     userdist = NULL,
     stepmax = NULL
@@ -120,6 +121,9 @@ openCR.fit <- function (
   if (!is.null(details$kernelradius)) {
     warning ("kernelradius is now full argument of openCR.fit; value in details ignored")
   }
+  if (!is.null(agecov)) {
+    warning("details 'agebreaks' is preferred to 'agecov' for most purposes")
+  }
   
   ##
   details <- replace (defaultdetails, names(details), details)
@@ -127,6 +131,15 @@ openCR.fit <- function (
   if (details$LLonly)  details$trace <- FALSE
   if (details$R) ncores <- 1    ## force 2018-11-12
   if (!is.null(ncores) && (ncores == 1)) details$grain <- -1
+  if (is.null(details$agebreaks)) {
+    details$agebreaks <- c(details$minimumage:details$maximumage,Inf)
+  }
+  else {
+    if (details$minimumage > details$agebreaks[1])
+      stop("agebreaks not compatible with minimumage = ", details$minimumage)
+    if (details$maximumage < tail(details$agebreaks,2)[1])
+      stop("agebreaks not compatible with maximumage = ", details$maximumage)
+  }
   anchored <- details$anchored
   
   ##############################################
@@ -455,7 +468,7 @@ openCR.fit <- function (
     initialage = details$initialage,
     minimumage = details$minimumage,
     maximumage = details$maximumage,
-    ageclassfn = details$ageclassfn,
+    agebreaks  = details$agebreaks,
     CJSp1      = details$CJSp1
   )
   allvars <- unlist(lapply(model, all.vars))
@@ -477,7 +490,7 @@ openCR.fit <- function (
       initialage = details$initialage,
       minimumage = details$minimumage,
       maximumage = details$maximumage,
-      ageclassfn = details$ageclassfn,
+      agebreaks  = details$agebreaks,
       CJSp1      = details$CJSp1)
   }
   else {

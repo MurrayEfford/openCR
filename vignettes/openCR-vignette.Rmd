@@ -402,19 +402,38 @@ Finite mixture likelihoods are prone to multimodality. Misleading estimates resu
 
 If age is modelled as a factor then it is useful to group older animals in a maximum age class ('maximumage'). 'minimumage', 'maximumage' and 'initialage' are optional components of the 'details' argument of `openCR.fit`. 'initialage' can name an individual covariate to avoid the assumption that all animals are the minimum age at first detection.
 
-The agecov argument of `openCR.fit` may be used to specify a recoding of numerical age, analogous to the sessioncov argument of `secr.fit`. Thus numerical ages may be bracketed into 'young', 'middle' and 'old'. The length of agecov should match the number of numerical ages (maximumage - minimumage + 1).
-
-The 'agecov' mechanism is limited to sampling sessions separated by one time unit. A more flexible method is provided from 2.2.6: specify the details argument `ageclassfn`, a simple function to group numeric ages into age classes. Test your function by applying it to the matrix of numeric ages in your data. For example,
+Specify the details argument 'agebreaks' to group numeric ages into age classes. Breaks are used with the `cut` function to generate a factor from the numeric ages; the `cut` argument 'right' is set to FALSE to include the lower limit in each age class. Extreme ages are shrunk to the interval ['minimumage', 'maximumage'] before grouping, so these arguments must be compatible with 'agebreaks' (e.g., 'maximumage' >= lower bound of oldest group). Check the grouping by applying it to the matrix of numeric ages in your data. For example,
 ```{r ageclass}
-# a possible ageclassfn (should return a factor)
-agefn <- function(age) cut(age, breaks = c(0,1.99,Inf), 
-  labels = c('young', 'old'), include.lowest = TRUE)
+agebrk <- c(0, 2, Inf)
+
 # construct matrix of numeric ages (animal x secondary session)
-age <- age.matrix(join(ovenCH), maximumage = 6)
+age <- age.matrix(join(ovenCH), maximumage = 2, unborn = NA)
+
 # tabulate the grouped ages
-aclass <- agefn(age)
+aclass <- cut(age, breaks = agebrk, right = FALSE)
 table(age, aclass)
 ```
+The notation [0,2) indicates ages in the interval $0 \le \mbox{age} < 2$. The numbers in older groups include animals never seen again and possibly dead.
+
+This example illustrates how to use grouped ages in a model. The data are an undocumented non-spatial selection from the same brushtail possum study as OVpossumCH (trapping in February, June and September, 1980--1988, known-age females only; interval in years). The individual covariate 'age' records the age of each possum at first capture, in years.
+```{r fakeage, eval = TRUE}
+# retrieve capthist object
+datadir <- system.file('extdata', package = 'openCR')
+CH <- readRDS(paste0(datadir,'/poss8088F.RDS'))
+
+# model with grouped ages; any maximumage>=6 OK
+fit <- openCR.fit(CH, model = list(phi ~ age), details = list(
+  agebreaks = c(0,2,4,6,Inf), initialage = 'age', maximumage = 6))
+
+# show results for first session only, as no time effect fitted
+# levels of age grouping factor are stored in 'design' object
+newdat <- data.frame(age = fit$design$agelevels)
+predict(fit, newdata =  newdat)$phi
+```
+
+If 'agebreaks' is omitted then the default uses bins of width 1 time unit from 'minimumage' up to, but not including, 'maximumage', with an extra bin for 'maximumage' and above (7 bins [0,1),...,[6,Inf) in this example).
+
+The older 'agecov' mechanism is limited to sampling sessions separated by one time unit and is deprecated from 2.2.6.
 
 For a quadratic relationship with age, specify an additive model with both Age and Age2 terms (e.g., model = phi ~ Age + Age2).
 

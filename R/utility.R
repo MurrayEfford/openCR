@@ -903,7 +903,8 @@ fillpmix2 <- function (nc, nmix, PIA, realparval) {
 }
 ############################################################################################
 
-age.matrix <- function (capthist, initialage = 0, minimumage = 0, maximumage = 1, collapse = FALSE) 
+age.matrix <- function (capthist, initialage = 0, minimumage = 0, maximumage = 1, collapse = FALSE,
+  unborn = minimumage) 
 {    
   makeage <- function (n) {
     ch <- capthist[n,,,drop=FALSE]
@@ -914,6 +915,7 @@ age.matrix <- function (capthist, initialage = 0, minimumage = 0, maximumage = 1
     # age <- rep(initialage[n], S)
     # recruited <- primarysession>=firstsession
     # age[recruited] <- initialage[n] + cumsum(c(0, intervals[recruited[-S]]))
+    age[age<0] <- unborn # 2023-03-29
     age <- pmax(age, minimumage)
     age <- pmin(age, maximumage)
     age

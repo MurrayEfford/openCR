@@ -190,6 +190,11 @@ parameter appears in both models then the first is used.
 
 \tabular{lll}{
 Component \tab Default \tab Description \cr
+
+\code{agebreaks} \tab minimumage:maximumage \tab Limits of age classes (vector passed to \code{\link{cut}}) \cr
+
+\code{agelabels} \tab NULL \tab Labels for classes defined with agebreaks\cr
+
 \code{autoini} \tab 1 \tab Number of the session used to determine 
 initial values of D, lambda0 and sigma (secr types only) \cr
 
@@ -227,8 +232,6 @@ initial values \cr
 \code{maximumage} \tab 1 \tab Sets a maximum age; older animals are recycled into 
 this age class; see \code{\link{age.matrix}} \cr
 
-\code{ageclassfn} \tab NULL \tab Function to group numeric ages into age classes \cr
-
 \code{multinom} \tab FALSE \tab Include the multinomial constant in the 
 reported log-likelihood. \cr
 
@@ -263,9 +266,9 @@ simple JSSA models a threshold of 0.00001 seems effective.
 
 [There is an undocumented option to fix specific `beta' parameters.]
 
-The optional user-provided function 'ageclassfn' takes a vector of numeric ages 
-and returns a factor of equal length. It typically calls \code{\link{cut}} 
-with hard-wired breakpoints. See the openCR vignette for more detail.
+Numeric ages may be grouped into age classes by providing `agebreaks'. 
+In models, ~age then refers to the age-class factor. See the 
+\href{../doc/openCR-vignette.pdf}{vignette} for more detail.
 
 }
 

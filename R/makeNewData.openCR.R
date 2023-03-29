@@ -15,7 +15,7 @@
 ## 2021-07-02 fixed backward incompatibility bug details$minimumage not specified
 ## 2021-07-30 makeNewData method for openCR objects
 ## 2022-01-28 file renamed
-## 2023-03-28 object$details$ageclassfn used if provided
+## 2023-03-28 object$details$agebreaks used if provided
 ## 2023-03-28 do not search for autovars in covariates
 ############################################################################################
 
@@ -99,12 +99,16 @@ makeNewData.openCR <- function (object, all.levels = FALSE, ...) {
                 if (v == i) basevars[[i]] <- factor(0:1)  
             }
             
-            if (v=='age')  basevars$age <- if (is.null(object$details$ageclassfn)) {
-              factor(agerange)
-            }
-            else {
-              agefact <- object$details$ageclassfn(agerange)
-              factor(levels(agefact), levels = levels(agefact))     # note agerange is integer
+            if (v=='age')  {
+              agelevels <- object$design$agelevels
+              if (!is.null(agelevels)) {
+                # should always be TRUE >= 2.2.6
+                basevars$age <- factor(agelevels, levels = agelevels)
+              }
+              else {
+                # only for models fitted openCR < 2.2.6
+                basevars$age <- factor(agerange)
+              }
             }
             if (v=='Age')  basevars$Age <- agerange
             if (v=='Age2')  basevars$Age2 <- agerange^2

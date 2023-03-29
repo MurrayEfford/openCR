@@ -31,8 +31,8 @@ for the base levels of all predictors in an openCR object.
 user-specified `newdata'. There is seldom any need to call
 \code{makeNewData} directly.
 
-\code{makeNewData} respects the details argument 'ageclassfn' for grouping ages 
-(\pkg{openCR} >= 2.2.6), but only considers integer ages minimumage:maximumage.
+\code{makeNewData} respects the details argument `agebreaks' for grouping ages 
+(\pkg{openCR} >= 2.2.6).
 
 }
 
