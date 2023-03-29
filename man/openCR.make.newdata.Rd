@@ -31,7 +31,7 @@ for the base levels of all predictors in an openCR object.
 user-specified `newdata'. There is seldom any need to call
 \code{makeNewData} directly.
 
-\code{makeNewData} respects the details argument `agebreaks' for grouping ages 
+\code{makeNewData} uses saved agelevels for grouping ages 
 (\pkg{openCR} >= 2.2.6).
 
 }

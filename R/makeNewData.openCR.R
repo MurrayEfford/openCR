@@ -15,8 +15,8 @@
 ## 2021-07-02 fixed backward incompatibility bug details$minimumage not specified
 ## 2021-07-30 makeNewData method for openCR objects
 ## 2022-01-28 file renamed
-## 2023-03-28 object$details$agebreaks used if provided
 ## 2023-03-28 do not search for autovars in covariates
+## 2023-03-28 object$design$agelevels used if provided
 ############################################################################################
 
 makeNewData.openCR <- function (object, all.levels = FALSE, ...) {
