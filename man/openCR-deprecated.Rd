@@ -12,7 +12,7 @@ These functions will be removed from future versions of \pkg{openCR}.
 
 \usage{
 
-# Deprecated in 2.2.0
+# Deprecated in 2.2.6
 
 # None
 
