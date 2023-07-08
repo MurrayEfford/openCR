@@ -1,9 +1,10 @@
-version 2.2.6 (2023-03-30)
+version 2.2.6 (2023-07-08)
 
 New features and changed behaviour
     o static userdist option; linear mask
     o details may include stepmax argument of nlm
     o openCR.fit() acquires details argument 'agebreaks'
+    o collate method for 'openCR' objects
 
 Other
     o makeNewData.openCR() rejects covariates with reserved names
