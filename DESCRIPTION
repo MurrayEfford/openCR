@@ -2,7 +2,7 @@ Package: openCR
 Type: Package
 Title: Open Population Capture-Recapture
 Version: 2.2.6
-Date: 2023-03-30
+Date: 2023-07-08
 Authors@R: person("Murray", "Efford", 
     email = "murray.efford@otago.ac.nz", 
     role = c("aut","cre"), 
@@ -10,7 +10,7 @@ Authors@R: person("Murray", "Efford",
 Description: Non-spatial and spatial open-population capture-recapture analysis.
 Depends: 
     R (>= 3.5.0), 
-    secr (>= 4.5.0)
+    secr (>= 4.6.1)
 Imports: 
     abind, 
     MASS, 
