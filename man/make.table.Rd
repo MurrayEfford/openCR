@@ -29,6 +29,8 @@ make.table(fits, parm = "phi", fields = "estimate", strata = 1,
 
 The input will usually be from \code{par.openCR.fit}.
 
+\code{\link{collate.openCR}} is a flexible alternative.
+
 }
 
 \value{
@@ -39,7 +41,10 @@ A table object.
 
 \seealso{
 
-\code{\link{par.openCR.fit}}, \code{\link{openCRlist}}
+\code{\link{collate.openCR}},
+\code{\link{par.openCR.fit}}, 
+\code{\link{openCRlist}}
+
 }
 
 \examples{
