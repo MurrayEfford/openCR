@@ -5,20 +5,6 @@
 # calls lpredictor from utility.R
 ############################################################################################
 
-collate <- function (object, ..., 
-                     realnames = NULL, betanames = NULL, newdata = NULL,
-                     alpha = 0.05, perm = 1:4, fields = 1:4) 
-{
-  UseMethod("collate") 
-} 
-
-collate.default <- function (object, ..., 
-                     realnames = NULL, betanames = NULL, newdata = NULL,
-                     alpha = 0.05, perm = 1:4, fields = 1:4) 
-{
-  cat ('no collate method for objects of class', class(object), '\n')
-} 
-
 collate.openCR <- function (object, ..., realnames = NULL, betanames = NULL, newdata = NULL,
                      alpha = 0.05, perm = 1:4, fields = 1:4) {
   allargs <- list(...)
@@ -41,13 +27,9 @@ collate.openCRlist <- function (object, ..., realnames = NULL, betanames = NULL,
   else
     modelnames <- as.character(match.call(expand.dots=FALSE)$...)
   
-  if ( any (!sapply(object, function (x) inherits(x, c('openCR'))) ))
-    stop ("require fitted openCR objects")
   if ( length(object) < 2 )
     warning ("only one model")
-  if (!is.list(object) | !inherits(object[[1]], c('openCR','ipopenCR')))
-    stop("object must be openCR or list of openCR")
-  
+
   type <- 'real'                     ## default
   
   parnames <- unique(as.vector(unlist(sapply(object,
