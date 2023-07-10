@@ -44,11 +44,17 @@ fields ("estimate","SE.estimate","lcl","ucl") by name or number.
 
 \value{
 
-A 4-dimensional array of model-specific parameter
-estimates. By default, the dimensions correspond respectively to rows in
-\code{newdata} (usually sessions), models, statistic fields (estimate, SE.estimate, lcl,
-ucl), and parameters ("phi", "sigma" etc.). For particular comparisons it often helps
-to reorder the dimensions with the \code{perm} argument.
+A 4-dimensional array of model-specific parameter estimates. By default, 
+the dimensions correspond respectively to 
+
+\itemize{
+\item rows in \code{newdata} (usually sessions),
+\item models,
+\item statistic fields (estimate, SE.estimate, lcl, ucl), and 
+\item parameters ("phi", "sigma" etc.).
+}
+
+It often helps to reorder the dimensions with the \code{perm} argument.
 
 }
 
