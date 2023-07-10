@@ -86,11 +86,14 @@ annularR \tab \tab non-zero only at centre and a ring of cells at radius R \tab 
 }
 
 \seealso{
+
 \code{\link{make.kernel}}, 
 \code{\link{gkernel}}, 
 \code{\link{dkernel}}, 
 \code{\link{pkernel}}, 
-\code{\link{qkernel}}
+\code{\link{qkernel}},
+\code{\link{openCR.fit}}
+
 }
 
 \references{
