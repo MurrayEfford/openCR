@@ -81,9 +81,7 @@ Vector of 2-D probability density at radial distance r (zero for r > truncate).
 
 \references{
 
-Efford, M. G. and Schofield, M. R. (2022) A review of movement models in open population 
-capture--recapture. \emph{Methods in Ecology and Evolution}. In press. 
-https://doi.org/10.1111/2041-210X.13947
+Efford, M. G. and Schofield, M. R. (2022) A review of movement models in open population capture--recapture. \emph{Methods in Ecology and Evolution} \bold{13}, 2106--2118. https://doi.org/10.1111/2041-210X.13947
 
 }
 

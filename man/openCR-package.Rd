@@ -69,9 +69,7 @@ See \href{../doc/openCR-vignette.pdf}{openCR-vignette.pdf} for more.
   Efford, M. G. and Schofield, M. R. (2020) A spatial open-population capture--recapture model.
   \emph{Biometrics} \bold{76}, 392--402.
   
-  Efford, M. G. and Schofield, M. R. (2022) A review of movement models in open population 
-capture--recapture. \emph{Methods in Ecology and Evolution}. In press. 
-https://doi.org/10.1111/2041-210X.13947
+  Efford, M. G. and Schofield, M. R. (2022) A review of movement models in open population capture--recapture. \emph{Methods in Ecology and Evolution} \bold{13}, 2106--2118. https://doi.org/10.1111/2041-210X.13947
 
   Glennie, R., Borchers, D. L., Murchie, M. Harmsen, B. J., and Foster, R. J. (2019) Open population maximum likelihood spatial capture--recapture. \emph{Biometrics} \bold{75}, 1345--1355
 
