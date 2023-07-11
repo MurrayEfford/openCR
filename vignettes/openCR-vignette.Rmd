@@ -11,8 +11,6 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown} 
   \usepackage[utf8]{inputenc}
 ---
-\renewcommand{\vec}[1]{\mathbf{#1}}
-\newcommand{\bm}[1]{\mbox{\boldmath $#1$}}
 
 ```{r settings, echo = FALSE}
 mycache <- FALSE
@@ -877,7 +875,7 @@ Spatial models are slow to fit. Consider these options
 setNumThreads(7)
 ```
 
-The `grain size' tuning parameter (see [RcppParallel](https://rcppcore.github.io/RcppParallel/)) may be varied with details$grain, but it seems to have little effect. 
+The `grain size' tuning parameter (see [RcppParallel](https://rcppcore.github.io/RcppParallel/)) may be varied with `details$grain`, but it seems to have little effect. 
 
 # Extras
 
@@ -1028,7 +1026,7 @@ Efford, M. G. (2022a) secr: Spatially explicit capture--recapture models.
   
 Efford, M. G. (2022b) Efficient discretization of movement kernels
   for spatiotemporal capture--recapture. 
-  *Journal of Agricultural, Biological and Environmental Statistics* In press.
+  *Journal of Agricultural, Biological and Environmental Statistics* **27**, 641--651.
   https://doi.org/10.1007/s13253-022-00503-4
 
 Efford, M. G., Borchers D. L. and Byrom, A. E. (2009) Density
@@ -1047,7 +1045,7 @@ Efford, M. G. and Fewster, R. M. (2013) Estimating population size by
 Efford, M. G. and Schofield, M. R. (2020) A spatial open-population 
   capture--recapture model. *Biometrics* **76**, 392--402.
 
-Efford, M. G. and Schofield, M. R. (2022) A review of movement models in open population capture--recapture. \emph{Methods in Ecology and Evolution} \bold{13}, 2106--2118. https://doi.org/10.1111/2041-210X.13947
+Efford, M. G. and Schofield, M. R. (2022) A review of movement models in open population capture--recapture. *Methods in Ecology and Evolution* **13**, 2106--2118. https://doi.org/10.1111/2041-210X.13947
 
 Ergon, T. and Gardner, B. (2014) Separating mortality and emigration: modelling 
   space use, dispersal and survival with robust-design spatial 
