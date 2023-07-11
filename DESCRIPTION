@@ -2,7 +2,7 @@ Package: openCR
 Type: Package
 Title: Open Population Capture-Recapture
 Version: 2.2.6
-Date: 2023-07-08
+Date: 2023-07-10
 Authors@R: person("Murray", "Efford", 
     email = "murray.efford@otago.ac.nz", 
     role = c("aut","cre"), 
