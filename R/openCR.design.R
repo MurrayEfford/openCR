@@ -97,15 +97,15 @@ openCR.design <- function (capthist, models, type, naive = FALSE,
   findvars.covtime <- function (covindices, vars) {
     ## function to add time-specific trap covariates to a 
     ## design data frame 'dframe'
-    ## covindices should be a list
+    ## covindices should be a list of numeric or character index vectors, one component per session
     if (R>1) stop ("time-varying detector covariates not implemented for stratified designs")
     dimcov <- c(2,3)   ## animal, secondarysession
-    ## covindices is list of numeric or character index vectors, one component per session
     if (length(covindices[[1]]) != J)
       stop ("require one index per primary session")
     covnames <- names(covindices)
     found <- covnames[covnames %in% vars]
     vars <<- vars[!(vars %in% found)]
+
     for (variable in found) {
       firstcol <- zcov[,covindices[[1]][1]]
       factorlevels <- NULL
@@ -113,6 +113,7 @@ openCR.design <- function (capthist, models, type, naive = FALSE,
         ## all must have same levels!!
         factorlevels <- levels(firstcol)
       }
+      
       getvals <- function (indices, zcov) {
         notOK <- is.na(zcov[,indices])
         if (any(notOK)) {
@@ -124,8 +125,9 @@ openCR.design <- function (capthist, models, type, naive = FALSE,
       vals <- getvals(covindices[[variable]], zcov)
       vals <- vals[,primarysessions(intervals)]
       vals <- unlist(vals)  
-      if (!is.null(factorlevels))
+      if (!is.null(factorlevels)) {
         vals <- factor(vals, factorlevels)
+      }
       dframe[,variable] <<- secr::insertdim (vals, dimcov, dims)
     }
   }

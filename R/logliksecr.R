@@ -11,6 +11,7 @@
 # 2021-04-19 stratified
 # 2021-08-14 c and [ methods for openCRlist
 # 2021-11-08 PIA, PIAJ overwritten for naive animal, rather than always copied  
+# 2023-08-31 explicit error for integer overflow
 
 # types
 
@@ -179,6 +180,17 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
         }
         else {
             settlement <- 1
+        }
+        #-----------------------------------------
+
+        # check added 2023-08-31 in response to Oliver Devineau
+        suppressWarnings(
+          ncomb <- nrow(realparval) * nrow(stratum$distmat) * ncol(stratum$distmat)
+        )
+        if (is.na(ncomb)) {
+          stop ("integer overflow in open.secr.loglifkn: ",
+                "too many parameter levels for the number of cells in mask",
+                call. = FALSE)
         }
         #-----------------------------------------
         

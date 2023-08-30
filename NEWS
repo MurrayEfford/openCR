@@ -1,4 +1,4 @@
-version 2.2.6 (2023-07-10)
+version 2.2.6 (2023-08-31)
 
 New features and changed behaviour
     o static userdist option; linear mask
@@ -12,6 +12,7 @@ Other
     o openCR.design() acquires argument 'agebreaks', saves agelevels
     o age.matrix() acquires argument 'unborn' (code for age<0)
     o requires secr >= 4.6.1
+    o explicit error for integer overflow with many parameter levels
 
 version 2.2.5 (2022-09-25)
 
