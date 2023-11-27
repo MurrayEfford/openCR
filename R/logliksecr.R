@@ -189,7 +189,7 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
         )
         if (is.na(ncomb)) {
           stop ("integer overflow in open.secr.loglifkn: ",
-                nrow(realparval), " parameter levels is too many given the numbers of \ndetectors (",
+                nrow(realparval), " predictor levels is too many given the numbers of \ndetectors (",
                 nrow(stratum$distmat), ") and mask cells (", 
                 ncol(stratum$distmat), ")",
                 call. = FALSE)
