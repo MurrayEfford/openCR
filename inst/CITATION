@@ -4,12 +4,13 @@ year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date)
 vers <- paste("R package version", meta$Version)
 url <- "https://CRAN.R-project.org/package=openCR/"
 
-citEntry(entry="Manual",
-    title = "openCR: Open population capture-recapture models",
-    author = personList(as.person("Murray Efford")),
-    year = year,
-    note = vers,
-    url = url,
+bibentry(
+    bibtype = "Manual",
+    title   = "openCR: Open population capture-recapture models",
+    author  = c(person("Murray","Efford")),
+    year    = year,
+    note    = vers,
+    url     = url,
     textVersion =
         paste("Efford, M. G. (", year,
         "). openCR: Open population capture-recapture models. ",
