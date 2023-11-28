@@ -33,6 +33,7 @@
 ## 2021-10-06 allow RDL
 ## 2021-11-30 completed settlement model
 ## 2022-11-15 stepmax
+## 2023-03-29 details argument 'agebreaks'
 ################################################################################
 
 openCR.fit <- function (
