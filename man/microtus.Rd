@@ -73,7 +73,7 @@ Object \tab  \tab Source \cr
 Bonner, S. J. and Schwarz, C. J. (2006) An extension of the Cormack--Jolly--Seber model for continuous
 covariates with application to \emph{Microtus pennsylvanicus}. \emph{Biometrics} \bold{62}, 142--149.
 
-Hines, J. E. (1988) Program "JOLLY". Patuxent Wildlife Research Center. \url{https://www.mbr-pwrc.usgs.gov/software/jolly.html}
+Hines, J. E. (1988) Program "JOLLY". Patuxent Wildlife Research Center. \url{https://www.mbr-pwrc.usgs.gov/software/jolly.shtml}
 
 Nichols, J. D., Pollock, K. H., Hines, J. E. (1984) The use of a robust capture-recapture design in small mammal population studies: a field example with \emph{Microtus pennsylvanicus}. \emph{Acta Theriologica} \bold{29}, 357--365.
 
