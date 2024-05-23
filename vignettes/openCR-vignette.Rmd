@@ -286,8 +286,8 @@ Table 4. Parameter definitions and default link functions (spatial models)
 
 Table 5. Parameters of spatial **openCR** models
 
-| Type        | Alias | lambda0 | sigma | z | phi | b | f | gamma | lambda | superD | BD | D |
-|:------------|----|---|---|---|---|---|---|---|---|---|---|---|    
+| Type    | Alias| lambda0| sigma | z | phi | b | f | gamma | lambda | superD | BD | D |
+|:--------|------|-----|---|--|--|--|--|----|----|----|---|--|    
 | CJSsecr     | | + | + | + | + |   |   |   |   |   |   |   |
 | JSSAsecrbCL | PLBsecrb | + | + | + | + | + |   |   |   |   |   |   |
 | JSSAsecrfCL | PLBsecrf | + | + | + | + |   | + |   |   |   |   |   |
@@ -1187,7 +1187,7 @@ Williams, B. K., Nichols, J. D. and Conroy, M. J. (2002) *Analysis and
 
 \pagebreak
 
-# Appendix 1. Code for figures.
+# Appendix 1. Code for figures.{#appendix1} 
 
 Code used to generate schematic diagrams of data structure.
 
