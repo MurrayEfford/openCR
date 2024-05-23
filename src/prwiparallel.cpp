@@ -101,21 +101,23 @@ struct Somehistories : public RcppParallel::Worker {
                 // pbd now accounts for birth at b (JSSA) and survival to d
                 // next multiply by conditional probability of observed CH 
                 for (j = b + cjs; j <= d; j++) {
-                    // detection probability for each secondary session
-                    // in primary session j
-                    //notseen = 1;
-                    for (s = cumss[j-1]; s < cumss[j]; s++) {   
-                        count = w[nc * s + n];
-                        if (count<0) {count = -count; dead = true; }
-                        
-                        if (count>0) {
-                            // notseen = 0;
-                            pbd *= p[s];
-                        }
-                        else
-                            pbd *= 1 - p[s];
-                        if (dead) break;
+                  // detection probability for each secondary session
+                  // in primary session j
+                  //notseen = 1;
+                  for (s = cumss[j-1]; s < cumss[j]; s++) {   
+                    count = w[nc * s + n];
+                    if (count != NA_INTEGER) {   // 2024-02-26
+                      if (count<0) {count = -count; dead = true; }
+                      
+                      if (count>0) {
+                        // notseen = 0;
+                        pbd *= p[s];
+                      }
+                      else
+                        pbd *= 1 - p[s];
+                      if (dead) break;
                     }
+                  }
                 }   
                 pdt += pbd;
             }
