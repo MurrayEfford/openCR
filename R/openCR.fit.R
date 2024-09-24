@@ -145,7 +145,6 @@ openCR.fit <- function (
   ##############################################
   # Dummy variable coding 2021-07-22
   ##############################################
-  
   # allow TRUE to mean 't' or 'session' predictors
   if (is.logical(details$dummyvariablecoding)) {
     if (details$dummyvariablecoding) 
@@ -300,7 +299,6 @@ openCR.fit <- function (
     gamma = ~1, kappa = ~1, BN = ~1, BD = ~1, N=~1, D = ~1, superN = ~1,
     superD = ~1, sigma = ~1, z = ~1, move.a = ~1, move.b = ~1, tau = ~1, settle = ~1)
   model <- replace (defaultmodel, names(model), model)
-  
   pnames <- switch (type,
     CJS = c('p', 'phi'),                                      # 1
     CJSmte = c('p', 'phi', 'move.a', 'move.b'),               # 5
@@ -454,10 +452,11 @@ openCR.fit <- function (
       }
     }
   }
+ 
   design <- openCR.design (
     capthist   = capthist, 
     models     = model, 
-    type       = type  ,
+    type       = type,
     timecov    = timecov,
     sessioncov = sessioncov,
     stratumcov = stratumcov,
@@ -861,7 +860,7 @@ openCR.fit <- function (
     stratumdata <- list(onestratum(capthist, mask, 1))
   }
   logmult <- logmultinom(capthist, stratified)
-  
+ 
   data <- new.env(parent = emptyenv())
   assign("type",      type,     pos = data)
   assign("detectfn",  detectfn, pos = data)
