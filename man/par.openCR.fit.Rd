@@ -35,7 +35,7 @@ par.openCR.fit (arglist, ncores = 1, seed = 123, trace = FALSE, logfile = NULL,
 
 \details{
 
-In openCR >= 1.5.0, setting ncores > 1 is deprecated and triggers a warning: multithreading makes it faster to set ncores = 1 in par.secr.fit.
+In openCR >= 1.5.0, setting ncores > 1 is deprecated and triggers a warning: multithreading makes it faster to set ncores = 1 in par.openCR.fit.
 
 \code{trace} overrides any settings in \code{arglist}.
   
@@ -65,7 +65,7 @@ execution time and finish time are displayed.
 
 \seealso{
   \code{\link{openCR.fit}},
-  \link{Parallel},
+  \link[secr]{Parallel},
   \code{\link{make.table}},
   \code{\link{openCRlist}}
 }

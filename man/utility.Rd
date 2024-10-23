@@ -35,7 +35,7 @@ bd.array(beta, phi)
 
 The input is a capthist object representing a multi-session capture--recapture study. This may be (i) a single-session capthist in which occasions are understood to represent primary sessions, or (ii) a multi-session capthist object that is automatically converted to a single session object with \code{\link[secr]{join}} (any secondary sessions (occasions) are first collapsed with \code{reduce(object, by = 'all')}*, or (iii) a multi-session capthist object in which sessions are interpreted as strata.
 
-The argument \code{primary.only} applies for single-session input with a robust-design structure defined by the \code{\link{intervals}}. \code{last.session} results in a final row with no recaptures.
+The argument \code{primary.only} applies for single-session input with a robust-design structure defined by the \code{\link[secr]{intervals}}. \code{last.session} results in a final row with no recaptures.
 
 If the covariates attribute of \code{object} includes a column named `freq' then this is used to expand the capture histories.
 

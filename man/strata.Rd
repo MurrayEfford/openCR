@@ -53,7 +53,7 @@ primary sessions and concatenated as usual with \code{join()}.
 
 \seealso{ 
 
-  \code{\link{openCR.fit}}, \code{\link{session}}, \code{\link{stratify}}
+  \code{\link{openCR.fit}}, \code{\link[secr]{session}}, \code{\link{stratify}}
 
 }
 

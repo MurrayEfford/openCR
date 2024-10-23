@@ -27,8 +27,8 @@
 \tabular{ll}{
 Package: \tab openCR\cr
 Type: \tab Package\cr
-Version: \tab 2.2.6\cr
-Date: \tab 2023-11-28\cr
+Version: \tab 2.2.7\cr
+Date: \tab 2024-10-23\cr
 License: \tab GNU General Public License Version 2 or later\cr
 }
 
@@ -90,7 +90,7 @@ See \href{../doc/openCR-vignette.pdf}{openCR-vignette.pdf} for more.
 
 \seealso{
   
-  \code{\link{openCR.fit}}, \code{\link[secr]{capthist}}, \code{\link{ovenCH}}
+  \code{\link{openCR.fit}}, \code{\link[secr]{capthist}}, \code{\link[secr]{ovenCH}}
   
 }
 \examples{

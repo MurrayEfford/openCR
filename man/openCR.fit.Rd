@@ -43,7 +43,7 @@ openCR.fit (capthist, type = "CJS", model = list(p~1, phi~1, sigma~1),
   
   \item{distribution}{character distribution of number of individuals detected}
 
-  \item{mask}{ single-session \code{\link{mask}} object; required for spatial (secr) models }
+  \item{mask}{ single-session \code{\link[secr]{mask}} object; required for spatial (secr) models }
 
   \item{detectfn}{character code}
 
@@ -125,7 +125,7 @@ Data are provided as \pkg{secr} `capthist' objects, with some
 restrictions. For nonspatial analyses, `capthist' may be
 single-session or multi-session, with any of the main detector types. For
 spatial analyses `capthist' should be a single-session dataset of a point 
-\link{detector} type (`multi', `proximity' or `count') (see also
+\link[secr]{detector} type (`multi', `proximity' or `count') (see also
 details$distribution below). In openCR the occasions of a single-session
 dataset are treated as open-population temporal samples except that occasions 
 separated by an interval of zero (0) are from the same primary session (multi-session
@@ -163,10 +163,10 @@ Movement models are list at \link{Movement models}. Their use is described in th
 The mlogit link function is used for the JSSA (POPAN) entry parameter 
 `b' (PENT in MARK) and for mixture proportions, regardless of \code{link}.
 
-Spatial models use one of the hazard-based detection functions (see \code{\link{detectfn}}) and require data
+Spatial models use one of the hazard-based detection functions (see \code{\link[secr]{detectfn}}) and require data
 from independent point detectors (\pkg{secr} detector types `multi', `proximity' or `count').
 
-Code is executed in multiple threads unless the user specifies \code{ncores = 1} or there is only one core available or \code{details$R == TRUE}. Setting \code{ncores = NULL} uses the existing value from the environment variable RCPP_PARALLEL_NUM_THREADS (see \code{\link{setNumThreads}}) or 2 if that has not been set. 
+Code is executed in multiple threads unless the user specifies \code{ncores = 1} or there is only one core available or \code{details$R == TRUE}. Setting \code{ncores = NULL} uses the existing value from the environment variable RCPP_PARALLEL_NUM_THREADS (see \code{\link[secr]{setNumThreads}}) or 2 if that has not been set. 
 
 Optional stratification was introduced in \pkg{openCR} 2.0.0. See \href{../doc/openCR-vignette.pdf}{openCR-vignette.pdf} for details.
 
@@ -379,7 +379,7 @@ probabilities for each individual in finite mixture models and saved them in
 component `posterior'. Now see \code{\link{classMembership}} for that functionality.
 
 From 1.5.0 onwards the number of threads uses the environment variable 
-RCPP_PARALLEL_NUM_THREADS, as in \code{\link{secr.fit}}. This may be set once
+RCPP_PARALLEL_NUM_THREADS, as in \code{\link[secr]{secr.fit}}. This may be set once
 in a session with \code{secr::setNumThreads}.
 
 The default movement arguments changed in \pkg{openCR} 2.1.1. Now 

@@ -76,7 +76,7 @@ cyclic.fit (..., maxcycle = 10, tol = 1e-5, trace = FALSE)
   \item{nc}{number of capture histories}
   \item{kk}{number of detectors}
   \item{mm}{number of points on habitat mask}
-  \item{binomN}{code for distribution of counts (see \code{\link{secr.fit}})}
+  \item{binomN}{code for distribution of counts (see \code{\link[secr]{secr.fit}})}
   
   \item{\dots}{named arguments passed to \code{\link{openCR.fit}} or \code{predict} (see extractFocal)}
   \item{maxcycle}{integer maximum number of cycles (maximizations of a given parameter)}

@@ -22,7 +22,7 @@ ucare.cjs(CH, tests = "all", by = NULL, verbose = TRUE, rounding = 3, ...)
   \item{by}{character name of covariate in CH used to split rows of CH into separate groups }
   \item{verbose}{logical; if TRUE then additional details are tabulated}
   \item{rounding}{integer number of decimal places in output}
-  \item{\dots}{other arguments passed to \code{\link{split.capthist}} if needed }
+  \item{\dots}{other arguments passed to \code{\link[secr]{split.capthist}} if needed }
   
 }
 

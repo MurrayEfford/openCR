@@ -64,7 +64,8 @@ For proportionInPolygon - vector of the summed weights (probabilities) for cells
 
 \seealso{
 
-\code{\link{make.kernel}}, \code{\link{pointsInPolygon}}
+\code{\link{make.kernel}}, 
+\code{\link[secr]{pointsInPolygon}}
 
 }
 

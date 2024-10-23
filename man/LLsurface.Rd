@@ -76,7 +76,7 @@ grid point
   parameters not beta parameters.
   
   Handling of multiple threads was changed in version 1.5.0 to align 
-  with \code{\link{LLsurface.secr}}.
+  with \code{\link[secr]{LLsurface.secr}}.
 
   The contours are approximate because they rely on interpolation. 
   

@@ -48,7 +48,7 @@ make.kernel(movementmodel = c("BVN", "BVE", "BVC", "BVT","RDE", "RDG", "RDL", "U
   \item{add}{logical; if TRUE a line is added to an existing plot (types "gr", "fr", "Fr")}
   \item{xscale}{numeric multiplier for distance axis (0.001 for distances in km)}
   \item{\dots}{other arguments passed to \code{\link{predict.openCR}} (\code{make.kernel}) or
-      \code{\link{plot.mask}} (plot type "kernel") or \code{\link{lines}} ( plot types "gr", "fr", "Fr") (not used by summary method)}
+      \code{\link[secr]{plot.mask}} (plot type "kernel") or \code{\link{lines}} ( plot types "gr", "fr", "Fr") (not used by summary method)}
 
   \item{object}{kernel object from \code{make.kernel}}
 
@@ -147,7 +147,7 @@ Nathan, R., Klein, E., Robledo-Arnuncio, J. J. and Revilla, E. (2012) Dispersal 
 
 \seealso{
 
-\link{Movement models}, \code{\link{mask}}, \code{\link{matchscale}}, \code{\link{dkernel}}, \code{\link{pkernel}}, \code{\link{qkernel}}
+\link{Movement models}, \code{\link[secr]{mask}}, \code{\link{matchscale}}, \code{\link{dkernel}}, \code{\link{pkernel}}, \code{\link{qkernel}}
 
 }
 

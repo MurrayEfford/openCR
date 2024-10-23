@@ -41,9 +41,9 @@ runsim.RMark (nrepl = 100, model = "CJS", model.parameters = NULL, extractfn,
   \item{intervals}{intervals between primary sessions (see Details)}
 \item{recapfactor}{numeric multiplier for capture probability after
   first capture}
-  \item{seed}{random number seed see \link{random numbers}}
+  \item{seed}{random number seed see \link[secr]{random numbers}}
   \item{savepopn}{logical; if TRUE the generated population is saved as an attribute of the capthist object}
-  \item{\dots}{other arguments passed to \code{\link{sim.popn}} (sim.nonspatial) or \code{\link{sim.nonspatial}} (runsims)}
+  \item{\dots}{other arguments passed to \code{\link[secr]{sim.popn}} (sim.nonspatial) or \code{\link{sim.nonspatial}} (runsims)}
   
   \item{nrepl}{number of replicates}
   \item{ncores}{ integer number of cores to be used for parallel processing (see Details)}
@@ -69,7 +69,7 @@ runsim.RMark (nrepl = 100, model = "CJS", model.parameters = NULL, extractfn,
 
 For \code{sim.nonspatial} -- If \code{intervals} is specified then the number of primary and secondary sessions is inferred from \code{intervals} and \code{nsessions} and \code{noccasions} are ignored. If \code{N} and \code{p} are vectors of length 2 then subpopulations of the given initial size are sampled with the differing capture probabilities and the resulting capture histories are combined.
 
-\code{runsim.spatial} is a relatively simple wrapper for \code{\link{sim.popn}}, \code{\link{sim.capthist}}, and \code{\link{openCR.fit}}. Some arguments are set automatically: the \code{sim.capthist} argument 'renumber' is always FALSE; argument 'seed' is ignored within 'popargs' and 'detargs'; if no 'traps' argument is provided in 'detargs' then 'core' from 'popargs' will be used; detargs$popn and fitargs$capthist are derived from the preceding step. The 'type' specified in fitargs may refer to a non-spatial or spatial open-population model ('CJS', 'JSSAsecrfCL' etc.). If the \code{intervals} argument is specified it is used to set the intervals attribute of the simulated capthist object; turnover parameters in \code{sim.popn} are not scaled by \code{intervals}.
+\code{runsim.spatial} is a relatively simple wrapper for \code{\link[secr]{sim.popn}}, \code{\link[secr]{sim.capthist}}, and \code{\link{openCR.fit}}. Some arguments are set automatically: the \code{sim.capthist} argument 'renumber' is always FALSE; argument 'seed' is ignored within 'popargs' and 'detargs'; if no 'traps' argument is provided in 'detargs' then 'core' from 'popargs' will be used; detargs$popn and fitargs$capthist are derived from the preceding step. The 'type' specified in fitargs may refer to a non-spatial or spatial open-population model ('CJS', 'JSSAsecrfCL' etc.). If the \code{intervals} argument is specified it is used to set the intervals attribute of the simulated capthist object; turnover parameters in \code{sim.popn} are not scaled by \code{intervals}.
 
 Control of parallel processing changed in \pkg{openCR} 1.5.0 to conform to \pkg{secr}. In \code{runsim.nonspatial} and \code{runsim.spatial}, if \code{ncores} is NULL (the default) then the number of cores used for multithreading by \code{openCR.fit} is controlled by the environment variable RCPP_PARALLEL_NUM_THREADS. Use the secr function \code{setNumThreads} to set RCPP_PARALLEL_NUM_THREADS to a value greater than the default (2, from \pkg{openCR} 1.5 onwards).
 
@@ -99,7 +99,7 @@ Data.frame with rows `estimate', `SE.estimate', `lcl', `ucl', `RSE', `CI.length'
 
 \seealso{
 
-\code{\link{sim.popn}}, \code{\link{sim.capthist}}
+\code{\link[secr]{sim.popn}}, \code{\link[secr]{sim.capthist}}
 
 }
 

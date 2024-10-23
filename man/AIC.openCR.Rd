@@ -117,7 +117,7 @@ overdispersion has yet to be addressed (cf QAIC in MARK).
 
 \seealso{
   \code{\link[stats]{AIC}}, \code{\link{openCR.fit}},
-  \code{\link{print.openCR}}, \code{\link{LR.test}}
+  \code{\link{print.openCR}}, \code{\link[secr]{LR.test}}
 }
 
 \examples{

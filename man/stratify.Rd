@@ -16,7 +16,7 @@ stratify(..., intervals = NULL, MoreArgs = list(), covariate = NULL, bytraps = F
 \arguments{
   \item{\dots}{one or more multi-session capthist objects, or a list of such objects}
   \item{intervals}{list of intervals vectors, one for each multi-session capthist in \dots}
-  \item{MoreArgs}{list of other arguments passed to \code{\link{join}}}
+  \item{MoreArgs}{list of other arguments passed to \code{\link[secr]{join}}}
   \item{covariate}{character; name of individual or trap covariate to stratify by}
   \item{bytraps}{logical; if TRUE then covariate is interpreted as the name of a detector covariate}
 }
@@ -39,7 +39,7 @@ The result in Case 1 is identical to \code{MS.capthist(\dots)}.
 The argument \code{intervals} refers to the intervals between primary sessions 
 before joining (Cases 2,4 only) (see Examples).
 
-MoreArgs may include the arguments remove.dupl.sites, tol, sites.by.name or drop.sites of \code{\link{join}}; these otherwise take their default values.
+MoreArgs may include the arguments remove.dupl.sites, tol, sites.by.name or drop.sites of \code{\link[secr]{join}}; these otherwise take their default values.
 
 }
 
@@ -51,8 +51,8 @@ Multi-stratum (multi-session) capthist object for which each component has been 
 
 \seealso{
 
-\code{\link{join}}, 
-\code{\link{MS.capthist}}, 
+\code{\link[secr]{join}}, 
+\code{\link[secr]{MS.capthist}}, 
 \code{\link{openCR.fit}}, 
 \code{\link{strata}}
 

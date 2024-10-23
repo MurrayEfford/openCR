@@ -42,7 +42,7 @@ If \code{grouplevels} is specified then \code{ngroups} is taken from the number 
 
 \seealso{
 
-\code{\link{RMarkInput}}, \code{\link{unRMarkInput}}
+\code{\link[secr]{RMarkInput}}, \code{\link[secr]{unRMarkInput}}
 
 }
 
