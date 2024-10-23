@@ -21,8 +21,8 @@
 ###############################################################################
 
 .openCRstuff <- new.env()
-.openCRstuff$packageType <- ' pre-release'
-#.openCRstuff$packageType <- ''
+# .openCRstuff$packageType <- ' pre-release'
+.openCRstuff$packageType <- ''
 .openCRstuff$iter <- 0
 .openCRstuff$suspendedtypes <- c('JSSAfgCL', 'JSSAfg')
 
