@@ -1,7 +1,7 @@
 \name{openCR-defunct}
 \alias{openCR-defunct}
 \alias{openCR.make.newdata}
-\alias{plotkernel}
+\alias{plotKernel}
 
 \title{Defunct Functions in Package \pkg{openCR}}
 

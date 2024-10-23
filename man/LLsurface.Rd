@@ -62,7 +62,7 @@ grid point
 
 \seealso{
 
-\code{\link{LLsurface.secr}}
+\code{\link[secr]{LLsurface.secr}}
 
 }
 

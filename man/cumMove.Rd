@@ -48,7 +48,7 @@ The default edgemethod truncates the kernel at the edge and re-normalizes the ce
 
 \code{settlecov} may name a covariate of \code{mask} that has settlement weights in range 0--1.
 
-For \code{proportionInPolygon}, the input mask may be the output from \code{cumMove}. The polygon \code{poly} may be specified as for \code{\link{pointsInPolygon}} (e.g., SpatialPolygons object or 2-column matrix of coordinates) or as a list with components x and y. A list of polygon specifications is also accepted.
+For \code{proportionInPolygon}, the input mask may be the output from \code{cumMove}. The polygon \code{poly} may be specified as for \code{\link[secr]{pointsInPolygon}} (e.g., SpatialPolygons object or 2-column matrix of coordinates) or as a list with components x and y. A list of polygon specifications is also accepted.
 
 \code{mqarray} is computed automatically if not provided. Precomputing the array can save time but is undocumented.
 
