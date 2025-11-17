@@ -57,7 +57,7 @@ Differing selections of data from the Patuxent study were analysed by Nichols et
 
 \source{
 
-\tabular{llll}{
+\tabular{lll}{
 Object \tab  \tab Source \cr
 \code{microtusCH} \tab  \tab Text file JLYEXMPL distributed with Program JOLLY (Hines 1988; see also Examples) \cr
 \code{microtusFCH} \tab  \tab Table 17.5 in Williams, Nichols and Conroy (2002) \cr
