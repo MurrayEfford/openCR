@@ -16,7 +16,7 @@ and seniority γ). Spatially explicit analyses may assume home-range centres are
 dispersal between primary sessions according to various probability kernels, including bivariate
 normal (BVN) and bivariate t (BVT).
 
-**openCR** 2.2.5 is available on [CRAN](https://CRAN.R-project.org/package=openCR).
+**openCR** 2.2.7 is available on [CRAN](https://CRAN.R-project.org/package=openCR).
 
 See also --
 
