@@ -100,6 +100,7 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
                 hx <- if (detectr == "multi") matrix(haztemp$h[x,,], nrow = stratum$m) else -1 ## lookup sum_k (hazard)
                 hi <- if (detectr == "multi") haztemp$hindex else -1                        ## index to hx
                 
+                # temp <-  openCR:::allhistsecrparallelcpp(
                 temp <-  allhistsecrparallelcpp(
                     as.integer(x-1),
                     as.integer(type),
@@ -197,8 +198,9 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
         #-----------------------------------------
         
         ## number of threads was set in openCR.fit
+        # temp <- openCR:::makegkParalleldcpp (as.integer(data$detectfn),
         temp <- makegkParalleldcpp (as.integer(data$detectfn),
-            as.integer(.openCRstuff$sigmai[type]),
+                                    as.integer(.openCRstuff$sigmai[type]),
             as.integer(data$details$grain),
             as.integer(data$ncores),
             as.matrix(realparval),
@@ -208,7 +210,8 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
         sumhk <- sum(hk)
         # additional checks 2021-10-09
         if (is.na(sumhk) || !is.finite(sumhk) || sumhk==0) {
-            return(NA)   # changed from 1e10 2021-06-01
+          # return(NA)   # changed from 1e10 2021-06-01
+          return(rep(NA,4))   # changed from NA 2026-04-04
         }
         
         if (data$details$debug>0) message ("sum(gk) = ", sum(gk))
@@ -223,16 +226,17 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
                 haztemp <- gethR(stratum$m, PIA, stratum$usge, hk)
             }
             else {
-                haztemp <- gethcpp(
-                    as.integer(stratum$nc),
-                    as.integer(nrow(realparval)),
-                    as.integer(data$details$nmix),
-                    as.integer(stratum$k),
-                    as.integer(stratum$cumss[stratum$J+1]),
-                    as.integer(stratum$m),
-                    as.integer(PIA),
-                    as.matrix(stratum$usge),
-                    as.double(hk))
+              # haztemp <- openCR:::gethcpp(
+              haztemp <- gethcpp(
+                as.integer(stratum$nc),
+                as.integer(nrow(realparval)),
+                as.integer(data$details$nmix),
+                as.integer(stratum$k),
+                as.integer(stratum$cumss[stratum$J+1]),
+                as.integer(stratum$m),
+                as.integer(PIA),
+                as.matrix(stratum$usge),
+                as.double(hk))
             }
             haztemp$h <- array(haztemp$h, dim = c(data$details$nmix, stratum$m, max(haztemp$hindex)+1))
         }
@@ -308,6 +312,7 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
                     )
                 }
                 else {
+                  # pch1 <-  openCR:::PCH1secrparallelcpp(
                     pch1 <-  PCH1secrparallelcpp(
                         as.integer(x-1),
                         as.integer(type),
@@ -347,13 +352,13 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
         #####################################################################
         # Component 3: Probability of observing nc animals (non-CL types)
         if (type %in% c(7,8,12,13,14,24, 31)) {
-            if (type %in% c(7, 12, 13, 24, 31))
-                Dsuper <- realparval[nrow(realparval)*3 + stratum$i] # Dsuper direct
-            else  {        # type %in% c(8, 14)) D or B parameterisation
-                Dsuper <- getD(type, stratum$J, data$details$nmix, pmix,
-                    realparval, PIAJ,
-                    stratum$primaryintervals)
-            }
+            # if (type %in% c(7, 12, 13, 24, 31))
+            #       Dsuper <- realparval[nrow(realparval)*3 + stratum$i] # Dsuper direct
+            #   else  {        # type %in% c(8, 14)) D or B parameterisation
+            # use getD() for all these 2026-04-04
+            Dsuper <- getD(type, stratum$J, data$details$nmix, pmix,
+                         realparval, PIAJ,
+                         stratum$primaryintervals)
             A <- if (inherits(stratum$mask, "linearmask")) {
                 masklength(stratum$mask)
             }
@@ -361,19 +366,23 @@ open.secr.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
                 maskarea(stratum$mask)
             }
             N <- Dsuper * A
-            # impose constraint: return with invalid result code if not possible
-            if (N < ncf) return (1e10);
-            meanpdot <- ncf / sum(1/pdot)
-            ## cf CLmeanesa in 'secr'
-            
-            comp[3] <- switch (data$distrib+1,
-                dpois(ncf, N * meanpdot, log = TRUE),
-                lnbinomial (ncf, N, meanpdot),
-                NA)
+            # impose constraint: return with invalid result if not possible
+            if (N < ncf) {
+              # return (1e10);
+              comp[3] <- NA   # 2026-04-04
+            }
+            else {
+              meanpdot <- ncf / sum(1/pdot)
+              ## cf CLmeanesa in 'secr'
+              
+              comp[3] <- switch (data$distrib+1,
+                                 dpois(ncf, N * meanpdot, log = TRUE),
+                                 lnbinomial (ncf, N, meanpdot),
+                                 NA)
+            }
         }
         
         #####################################################################
-        
         comp
     }   # end of onestratumll
     
