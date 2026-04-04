@@ -4,27 +4,28 @@
 ## 2018-02-26 openCR 1.0.0
 ## 2018-11-11 buggy if J<3; fixed for getbeta0
 ## 2019-04-21 getmoveargs bug fixed - moveargsi + 1
+## 2026-04-04 includes type = 31
 ###############################################################################
 
 #------------------------------------------------------------------------
 
 getD <- function ( type, J, nmix, pmix, openval, PIAJ, intervals) {
     ## return superD
-    if (type %in% c(7,12,13,24)) {
+    if (type %in% c(7,12,13,24,31)) {
         # JSSAsecrf = 7
         # JSSAsecrl = 12
         # JSSAsecrb = 13
         # JSSAsecrg = 24
+        # secrD     = 31   # 2026-04-04
         return(openval[PIAJ[1,1,1,1], 4])
     }
     else {
         # JSSAsecrD = 8
         # JSSAsecrB = 14
-
         sumB <- 0
         for (x in 1:nmix) {
             phij <- openval[PIAJ[1,1,1:(J-1),x], 2]^intervals    ## per session
-            if (type %in% 8) {
+            if (type %in% c(8)) {
                 D <- openval[PIAJ[1,1,1:J,x], 3]
                 B <- D
                 for (j in 1:(J-1)) {
