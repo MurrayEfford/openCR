@@ -12,6 +12,7 @@
 # 2021-08-14 c and [ methods for openCRlist
 # 2021-11-08 PIA, PIAJ overwritten for naive animal, rather than always copied  
 # 2023-08-31 explicit error for integer overflow
+# 2026-04-04 getD  for all types 
 
 # types
 

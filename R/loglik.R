@@ -13,6 +13,7 @@
 # 2021-04-19 stratified
 # 2021-11-08 PIAJ recalc to fix bug in nonspatial learned response models and valgrind issue
 # 2021-11-08 PIA, PIAJ overwritten for naive animal, rather than always copied  
+# 2026-04-05 getN for all types
 
 # types
 
@@ -202,19 +203,15 @@ open.loglikfn <- function (beta, dig = 3, betaw = 8, oneeval = FALSE, data)
             # Component 3: Probability of observing nc animals
             # not CJS, CJSmte
             if (type %in% c(2:4,18,19,21, 22, 28)) {
-                if (type %in% c(2,3,4,22,28)) {
-                    superN <- realparval[nrow(realparval)*3 + stratum$i] # stratum i Nsuper direct
-                }
-                else {
-                    superN <- getN(type, ncf, stratum$J, data$details$nmix, pmix, 
-                        realparval, PIAJ, stratum$primaryintervals)
-                }
-                meanpdot <- ncf / sum(1/rep(pdot,freq))  ## cf CLmeanesa in 'secr'
-                comp[3] <- switch (data$distrib+1,
-                    dpois(ncf, superN * meanpdot, log = TRUE),
-                    ## lnbinomial (ncf, superN, meanpdot),
-                    lnbinomial (ncf, superN + ncf, meanpdot),
-                    NA)
+              # use getN() for all these 2026-04-05
+              superN <- getN(type, ncf, stratum$J, data$details$nmix, pmix, 
+                             realparval, PIAJ, stratum$primaryintervals)
+              meanpdot <- ncf / sum(1/rep(pdot,freq))  ## cf CLmeanesa in 'secr'
+              comp[3] <- switch (data$distrib+1,
+                                 dpois(ncf, superN * meanpdot, log = TRUE),
+                                 ## lnbinomial (ncf, superN, meanpdot),
+                                 lnbinomial (ncf, superN + ncf, meanpdot),
+                                 NA)
             }
             
             #####################################################################
