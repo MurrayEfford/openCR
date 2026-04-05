@@ -30,13 +30,19 @@ www.otago.ac.nz/density/openCR.html
 
 [openCR-kernel.pdf](https://www.otago.ac.nz/density/pdfs/openCR-kernel.pdf)
 
-The code here is under development. It may be installed using
+The code here is under development. It may be installed directly from GitHub with the following code 
+(tools for the compilation of C++ code etc. are required):
+
 ```
 devtools::install_github("MurrayEfford/openCR")
 ```
 
-Installation is rather slow, and produces voluminous messages because of the compilation of C++ code.
+Alternatively, the development version may be installed with
+```
+install.packages("openCR", repos = "https://MurrayEfford.r-universe.dev")
+```
 
+Please report bugs as Issues on this GitHub page. 
 
 ## References
 
