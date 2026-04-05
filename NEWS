@@ -4,7 +4,7 @@ New features and changed behaviour
     o none
 
 Bugs fixed
-    o stratified density models (e.g. type 'secrD') failed
+    o some stratified density models (e.g. type 'secrD') failed
 
 version 2.2.7 (2024-10-23)
 
