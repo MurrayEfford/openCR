@@ -1,10 +1,11 @@
-version 2.2.8 (2026-04-04)
+version 2.2.8 (2026-04-13)
 
 New features and changed behaviour
     o none
 
 Bugs fixed
     o some stratified density models (e.g. type 'secrD') failed
+    o kernel output uses spacing of first stratum mask if several, with warning
 
 version 2.2.7 (2024-10-23)
 
