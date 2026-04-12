@@ -1011,10 +1011,14 @@ openCR.fit <- function (
   }
   
   desc <- packageDescription("openCR")  ## for version number
-  if (secr && !(movementmodel %in% c('static','IND','INDzi'))) 
-    kernel <- kernel * spacing(mask)
-  else
+  if (secr && !(movementmodel %in% c('static','IND','INDzi'))) {
+    maskspacing <- spacing(mask)
+    if (length(maskspacing)>1) warning("output kernel uses spacing of first mask")
+    kernel <- kernel * maskspacing[1]
+  }
+  else {
     kernel <- NULL
+  }
   primaryintervals <- lapply(stratumdata, '[[', 'primaryintervals')
   sessionlabels <- lapply(stratumdata, '[[', 'sessnames')
   temp <- list (call = cl,
