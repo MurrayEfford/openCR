@@ -16,6 +16,7 @@
 ## 2021-04-18 stratified
 ## 2021-05-12 test for time-varying trap covariates allows for stratification
 ## 2021-09-27 usage bug fixed (used should have been binary)
+## 2026-04-19 timevaryingcov enabled
 
 ## openCR.design()
 
@@ -44,7 +45,7 @@ openCR.design <- function (capthist, models, type, naive = FALSE,
         ## therefore assume cov is a list, one per stratum
         ## care required as strata may differ in n, S, K
         ## solution is to pad to max [n,S,K] over strata
-        if (!is.list(cov) | (R==1))
+        if (!is.list(cov) || (R==1))
           stop ("irregular covariates; check stratum structure")
         cov <- lapply(cov, stringsAsFactors)
         covnames <- lapply(cov, names)
@@ -95,13 +96,14 @@ openCR.design <- function (capthist, models, type, naive = FALSE,
   
   # not tested for openCR 2.0
   findvars.covtime <- function (covindices, vars) {
+    ## OBSOLETE 2026-04-19 see findvars.traptime
     ## function to add time-specific trap covariates to a 
     ## design data frame 'dframe'
     ## covindices should be a list of numeric or character index vectors, one component per session
     if (R>1) stop ("time-varying detector covariates not implemented for stratified designs")
     dimcov <- c(2,3)   ## animal, secondarysession
-    if (length(covindices[[1]]) != J)
-      stop ("require one index per primary session")
+    # if (length(covindices[[1]]) != J)
+    #   stop ("require one index per primary session")
     covnames <- names(covindices)
     found <- covnames[covnames %in% vars]
     vars <<- vars[!(vars %in% found)]
@@ -130,6 +132,57 @@ openCR.design <- function (capthist, models, type, naive = FALSE,
       }
       dframe[,variable] <<- secr::insertdim (vals, dimcov, dims)
     }
+  }
+  #--------------------------------------------------------------------------------
+  findvars.traptime <- function (covindices, vars) {
+      ## based on secr.design.MS function of same name
+      ## function to add time-specific trap covariates to a design data frame 'dframe'
+      ## covindices should be a list or list of lists, one per stratum (R > 1),
+      ## if list, then require predictors to appear in all sessions
+      ## uses pad1 from utility.R and and insertdim from secr
+      
+      if (R>1) {
+          # DOES NOT YET ALLOW FOR R>1 (VARYING n,s,k) 2026-04-19
+          stop("does not yet allow time-varying trap covariates for multiple strata")
+      }
+      found <- ''
+      dimcov <- c(1,4,3) ## stratum, trap, time
+      ## covindices is list of numeric or character index vectors, one component per stratum
+      if (length(covindices) != R)
+          stop ("require one set of indices per stratum")
+      if (is.data.frame(trapcov))   ## single-stratum
+          trapcov <- list(trapcov)
+      covnames <- unique(sapply(covindices,names))
+      found <- vars[vars %in% covnames]
+      vars <<- vars[!(vars %in% found)]
+      
+      for (variable in found) {
+          firstcol <- trapcov[[1]][,covindices[[1]][[1]][1]]
+          factorlevels <- NULL
+          if (is.factor(firstcol)) {
+              ## all must have same levels!!
+              factorlevels <- levels(firstcol)
+          }
+          vals <- vector(mode = 'list', length = R)
+          for (i in 1:R) {  ## over strata
+              getvals <- function (indices, trcov) {
+                  notOK <- is.na(trcov[,indices])
+                  if (any(notOK)) {
+                      warning ("detector covariate(s) missing values set to -1")
+                      trcov[,indices][notOK] <- -1
+                  }
+                  mat <- as.matrix(trcov[,indices]) ## detectors x occasions
+                  padarray(mat, dims[c(4,3)])
+              }
+              covs <- covindices[[i]][[variable]]  ## indices this cov, this stratum
+              vals[[i]] <- getvals(covs, trapcov[[i]])
+          }
+          vals <- unlist(vals)  ## concatenate strata
+          if (!is.null(factorlevels))
+              vals <- factor(vals, factorlevels)
+          
+          dframe[,variable] <<- insertdim (vals, dimcov, dims)
+      }
   }
   #--------------------------------------------------------------------------------
   
@@ -500,9 +553,13 @@ openCR.design <- function (capthist, models, type, naive = FALSE,
   findvars.MS (agecov, vars, 2, scov = TRUE)      ## new 2020-10-19
   
   # time-varying trap covariates
-  tvc <- timevaryingcov(capthist)
+  if (MS)
+      tvc <- timevaryingcov(trps)
+  else
+      tvc <- list(timevaryingcov(trps))
+  
   if (!is.null(unlist(tvc)) && (length(vars)>0)) {
-    findvars.covtime (tvc, vars)
+    findvars.traptime (tvc, vars)
   }
   
   if (length(vars)>0) {
