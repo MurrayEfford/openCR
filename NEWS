@@ -1,7 +1,7 @@
-version 2.2.8 (2026-04-13)
+version 2.2.8 (2026-04-19)
 
 New features and changed behaviour
-    o none
+    o time-varying trap covariates enabled for single-stratum models
 
 Bugs fixed
     o some stratified density models (e.g. type 'secrD') failed
