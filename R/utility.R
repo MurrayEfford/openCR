@@ -254,7 +254,7 @@ pad1 <- function (x, n) {
 padarray <- function (x, dims) {
   temp <- array(dim=dims)
   dimx <- dim(x)
-  if (length(dimx)<2 | length(dimx)>3)
+  if (length(dimx)<2 || length(dimx)>3)
     stop ("invalid array")
   if (length(dimx)>2) temp[1:dimx[1], 1:dimx[2], 1:dimx[3]] <- x
   else temp[1:dimx[1], 1:dimx[2]] <- x

@@ -93,47 +93,8 @@ openCR.design <- function (capthist, models, type, naive = FALSE,
       vars <<- vars[!(vars %in% found)]
     }
   }
-  
-  # not tested for openCR 2.0
-  findvars.covtime <- function (covindices, vars) {
-    ## OBSOLETE 2026-04-19 see findvars.traptime
-    ## function to add time-specific trap covariates to a 
-    ## design data frame 'dframe'
-    ## covindices should be a list of numeric or character index vectors, one component per session
-    if (R>1) stop ("time-varying detector covariates not implemented for stratified designs")
-    dimcov <- c(2,3)   ## animal, secondarysession
-    # if (length(covindices[[1]]) != J)
-    #   stop ("require one index per primary session")
-    covnames <- names(covindices)
-    found <- covnames[covnames %in% vars]
-    vars <<- vars[!(vars %in% found)]
-
-    for (variable in found) {
-      firstcol <- zcov[,covindices[[1]][1]]
-      factorlevels <- NULL
-      if (is.factor(firstcol)) {
-        ## all must have same levels!!
-        factorlevels <- levels(firstcol)
-      }
-      
-      getvals <- function (indices, zcov) {
-        notOK <- is.na(zcov[,indices])
-        if (any(notOK)) {
-          warning ("covariate missing values set to -1")
-          zcov[,indices][notOK] <- -1
-        }
-        mat <- as.matrix(zcov[,indices]) ## detectors x occasions
-      }
-      vals <- getvals(covindices[[variable]], zcov)
-      vals <- vals[,primarysessions(intervals)]
-      vals <- unlist(vals)  
-      if (!is.null(factorlevels)) {
-        vals <- factor(vals, factorlevels)
-      }
-      dframe[,variable] <<- secr::insertdim (vals, dimcov, dims)
-    }
-  }
   #--------------------------------------------------------------------------------
+  
   findvars.traptime <- function (covindices, vars) {
       ## based on secr.design.MS function of same name
       ## function to add time-specific trap covariates to a design data frame 'dframe'
@@ -142,8 +103,7 @@ openCR.design <- function (capthist, models, type, naive = FALSE,
       ## uses pad1 from utility.R and and insertdim from secr
       
       if (R>1) {
-          # DOES NOT YET ALLOW FOR R>1 (VARYING n,s,k) 2026-04-19
-          stop("does not yet allow time-varying trap covariates for multiple strata")
+          warning("time-varying trap covariates are experimental for stratified models in openCR 2.2.8")
       }
       found <- ''
       dimcov <- c(1,4,3) ## stratum, trap, time
