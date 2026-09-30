@@ -1,4 +1,4 @@
-version 2.2.8 (2026-04-19)
+version 2.2.8 (2026-09-30)
 
 New features and changed behaviour
     o time-varying trap covariates enabled (experimental for stratified models)
@@ -6,6 +6,8 @@ New features and changed behaviour
 Bugs fixed
     o some stratified density models (e.g. type 'secrD') failed
     o kernel output uses spacing of first stratum mask if several, with warning
+    o predict() warned in R-devel for stratified models with differing numbers
+      of sessions per stratum (logical index recycled in internal adjustlevels())
 
 version 2.2.7 (2024-10-23)
 
