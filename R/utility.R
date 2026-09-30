@@ -603,7 +603,9 @@ adjustlevels <- function (field, dframe, validlevels ) {
     for (i in 1:length(validlevels)) {
       stratum <- levels(dframe$stratum)[i]
       OK <- validlevels[[i]][field,]
-      OKlevels <- levels(dframe$session)[OK]
+      # which() avoids recycling a short logical index when strata differ
+      # in number of sessions (warning in R >= 4.7.0) 2026-09-30
+      OKlevels <- levels(dframe$session)[which(OK)]
       if (length(OKlevels)<1) {
         stop ("stratum ", i, " has no valid levels of ", field)
       }
